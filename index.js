@@ -1,8 +1,10 @@
 "use strict";
 
 const Readline = require("readline");
-const Interpreter = require('./src/Interpreter');
-const Lexer = require("./src/Lexer");
+
+const {Interpreter} = require('./src/Interpreter');
+const {Lexer} = require("./src/Lexer");
+const {Parser} = require("./src/Parser");
 
 
 
@@ -71,8 +73,9 @@ const Lexer = require("./src/Lexer");
       else {
         try {
           const lexer = new Lexer(input);
-          const interpreter = new Interpreter(lexer);
-          result = interpreter.expr().value;
+          const parser = new Parser(lexer);
+          const interpreter = new Interpreter(parser);
+          result = interpreter.interpret();
           console.log(result);
         }
         catch (error) {
