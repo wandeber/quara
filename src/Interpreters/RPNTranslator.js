@@ -1,16 +1,18 @@
 "use strict";
 
-const {TokenTypes} = require("./Token");
-const {NodeVisitor} = require("./NodeVisitor");
+const {TokenTypes} = require("../Token");
+const {NodeVisitor} = require("../NodeVisitor");
 
 
 
 
 
 /**
- *
+ * Translates input to Reverse Polish Notation (RPN).
+ * Example:
+ *   (5 + 3) * 12 / 3   ->   5 3 + 12 * 3 /
  */
-class Interpreter extends NodeVisitor {
+class RPNTranslator extends NodeVisitor {
   constructor(parser) {
     super();
     this.showDebug = false;
@@ -29,7 +31,7 @@ class Interpreter extends NodeVisitor {
   debug(message = "") {
     if (this.showDebug) {
       this.lexer.debug(message);
-      console.log("-- Interpreter: "+ message);
+      console.log("-- RPNTranslator: "+ message);
       if (this.currentToken) {
         console.log("  current token - "+ this.currentToken.type +" - "+ this.currentToken.value);
       }
@@ -41,14 +43,7 @@ class Interpreter extends NodeVisitor {
   visit_ASTBinaryOperator(node) {
     let result;
 
-    if (node.operator.type == TokenTypes.OpPlus)
-      result = this.visit(node.left) + this.visit(node.right);
-    else if (node.operator.type == TokenTypes.OpMinus)
-      result = this.visit(node.left) - this.visit(node.right);
-    else if (node.operator.type == TokenTypes.OpMultiplication)
-      result = this.visit(node.left) * this.visit(node.right);
-    else if (node.operator.type == TokenTypes.OpDivision)
-      result = this.visit(node.left) / this.visit(node.right);
+    result = this.visit(node.left) +" "+ this.visit(node.right) +" "+ node.operator.value;
     
     return result;
   }
@@ -67,4 +62,4 @@ class Interpreter extends NodeVisitor {
 
 
 
-module.exports = {Interpreter};
+module.exports = {RPNTranslator};

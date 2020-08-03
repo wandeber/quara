@@ -2,9 +2,12 @@
 
 const Readline = require("readline");
 
-const {Interpreter} = require('./src/Interpreter');
 const {Lexer} = require("./src/Lexer");
 const {Parser} = require("./src/Parser");
+const {Interpreter} = require('./src/Interpreters/Interpreter');
+//const {RPNTranslator} = require('./src/Interpreters/RPNTranslator');
+//const {LispTranslator} = require('./src/Interpreters/LispTranslator');
+//const {SQLTranslator} = require('./src/Interpreters/SQLTranslator');
 
 
 
@@ -72,11 +75,19 @@ const {Parser} = require("./src/Parser");
       }
       else {
         try {
-          const lexer = new Lexer(input);
-          const parser = new Parser(lexer);
-          const interpreter = new Interpreter(parser);
-          result = interpreter.interpret();
-          console.log(result);
+          if (typeof input === "string") {
+            input = input.trim();
+            const lexer = new Lexer(input);
+            const parser = new Parser(lexer);
+  
+            //const interpreter = new RPNTranslator(parser);
+            //const interpreter = new LispTranslator(parser);
+            //const interpreter = new SQLTranslator(parser);
+            const interpreter = new Interpreter(parser);
+            
+            result = interpreter.interpret();
+            console.log(result);
+          }
         }
         catch (error) {
           console.log("Error: ", error);

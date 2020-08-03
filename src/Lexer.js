@@ -82,6 +82,10 @@ class Lexer {
       this.advance();
     }
 
+    if (!Types.isNumber(number)) {
+      this.error('Invalid number: '+ number);
+    }
+
     return number;
   }
 
