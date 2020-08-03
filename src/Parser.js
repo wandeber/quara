@@ -2,6 +2,7 @@
 
 const {TokenTypes} = require("./Token");
 const {ASTNumber} = require("./ASTNumber");
+const {ASTUnaryOperator} = require("./ASTUnaryOperator");
 const {ASTBinaryOperator} = require("./ASTBinaryOperator");
 
 
@@ -44,12 +45,22 @@ const {ASTBinaryOperator} = require("./ASTBinaryOperator");
  * 
  * Precedence table (from higher to lower):
  * | Precedence level  Associativity  Operators
- * | 2                 Left           +, -
- * v 1                 Left           *, /
+ * | 14                Left           ||
+ * | 13                Left           &&
+ * | 9                 Left           ==, !=
+ * | 8                 Left           <, >, <=, >=
+ * | 6                 Left           +, -           Plus and minus
+ * | 5                 Left           *, /, %
+ * | 4                 Left           +, -           Unary plus and minus
+ * v 
  * 
  * expr   -> term ((OpPlus | OpMinus) term)*
- * term   -> factor ((OpMultiplication | OpDivision) factor)*
+ * term   -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
  * factor -> (TypeInteger | TypeDecimal) | OpParenthesisOpen expr OpParenthesisClose
+ * 
+ * expr   -> term ((OpPlus | OpMinus) term)*
+ * term   -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
+ * factor -> (OpPlus | OpMinus) factor | (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
  */
 class Parser {
   constructor(lexer) {
@@ -140,7 +151,8 @@ class Parser {
     let operatorToken = this.currentToken;
     this.eat([
       TokenTypes.OpMultiplication,
-      TokenTypes.OpDivision
+      TokenTypes.OpDivision,
+      TokenTypes.OpModulus,
     ]);
     return operatorToken;
   }
@@ -148,23 +160,29 @@ class Parser {
 
 
   /**
-   * factor -> (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
+   * factor -> (OpPlus | OpMinus) factor | (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
    */
   factor() {
     this.debug("Get factor");
     
     let node;
-    // If current token is a parenthesis aperture "("...
-    if (this.currentToken.type == TokenTypes.OpParenthesisOpen) {
+    // Unary operator + or -:
+    if ([TokenTypes.OpMinus, TokenTypes.OpPlus].includes(this.currentToken.type)) {
+      let operator = this.sumOperators();
+      node = new ASTUnaryOperator(operator, this.factor());
+    }
+    // If current token is a parenthesis aperture "(":
+    else if (this.currentToken.type == TokenTypes.OpParenthesisOpen) {
       // We eat the parenthesis opening (we can just ignore it).
-      this.parenthesisOperator(); // Open
+      this.parenthesisOperator(); // Open.
       /* We support a full expression inside the parenthesis. This includes from a single numbber to
       complex expression like other ones with parenthesis. */
       node = this.expr();
       // We eat the parenthesis closure (we can just ignore it).
-      this.parenthesisOperator(); // Close
+      this.parenthesisOperator(); // Close.
     }
-    else {
+    // Number:
+    else if ([TokenTypes.TypeInteger, TokenTypes.TypeDecimal].includes(this.currentToken.type)) {
       node = new ASTNumber(this.currentToken);
       this.eat([TokenTypes.TypeInteger, TokenTypes.TypeDecimal]);
     }
@@ -173,7 +191,7 @@ class Parser {
   }
 
   /**
-   * term -> factor ((OpMultiplication | OpDivision) factor)*
+   * term -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
    */
   term() {
     this.debug("Get term");
@@ -184,7 +202,8 @@ class Parser {
     
     let allowedOperators = [
       TokenTypes.OpMultiplication,
-      TokenTypes.OpDivision
+      TokenTypes.OpDivision,
+      TokenTypes.OpModulus,
     ];
 
     while (allowedOperators.includes(this.currentToken.type)) {

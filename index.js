@@ -19,6 +19,7 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
  * - Support expressions with operators * and /. They have precedence over + and -.
  * - Support parenthesis.
  * - Support decimal numbers.
+ * - Support unary operator + and -.
  * 
  * @author wandeber
  * @see https://ruslanspivak.com/lsbasi-part1/ Implemented following Ruslan's guide.

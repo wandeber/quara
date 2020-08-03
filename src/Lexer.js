@@ -83,10 +83,43 @@ class Lexer {
     }
 
     if (!Types.isNumber(number)) {
-      this.error('Invalid number: '+ number);
+      number = null;
     }
 
     return number;
+  }
+
+  getOperator() {
+    let operators = [
+      '$not', '$eq', '$ne', '$lt', '$gt', '$lte', '$gte', '$and', '$or',
+      '!', '==', '!=', '<>', '<', '>', '<=', '>=', '&&', '||',
+      '+', '-',
+      '*', '/', '%',
+      '++', '--',
+      '(', ')',
+    ];
+    
+    let operator = "";
+
+    function lastCharacterCoincidence(index, charToCheck, values) {
+      for (let value of values) {
+        if (value.length > index && charToCheck == value[index]) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    while (lastCharacterCoincidence(operator.length, this.currentChar, operators)) {
+      operator += ""+ this.currentChar;
+      this.advance();
+    }
+    
+    if (!operators.includes(operator)) {
+      operator = null;
+    }
+    
+    return operator;
   }
 
   /**
@@ -120,46 +153,83 @@ class Lexer {
     and return the TypeInteger token */
     if (this.currentChar == '.' || Types.isInteger(this.currentChar)) {
       let number = this.getNumber();
-      if (Types.isInteger(number)) {
-        token = new Token(TokenTypes.TypeInteger, parseInt(number));
+      if (number) {
+        if (Types.isInteger(number)) {
+          return new Token(TokenTypes.TypeInteger, parseInt(number));
+        }
+        else {
+          return new Token(TokenTypes.TypeDecimal, parseFloat(number));
+        }
       }
-      else {
-        token = new Token(TokenTypes.TypeDecimal, parseFloat(number));
-      }
-      return token;
     }
 
+    // Operators:
     // Arithmetic operators:
-    if (this.currentChar == '+') {
-      token = new Token(TokenTypes.OpPlus, this.currentChar);
-      this.advance();
-      return token;
-    }
-    if (this.currentChar == '-') {
-      token = new Token(TokenTypes.OpMinus, this.currentChar);
-      this.advance();
-      return token;
-    }
-    if (this.currentChar == '*') {
-      token = new Token(TokenTypes.OpMultiplication, this.currentChar);
-      this.advance();
-      return token;
-    }
-    if (this.currentChar == '/') {
-      token = new Token(TokenTypes.OpDivision, this.currentChar);
-      this.advance();
-      return token;
-    }
+    //   +, -, *, /
+    // Logic operators:
+    //   $eq, $ne, $lt, $gt, $lte, $gte, $and, $or
+    //   ==, !=, <>, <, >, <=, >=, &&, ||
+    // Other:
+    //   (, )
+    let operator = this.getOperator();
+    if (operator) { // Not null.
+      if (operator == '+') {
+        return new Token(TokenTypes.OpPlus, '+');
+      }
+      if (operator == '-') {
+        return new Token(TokenTypes.OpMinus, '-');
+      }
+      if (operator == '*') {
+        return new Token(TokenTypes.OpMultiplication, '*');
+      }
+      if (operator == '/') {
+        return new Token(TokenTypes.OpDivision, '/');
+      }
+      if (operator == '%') {
+        return new Token(TokenTypes.OpModulus, '%');
+      }
 
-    if (this.currentChar == '(') {
-      token = new Token(TokenTypes.OpParenthesisOpen, this.currentChar);
-      this.advance();
-      return token;
-    }
-    if (this.currentChar == ')') {
-      token = new Token(TokenTypes.OpParenthesisClose, this.currentChar);
-      this.advance();
-      return token;
+      if (operator == '++') {
+        return new Token(TokenTypes.OpIncrement, '++');
+      }
+      if (operator == '--') {
+        return new Token(TokenTypes.OpDecrement, '--');
+      }
+
+      if (operator == '!' || operator == '$not') {
+        return new Token(TokenTypes.OpNot, '!');
+      }
+      if (operator == '==' || operator == '$eq') {
+        return new Token(TokenTypes.OpEqual, '==');
+      }
+      if (operator == '!=' || operator == '<>' || operator == '$ne') {
+        return new Token(TokenTypes.OpNotEqual, '!=');
+      }
+      if (operator == '<' || operator == '$lt') {
+        return new Token(TokenTypes.OpLowerThan, '<');
+      }
+      if (operator == '>' || operator == '$gt') {
+        return new Token(TokenTypes.OpGreaterThan, '>');
+      }
+      if (operator == '<=' || operator == '$lte') {
+        return new Token(TokenTypes.OpLowerThanEqual, '<=');
+      }
+      if (operator == '>=' || operator == '$gte') {
+        return new Token(TokenTypes.OpGreaterThanEqual, '>=');
+      }
+      if (operator == '&&' || operator == '$and') {
+        return new Token(TokenTypes.OpAnd, '&&');
+      }
+      if (operator == '||' || operator == '$or') {
+        return new Token(TokenTypes.OpOr, '||');
+      }
+
+      if (this.currentChar == '(') {
+        return new Token(TokenTypes.OpParenthesisOpen, '(');
+      }
+      if (this.currentChar == ')') {
+        return new Token(TokenTypes.OpParenthesisClose, ')');
+      }
     }
 
     this.error();

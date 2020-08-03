@@ -4,33 +4,64 @@
 
 
 
-const TypeInteger = "TypeInteger"; // 1
+/*
+Operators:
+Arithmetic operators:
+  +, -, *, /
+Logic operators:
+  $eq, $ne, $lt, $gt, $lte, $gte, $and, $or
+  ==, !=, <>, <, >, <=, >=, &&, ||
+Other:
+  (, )
+*/
+const Space = "Space"; // " "
 const Dot = "Dot"; // .
+
+const TypeInteger = "TypeInteger"; // 1
 const TypeDecimal = "TypeDecimal"; // 1.1
 
-const Space = "Space"; // " "
-
-const Operator = "Operator";
 const OpPlus = "OpPlus"; // "+"
 const OpMinus = "OpMinus"; // "-"
 const OpMultiplication = "OpTimes"; // "*"
 const OpDivision = "OpDivision"; // "/"
+const OpModulus = "OpModulus"; // %
+const OpPow = "OpPow"; // ^, **
+
+const OpIncrement = "OpIncrement"; // ++
+const OpDecrement = "OpDecrement"; // --
+
+const OpNot = "Not";
+const OpEqual = "OpEqual";
+const OpNotEqual = "OpNotEqual";
+const OpLowerThan = "OpLowerThan";
+const OpGreaterThan = "OpGreaterThan";
+const OpLowerThanEqual = "OpLowerThanEqual";
+const OpGreaterThanEqual = "OpGreaterThanEqual";
+const OpAnd = "OpAnd";
+const OpOr = "OpOr";
+
 const OpParenthesisOpen = 'OpParenthesisOpen';
 const OpParenthesisClose = 'OpParenthesisClose';
 
 const EoF = "EoF"; // Fin.
 
+
+
 const TokenTypes = {
-  // Character
-  TypeInteger, Space, Dot,
+  Space, Dot,
+
+  TypeInteger, TypeDecimal,
   
-  // Composed
-  TypeDecimal,
+  OpPlus, OpMinus,
+  OpMultiplication, OpDivision, OpModulus, OpPow,
+  OpIncrement, OpDecrement,
   
-  Operator,
-  OpPlus, OpMinus, OpMultiplication, OpDivision,
+  OpNot,
+  OpEqual, OpNotEqual, OpLowerThan, OpGreaterThan, OpLowerThanEqual, OpGreaterThanEqual,
+  OpAnd, OpOr,
+  
   OpParenthesisOpen, OpParenthesisClose,
-  
+
   EoF
 };
 
