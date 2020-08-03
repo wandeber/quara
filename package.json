@@ -1,0 +1,23 @@
+{
+  "name": "quara",
+  "version": "0.3.0",
+  "description": "Query as Sara.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "quara": "npm start",
+    "sum-interpreter": "node ./SumInterpreter/sum-interpreter.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "query",
+    "interpreter",
+    "language",
+    "sql",
+    "database",
+    "filter"
+  ],
+  "author": "wandeber",
+  "license": "ISC",
+  "dependencies": {}
+}
