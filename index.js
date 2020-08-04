@@ -20,6 +20,7 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
  * - Support parenthesis.
  * - Support decimal numbers.
  * - Support unary operator + and -.
+ * - Support logic operators (!, !=, <, >, <=, >=, &&, ||).
  * 
  * @author wandeber
  * @see https://ruslanspivak.com/lsbasi-part1/ Implemented following Ruslan's guide.

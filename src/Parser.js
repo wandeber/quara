@@ -45,22 +45,25 @@ const {ASTBinaryOperator} = require("./ASTBinaryOperator");
  * 
  * Precedence table (from higher to lower):
  * | Precedence level  Associativity  Operators
- * | 14                Left           ||
- * | 13                Left           &&
- * | 9                 Left           ==, !=
- * | 8                 Left           <, >, <=, >=
+ * | 14                Left           ||             Logical or
+ * | 13                Left           &&             Logical and
+ * | 9                 Left           ==, !=         Equality
+ * | 8                 Left           <, >, <=, >=   Relational
  * | 6                 Left           +, -           Plus and minus
- * | 5                 Left           *, /, %
- * | 4                 Left           +, -           Unary plus and minus
- * v 
- * 
+ * | 5                 Left           *, /, %        Factor
+ * v 4                 Left           +, -           Unary plus and minus
+ *
  * expr   -> term ((OpPlus | OpMinus) term)*
  * term   -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
  * factor -> (TypeInteger | TypeDecimal) | OpParenthesisOpen expr OpParenthesisClose
- * 
- * expr   -> term ((OpPlus | OpMinus) term)*
- * term   -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
- * factor -> (OpPlus | OpMinus) factor | (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
+ *
+ * expr       -> or ((OpOr) or)*
+ * or         -> and ((OpAnd) and)*
+ * and        -> equality ((OpEqual | OpNotEqual) equality)*
+ * equality   -> relational ((OpGreaterThan | OpLowerThan | OpGreaterThanEqual | OpLowerThanEqual) relational)*
+ * relational -> term ((OpPlus | OpMinus) term)*
+ * term       -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
+ * factor     -> (OpPlus | OpMinus | OpNot) factor | (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
  */
 class Parser {
   constructor(lexer) {
@@ -114,72 +117,41 @@ class Parser {
     }
   }
 
-  parenthesisOperator() {
-    this.debug("Get parenthesis operator");
+  operator(allowed) {
+    this.debug("Get operator");
     let token = this.currentToken;
-    this.eat([
-      TokenTypes.OpParenthesisOpen,
-      TokenTypes.OpParenthesisClose
-    ]);
+    this.eat(allowed);
     return token;
-  }
-
-  sumOperators() {
-    this.debug("Get sum operator");
-    let operatorToken = this.currentToken;
-    this.eat([
-      TokenTypes.OpPlus,
-      TokenTypes.OpMinus,
-    ]);
-    return operatorToken;
-  }
-
-  arithmeticOperator() {
-    this.debug("Get arithmetic operator");
-    let operatorToken = this.currentToken;
-    this.eat([
-      TokenTypes.OpPlus,
-      TokenTypes.OpMinus,
-      TokenTypes.OpMultiplication,
-      TokenTypes.OpDivision
-    ]);
-    return operatorToken;
-  }
-
-  factorOperator() {
-    this.debug("Get factor operator");
-    let operatorToken = this.currentToken;
-    this.eat([
-      TokenTypes.OpMultiplication,
-      TokenTypes.OpDivision,
-      TokenTypes.OpModulus,
-    ]);
-    return operatorToken;
   }
 
 
 
   /**
-   * factor -> (OpPlus | OpMinus) factor | (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
+   * factor -> unary | (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
    */
   factor() {
     this.debug("Get factor");
     
     let node;
     // Unary operator + or -:
-    if ([TokenTypes.OpMinus, TokenTypes.OpPlus].includes(this.currentToken.type)) {
-      let operator = this.sumOperators();
-      node = new ASTUnaryOperator(operator, this.factor());
+    let allowedOperators = [
+      TokenTypes.OpMinus,
+      TokenTypes.OpPlus,
+      TokenTypes.OpNot
+    ];
+
+    if (allowedOperators.includes(this.currentToken.type)) {
+      node = new ASTUnaryOperator(this.operator(allowedOperators), this.factor());
     }
     // If current token is a parenthesis aperture "(":
     else if (this.currentToken.type == TokenTypes.OpParenthesisOpen) {
       // We eat the parenthesis opening (we can just ignore it).
-      this.parenthesisOperator(); // Open.
+      this.operator([TokenTypes.OpParenthesisOpen]); // Open.
       /* We support a full expression inside the parenthesis. This includes from a single numbber to
       complex expression like other ones with parenthesis. */
       node = this.expr();
       // We eat the parenthesis closure (we can just ignore it).
-      this.parenthesisOperator(); // Close.
+      this.operator([TokenTypes.OpParenthesisClose]); // Close.
     }
     // Number:
     else if ([TokenTypes.TypeInteger, TokenTypes.TypeDecimal].includes(this.currentToken.type)) {
@@ -199,7 +171,6 @@ class Parser {
     /* We expect the current token to be a number (1, 14, 1.4...) or a parenthesis opening
     containing an expression. */
     let node = this.factor();
-    
     let allowedOperators = [
       TokenTypes.OpMultiplication,
       TokenTypes.OpDivision,
@@ -207,41 +178,141 @@ class Parser {
     ];
 
     while (allowedOperators.includes(this.currentToken.type)) {
-      // We expect the current token to be an arithmetic operator token (+, -, * or /).
-      let op = this.factorOperator();
-      
-      /* We expect the current token to be a number (1, 14, 1.4...) or a factor opening
-      containing an expression. */
-      let right = this.factor();
-      
-      node = new ASTBinaryOperator(node, op, right);
+      node = new ASTBinaryOperator(
+        node,
+        // We expect the current token to be an arithmetic operator token (+, -, * or /).
+        this.operator(allowedOperators),
+        /* We expect the current token to be a number (1, 14, 1.4...) or a factor opening containing
+        an expression. */
+        this.factor()
+      );
     }
 
     return node;
   }
 
   /**
-   * expr -> term ((OpPlus | OpMinus) term)*
+   * relational -> term ((OpPlus | OpMinus) term)*
    */
-  expr() {
-    this.debug("expr");
+  relational() {
+    this.debug("Get relational");
 
     // We expect the current token to be a number (1, 14, 1.4...).
     let node = this.term();
-    
     let allowedOperators = [
       TokenTypes.OpPlus,
       TokenTypes.OpMinus
     ];
 
     while (allowedOperators.includes(this.currentToken.type)) {
-      // We expect the current token to be an arithmetic operator token (+ or -).
-      let op = this.sumOperators();
-      
-      // We expect the current token to be a number (1, 14, 1.4...).
-      let right = this.term();
+      node = new ASTBinaryOperator(
+        node,
+        // We expect the current token to be an arithmetic operator token (+ or -).
+        this.operator(allowedOperators),
+        // We expect the current token to be a number (1, 14, 1.4...).
+        this.term()
+      );
+    }
 
-      node = new ASTBinaryOperator(node, op, right);
+    return node;
+  }
+
+  /**
+   * equality -> relational (
+   *               (OpGreaterThan | OpLowerThan | OpGreaterThanEqual | OpLowerThanEqual) relational
+   *             )*
+   */
+  equality() {
+    this.debug("Get equality");
+    
+    // We expect the current token to be a number (1, 14, 1.4...).
+    let node = this.relational();
+
+    let allowedOperators = [
+      TokenTypes.OpGreaterThan,
+      TokenTypes.OpGreaterThanEqual,
+      TokenTypes.OpLowerThan,
+      TokenTypes.OpLowerThanEqual,
+    ];
+
+    while (allowedOperators.includes(this.currentToken.type)) {
+      node = new ASTBinaryOperator(
+        node,
+        // We expect the current token to be an arithmetic operator token (+ or -).
+        this.operator(allowedOperators),
+        // We expect the current token to be a number (1, 14, 1.4...).
+        this.relational()
+      );
+    }
+
+    return node;
+  }
+
+  /**
+   * and -> equality ((OpEqual | OpNotEqual) equality)*
+   */
+  and() {
+    this.debug("Get and");
+
+    // We expect the current token to be a number (1, 14, 1.4...).
+    let node = this.equality();
+    let allowedOperators = [
+      TokenTypes.OpEqual,
+      TokenTypes.OpNotEqual,
+    ];
+
+    while (allowedOperators.includes(this.currentToken.type)) {
+      node = new ASTBinaryOperator(
+        node,
+        // We expect the current token to be an arithmetic operator token (+ or -).
+        this.operator(allowedOperators),
+        // We expect the current token to be a number (1, 14, 1.4...).
+        this.equality()
+      );
+    }
+
+    return node;
+  }
+
+  /**
+   * or -> and ((OpAnd) and)*
+   */
+  or() {
+    this.debug("Get or");
+
+    // We expect the current token to be a number (1, 14, 1.4...).
+    let node = this.and();
+
+    while (TokenTypes.OpAnd == this.currentToken.type) {
+      node = new ASTBinaryOperator(
+        node,
+        // We expect the current token to be an arithmetic operator token (+ or -).
+        this.operator([TokenTypes.OpAnd]),
+        // We expect the current token to be a number (1, 14, 1.4...).
+        this.and()
+      );
+    }
+
+    return node;
+  }
+
+  /**
+   * expr -> or ((OpOr) or)*
+   */
+  expr() {
+    this.debug("Get expr");
+
+    // We expect the current token to be a number (1, 14, 1.4...).
+    let node = this.or();
+
+    while (TokenTypes.OpOr == this.currentToken.type) {
+      node = new ASTBinaryOperator(
+        node,
+        // We expect the current token to be an arithmetic operator token (+ or -).
+        this.operator([TokenTypes.OpOr]),
+        // We expect the current token to be a number (1, 14, 1.4...).
+        this.or()
+      );
     }
 
     return node;

@@ -95,6 +95,9 @@ class Interpreter extends NodeVisitor {
     else if (node.operator.type == TokenTypes.OpMinus) {
       result = -this.visit(node.expr);
     }
+    else if (node.operator.type == TokenTypes.OpNot) {
+      result = !this.visit(node.expr);
+    }
     
     return result;
   }

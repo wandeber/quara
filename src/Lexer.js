@@ -91,35 +91,48 @@ class Lexer {
 
   getOperator() {
     let operators = [
-      '$not', '$eq', '$ne', '$lt', '$gt', '$lte', '$gte', '$and', '$or',
-      '!', '==', '!=', '<>', '<', '>', '<=', '>=', '&&', '||',
+      '||', '$or',
+      '&&', '$and',
+      '==', '!=', '<>', '$eq', '$ne',
+      '<', '>', '<=', '>=', '$lt', '$gt', '$lte', '$gte',
       '+', '-',
       '*', '/', '%',
+      '!', '$not',
       '++', '--',
       '(', ')',
     ];
     
-    let operator = "";
+    let currentOperator = "";
 
-    function lastCharacterCoincidence(index, charToCheck, values) {
-      for (let value of values) {
-        if (value.length > index && charToCheck == value[index]) {
-          return true;
+    function filterOperators(index, charToCheck, operators) {
+      let newOperators = []; // Will contain only operators that match the current operator.
+      
+      for (let op of operators) {
+        if (op.length > index && charToCheck == op[index]) {
+          newOperators.push(op);
         }
       }
+      
+      if (newOperators.length > 0) {
+        operators = newOperators;
+        return true;
+      }
+
       return false;
     }
 
-    while (lastCharacterCoincidence(operator.length, this.currentChar, operators)) {
-      operator += ""+ this.currentChar;
+    /* If current character match with any operator in the position it would have in case of add it
+    to currentOperator, adds it to currentOperator and advance to the next character. */
+    while (filterOperators(currentOperator.length, this.currentChar, operators)) {
+      currentOperator += ""+ this.currentChar;
       this.advance();
     }
     
-    if (!operators.includes(operator)) {
-      operator = null;
+    if (!operators.includes(currentOperator)) {
+      currentOperator = null;
     }
     
-    return operator;
+    return currentOperator;
   }
 
   /**
@@ -222,6 +235,9 @@ class Lexer {
       }
       if (operator == '||' || operator == '$or') {
         return new Token(TokenTypes.OpOr, '||');
+      }
+      if (operator == '!' || operator == '$not') {
+        return new Token(TokenTypes.OpNot, '!');
       }
 
       if (this.currentChar == '(') {
