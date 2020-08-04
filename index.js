@@ -37,9 +37,12 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
       +"  Query as Sara...                 v0.3\n"
       +"\n"
       +"\n"
-      +"  - Supports arithmetic operations (sums, substractions, divisions, multiplications) with\n"
-      +"    parenthesis and any number of spaces between members. You can use integer and decimal\n"
-      +"    numbers.\n"
+      +"  - Supported operators:\n"
+      +"      +, -, *, /, %, !, ==, !=, <>, <, >, <=, >=, &&, ||\n"
+      +"      $not, $ne, $lt, $gt, $lte, $gte, $and, $or\n"
+      +"      (, )\n"
+      +"  - Supported types:\n"
+      +"      Integer and decimal numbers.\n"
       +"\n"
     );
   }
