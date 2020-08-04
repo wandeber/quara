@@ -51,19 +51,24 @@ const {ASTBinaryOperator} = require("./ASTBinaryOperator");
  * | 8                 Left           <, >, <=, >=   Relational
  * | 6                 Left           +, -           Plus and minus
  * | 5                 Left           *, /, %        Factor
- * v 4                 Left           +, -           Unary plus and minus
- *
- * expr   -> term ((OpPlus | OpMinus) term)*
- * term   -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
- * factor -> (TypeInteger | TypeDecimal) | OpParenthesisOpen expr OpParenthesisClose
+ * v 4                 Left           !, +, -        Unary plus and minus
  *
  * expr       -> or ((OpOr) or)*
  * or         -> and ((OpAnd) and)*
  * and        -> equality ((OpEqual | OpNotEqual) equality)*
- * equality   -> relational ((OpGreaterThan | OpLowerThan | OpGreaterThanEqual | OpLowerThanEqual) relational)*
+ * equality   -> relational (
+ *                 (
+ *                   OpGreaterThan
+ *                   | OpLowerThan
+ *                   | OpGreaterThanEqual
+ *                   | OpLowerThanEqual
+ *                 ) relational
+ *               )*
  * relational -> term ((OpPlus | OpMinus) term)*
  * term       -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
- * factor     -> (OpPlus | OpMinus | OpNot) factor | (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
+ * factor     -> (OpPlus | OpMinus | OpNot) factor
+ *               | (TypeInteger | TypeDecimal)
+ *               | (OpParenthesisOpen expr OpParenthesisClose)
  */
 class Parser {
   constructor(lexer) {
