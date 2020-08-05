@@ -2,13 +2,13 @@
 
 const Readline = require("readline");
 
-const {Lexer} = require("./Pascal/Lexer");
-const {Parser} = require("./Pascal/Parser");
-const {Interpreter} = require('./Pascal/Interpreters/Interpreter');
-//const {RPNTranslator} = require('./Pascal/Interpreters/RPNTranslator');
-//const {LispTranslator} = require('./Pascal/Interpreters/LispTranslator');
-const {SQLTranslator} = require('./Pascal/Interpreters/SQLTranslator');
-const {ASTInterpreter} = require('./Pascal/Interpreters/ASTInterpreter');
+const {Lexer} = require("./pascal/Lexer");
+const {Parser} = require("./pascal/Parser");
+const {Interpreter} = require('./pascal/Interpreters/Interpreter');
+//const {RPNTranslator} = require('./pascal/Interpreters/RPNTranslator');
+//const {LispTranslator} = require('./pascal/Interpreters/LispTranslator');
+//const {SQLTranslator} = require('./pascal/Interpreters/SQLTranslator');
+//const {ASTInterpreter} = require('./pascal/Interpreters/ASTInterpreter');
 
 
 
@@ -28,30 +28,13 @@ const {ASTInterpreter} = require('./Pascal/Interpreters/ASTInterpreter');
  */
 (() => {
   function head() {
-    console.log(
-       "   ___                                 \n"
-      +"  / _ \\   _   _    __ _   _ __    __ _\n"
-      +" | | | | | | | |  / _` | | '__|  / _` |\n"
-      +" | |_| | | |_| | | (_| | | |    | (_| |\n"
-      +"  \\__\\_\\  \\__,_|  \\__,_| |_|     \\__,_|\n"
-      +"\n"
-      +"  Query as Sara...                 v0.3\n"
-      +"\n"
-      +"\n"
-      +"  - Supported operators:\n"
-      +"      +, -, *, /, %, !, ==, !=, <>, <, >, <=, >=, &&, ||\n"
-      +"      $not, $ne, $lt, $gt, $lte, $gte, $and, $or\n"
-      +"      (, )\n"
-      +"  - Supported types:\n"
-      +"      Integer and decimal numbers.\n"
-      +"\n"
-    );
+    console.log("  Pascal interpreter.\n");
   }
 
   function close() {
     console.log(
       "\n"
-      +"  Hope Bernito has solve your doubts. Bye!"
+      +"  Bye!"
       +"\n"
     );
     process.exit();
