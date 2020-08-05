@@ -14,11 +14,14 @@ Logic operators:
 Other:
   (, )
 */
+const Id = "Id";
+
 const Space = "Space"; // " "
 const Dot = "Dot"; // .
 
 const TypeInteger = "TypeInteger"; // 1
 const TypeDecimal = "TypeDecimal"; // 1.1
+const TypeBoolean = "TypeBoolean"; // true, false
 
 const OpPlus = "OpPlus"; // "+"
 const OpMinus = "OpMinus"; // "-"
@@ -26,19 +29,25 @@ const OpMultiplication = "OpTimes"; // "*"
 const OpDivision = "OpDivision"; // "/"
 const OpModulus = "OpModulus"; // %
 const OpPow = "OpPow"; // ^, **
+const OpSqrt = "OpSqrt"; // ¬/
 
 const OpIncrement = "OpIncrement"; // ++
 const OpDecrement = "OpDecrement"; // --
 
 const OpNot = "Not";
 const OpEqual = "OpEqual";
+const OpLaxEqual = "OpLaxEqual";
 const OpNotEqual = "OpNotEqual";
+const OpLaxNotEqual = "OpLaxNotEqual";
 const OpLowerThan = "OpLowerThan";
 const OpGreaterThan = "OpGreaterThan";
 const OpLowerThanEqual = "OpLowerThanEqual";
 const OpGreaterThanEqual = "OpGreaterThanEqual";
 const OpAnd = "OpAnd";
 const OpOr = "OpOr";
+
+const OpDot = "OpDot";
+const OpSemicolon = "OpSemicolon";
 
 const OpParenthesisOpen = 'OpParenthesisOpen';
 const OpParenthesisClose = 'OpParenthesisClose';
@@ -48,16 +57,20 @@ const EoF = "EoF"; // Fin.
 
 
 const TokenTypes = {
+  Id,
+
   Space, Dot,
 
-  TypeInteger, TypeDecimal,
+  TypeInteger, TypeDecimal, TypeBoolean,
   
   OpPlus, OpMinus,
-  OpMultiplication, OpDivision, OpModulus, OpPow,
+  OpMultiplication, OpDivision, OpModulus, OpPow, OpSqrt,
   OpIncrement, OpDecrement,
+  OpDot, OpSemicolon,
   
   OpNot,
-  OpEqual, OpNotEqual, OpLowerThan, OpGreaterThan, OpLowerThanEqual, OpGreaterThanEqual,
+  OpEqual, OpLaxEqual, OpNotEqual, OpLaxNotEqual,
+  OpLowerThan, OpGreaterThan, OpLowerThanEqual, OpGreaterThanEqual,
   OpAnd, OpOr,
   
   OpParenthesisOpen, OpParenthesisClose,

@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node ./index.js",
     "quara": "npm start",
-    "pascal": "node ./pascal.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

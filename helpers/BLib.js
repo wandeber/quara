@@ -4,17 +4,30 @@
 
 
 
-const Types = {
-  isInteger(str) {
+const AlphaRegExp = /^[a-z]+$/i;
+const AlphanumericRegExp = /^[a-z0-9]+$/i;
+
+
+
+class Types {
+  static isInteger(str) {
     if (isNaN(str)) {
       return false;
     }
     let value = parseFloat(str); // parseFloat parses 1 to 1.0.
     return Number.isInteger(value); // isInteger returns true for cases like 1.0.
-  },
+  }
 
-  isNumber(str) {
+  static isNumber(str) {
     return !isNaN(str);
+  }
+
+  static isAlpha(str) {
+    return str.match(AlphaRegExp);
+  }
+
+  static isAlphanumeric(str) {
+    return str.match(AlphanumericRegExp);
   }
 }
 

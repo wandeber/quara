@@ -6,7 +6,7 @@ const {AST} = require("./AST");
 
 
 
-class ASTNumber extends AST {
+class ASTBoolean extends AST {
   constructor(token) {
     super();
     this.token = token;
@@ -16,4 +16,4 @@ class ASTNumber extends AST {
 
 
 
-module.exports = {ASTNumber};
+module.exports = {ASTBoolean};

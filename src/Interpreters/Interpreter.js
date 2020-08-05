@@ -7,6 +7,12 @@ const {NodeVisitor} = require("../NodeVisitor");
 
 
 
+const AvailableVariables = {
+  sample: 4
+};
+
+
+
 /**
  *
  */
@@ -56,12 +62,21 @@ class Interpreter extends NodeVisitor {
     else if (node.operator.type == TokenTypes.OpModulus) {
       result = this.visit(node.left) % this.visit(node.right);
     }
+    else if (node.operator.type == TokenTypes.OpPow) {
+      result = Math.pow(this.visit(node.left), this.visit(node.right));
+    }
 
     else if (node.operator.type == TokenTypes.OpEqual) {
       result = this.visit(node.left) === this.visit(node.right);
     }
+    else if (node.operator.type == TokenTypes.OpLaxEqual) {
+      result = this.visit(node.left) == this.visit(node.right);
+    }
     else if (node.operator.type == TokenTypes.OpNotEqual) {
       result = this.visit(node.left) !== this.visit(node.right);
+    }
+    else if (node.operator.type == TokenTypes.OpLaxNotEqual) {
+      result = this.visit(node.left) === this.visit(node.right);
     }
     else if (node.operator.type == TokenTypes.OpLowerThan) {
       result = this.visit(node.left) < this.visit(node.right);
@@ -98,12 +113,23 @@ class Interpreter extends NodeVisitor {
     else if (node.operator.type == TokenTypes.OpNot) {
       result = !this.visit(node.expr);
     }
+    else if (node.operator.type == TokenTypes.OpSqrt) {
+      result = Math.sqrt(this.visit(node.expr));
+    }
     
     return result;
   }
 
   visit_ASTNumber(node) {
     return node.value;
+  }
+
+  visit_ASTBoolean(node) {
+    return node.value;
+  }
+
+  visit_ASTVariable(node) {
+    return AvailableVariables[node.name];
   }
 
 

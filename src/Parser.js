@@ -2,8 +2,10 @@
 
 const {TokenTypes} = require("./Token");
 const {ASTNumber} = require("./ASTNumber");
+const {ASTBoolean} = require("./ASTBoolean");
 const {ASTUnaryOperator} = require("./ASTUnaryOperator");
 const {ASTBinaryOperator} = require("./ASTBinaryOperator");
+const {ASTVariable} = require("./ASTVariable");
 
 
 
@@ -51,7 +53,8 @@ const {ASTBinaryOperator} = require("./ASTBinaryOperator");
  * | 8                 Left           <, >, <=, >=   Relational
  * | 6                 Left           +, -           Plus and minus
  * | 5                 Left           *, /, %        Factor
- * v 4                 Left           !, +, -        Unary plus and minus
+ * | 4                 Left           !, +, -        Unary plus and minus
+ * v 3                 Left           ^, ¬/          Power ans sqrt              // Pending
  *
  * expr       -> or ((OpOr) or)*
  * or         -> and ((OpAnd) and)*
@@ -65,10 +68,12 @@ const {ASTBinaryOperator} = require("./ASTBinaryOperator");
  *                 ) relational
  *               )*
  * relational -> term ((OpPlus | OpMinus) term)*
- * term       -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
- * factor     -> (OpPlus | OpMinus | OpNot) factor
- *               | (TypeInteger | TypeDecimal)
+ * term       -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
+ * pow        -> factor (OpPow factor)*
+ * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
+ *               | (TypeInteger | TypeDecimal | TypeBoolean)
  *               | (OpParenthesisOpen expr OpParenthesisClose)
+ *               | variable
  */
 class Parser {
   constructor(lexer) {
@@ -132,7 +137,11 @@ class Parser {
 
 
   /**
-   * factor -> unary | (TypeInteger | TypeDecimal) | (OpParenthesisOpen expr OpParenthesisClose)
+   * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
+   *               | (TypeInteger | TypeDecimal)
+   *               | (TypeBoolean)
+   *               | (OpParenthesisOpen expr OpParenthesisClose)
+   *               | variable
    */
   factor() {
     this.debug("Get factor");
@@ -142,7 +151,8 @@ class Parser {
     let allowedOperators = [
       TokenTypes.OpMinus,
       TokenTypes.OpPlus,
-      TokenTypes.OpNot
+      TokenTypes.OpNot,
+      TokenTypes.OpSqrt
     ];
 
     if (allowedOperators.includes(this.currentToken.type)) {
@@ -163,19 +173,54 @@ class Parser {
       node = new ASTNumber(this.currentToken);
       this.eat([TokenTypes.TypeInteger, TokenTypes.TypeDecimal]);
     }
+    else if (this.currentToken.type == TokenTypes.TypeBoolean) {
+      node = new ASTBoolean(this.currentToken);
+      this.eat(TokenTypes.TypeBoolean);
+    }
+    else if (this.currentToken.type == TokenTypes.Id) {
+      node = new ASTVariable(this.currentToken);
+      this.eat(TokenTypes.Id);
+    }
     
     return node;
   }
 
   /**
-   * term -> factor ((OpMultiplication | OpDivision | OpModulus) factor)*
+   * pow -> factor (OpPow factor)*
+   */
+  pow() {
+    this.debug("Get pow");
+
+    /* We expect the current token to be a number (1, 14, 1.4...) or a parenthesis opening
+    containing an expression. */
+    let node = this.factor();
+    let allowedOperators = [
+      TokenTypes.OpPow,
+    ];
+
+    while (allowedOperators.includes(this.currentToken.type)) {
+      node = new ASTBinaryOperator(
+        node,
+        // We expect the current token to be an arithmetic operator token (+, -, * or /).
+        this.operator(allowedOperators),
+        /* We expect the current token to be a number (1, 14, 1.4...) or a factor opening containing
+        an expression. */
+        this.factor()
+      );
+    }
+
+    return node;
+  }
+
+  /**
+   * term -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
    */
   term() {
     this.debug("Get term");
 
     /* We expect the current token to be a number (1, 14, 1.4...) or a parenthesis opening
     containing an expression. */
-    let node = this.factor();
+    let node = this.pow();
     let allowedOperators = [
       TokenTypes.OpMultiplication,
       TokenTypes.OpDivision,
@@ -189,7 +234,7 @@ class Parser {
         this.operator(allowedOperators),
         /* We expect the current token to be a number (1, 14, 1.4...) or a factor opening containing
         an expression. */
-        this.factor()
+        this.pow()
       );
     }
 

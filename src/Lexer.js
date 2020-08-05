@@ -6,6 +6,70 @@ const {Types} = require('../helpers/BLib.js');
 
 
 
+
+
+const ReserverKeywords = {
+  "BEGIN": new Token('BEGIN', 'BEGIN'),
+  "END":   new Token('END', 'END'),
+  
+  "true":  new Token(TokenTypes.TypeBoolean, true),
+  //"yes":   new Token('TRUE', 'true'),
+  //"ok":    new Token('TRUE', 'true'),
+  "false": new Token(TokenTypes.TypeBoolean, false),
+  //"no":    new Token('FALSE', 'false'),
+  //"ko":    new Token('FALSE', 'false'),
+};
+
+const Operators = {
+  '!':    new Token(TokenTypes.OpNot, '!'),
+  '$not': new Token(TokenTypes.OpNot, '!'),
+  
+  '||':   new Token(TokenTypes.OpOr, '||'),
+  '$or':  new Token(TokenTypes.OpOr, '||'),
+  '&&':   new Token(TokenTypes.OpAnd, '&&'),
+  '$and': new Token(TokenTypes.OpAnd, '&&'),
+
+  '==':   new Token(TokenTypes.OpEqual, '=='), // ===
+  '$eq':  new Token(TokenTypes.OpEqual, '=='), // ===
+  '!=':   new Token(TokenTypes.OpNotEqual, '!='), // !==
+  '<>':   new Token(TokenTypes.OpNotEqual, '!='), // !==
+  '$ne':  new Token(TokenTypes.OpNotEqual, '!='), // !==
+  
+  '~=':   new Token(TokenTypes.OpLaxEqual, '~='), // Lax equality: == without type checking.
+  '$leq': new Token(TokenTypes.OpLaxEqual, '~='), // Lax equality: == without type checking.
+  '!~=':  new Token(TokenTypes.OpLaxNotEqual, '!~='), // Lax: != without type checking.
+  '$lne': new Token(TokenTypes.OpLaxNotEqual, '!~='), // Lax: != without type checking.
+  
+  '<':    new Token(TokenTypes.OpLowerThan, '<'),
+  '$lt':  new Token(TokenTypes.OpLowerThan, '<'),
+  '>':    new Token(TokenTypes.OpGreaterThan, '>'),
+  '$gt':  new Token(TokenTypes.OpGreaterThan, '>'),
+  '<=':   new Token(TokenTypes.OpLowerThanEqual, '<='),
+  '$lte': new Token(TokenTypes.OpLowerThanEqual, '<='),
+  '>=':   new Token(TokenTypes.OpGreaterThanEqual, '>='),
+  '$gte': new Token(TokenTypes.OpGreaterThanEqual, '>='),
+
+  '+':    new Token(TokenTypes.OpPlus, '+'),
+  '-':    new Token(TokenTypes.OpMinus, '-'),
+  '*':    new Token(TokenTypes.OpMultiplication, '*'),
+  '/':    new Token(TokenTypes.OpDivision, '/'),
+  '%':    new Token(TokenTypes.OpModulus, '%'),
+  '^':    new Token(TokenTypes.OpPow, '^'),
+  '**':   new Token(TokenTypes.OpPow, '^'),
+  '¬/':   new Token(TokenTypes.OpSqrt, '¬/'),
+  
+  '++':   new Token(TokenTypes.OpIncrement, '++'),
+  '--':   new Token(TokenTypes.OpDecrement, '--'),
+  
+  '(':    new Token(TokenTypes.OpParenthesisOpen, '('),
+  ')':    new Token(TokenTypes.OpParenthesisClose, ')'),
+  
+  '.':    new Token(TokenTypes.OpDot, '.'),
+  ';':    new Token(TokenTypes.OpSemicolon, ';'),
+}
+
+
+
 /**
  * Related definitions:
  * - Token: An object that has a type and a value. For example, +, -, * ans / are different tokens
@@ -56,8 +120,21 @@ class Lexer {
     }
   }
 
+  peek() {
+    let peekPos = this.pos + 1;
+    if (peekPos < this.text.length) {
+      return this.text[peekPos];
+    }
+    return null;
+  }
+
   advance() {
     this.pos++;
+    this.getCurrentChar();
+  }
+
+  goToPosition(pos) {
+    this.pos = pos;
     this.getCurrentChar();
   }
 
@@ -68,7 +145,7 @@ class Lexer {
   }
 
   getNumber() {
-    //let posAtStart = this.pos;
+    let posAtStart = this.pos;
     let number = "";
     let dots = 0;
     while (
@@ -84,55 +161,68 @@ class Lexer {
 
     if (!Types.isNumber(number)) {
       number = null;
+      this.goToPosition(posAtStart);
     }
 
     return number;
   }
 
-  getOperator() {
-    let operators = [
-      '||', '$or',
-      '&&', '$and',
-      '==', '!=', '<>', '$eq', '$ne',
-      '<', '>', '<=', '>=', '$lt', '$gt', '$lte', '$gte',
-      '+', '-',
-      '*', '/', '%',
-      '!', '$not',
-      '++', '--',
-      '(', ')',
-    ];
-    
-    let currentOperator = "";
+  /**
+   * Obtiene una cambinación de los siguientes caracteres en a partir de this.text[this.pos] si
+   * si coinciden con alguno de los valores de allowedValues. Para buscar, esta funcián irá
+   * comparando caracter a caracter con todos los valores disponibles para descartar los que no
+   * coincidan. Se da prioridad a coincidencias largas. Se intentará devolver == antes que =.
+   * @param {*} allowedValues 
+   */
+  getCoincidence(allowedValues) {
+    let currentValue = "";
 
-    function filterOperators(index, charToCheck) {
-      let newOperators = []; // Will contain only operators that match the current operator.
+    function filterValues(index, charToCheck) {
+      let remainingAllowedValues = []; // Will contain only operators that match the current operator.
       
-      for (let op of operators) {
-        if (op.length > index && charToCheck == op[index]) {
-          newOperators.push(op);
+      for (let value of allowedValues) {
+        if (value.length > index && charToCheck == value[index]) {
+          remainingAllowedValues.push(value);
         }
       }
       
-      if (newOperators.length > 0) {
-        operators = newOperators;
+      if (remainingAllowedValues.length > 0) {
+        allowedValues = remainingAllowedValues;
         return true;
       }
 
       return false;
     }
 
-    /* If current character match with any operator in the position it would have in case of add it
-    to currentOperator, adds it to currentOperator and advance to the next character. */
-    while (filterOperators(currentOperator.length, this.currentChar, operators)) {
-      currentOperator += ""+ this.currentChar;
+    /* If current character match with any value in the position it would have in case of add it
+    to currentValue, adds it to currentValue and advance to the next character. */
+    while (filterValues(currentValue.length, this.currentChar)) {
+      currentValue += ""+ this.currentChar;
       this.advance();
     }
     
-    if (!operators.includes(currentOperator)) {
-      currentOperator = null;
+    return currentValue;
+  }
+
+  _id() {
+    let result = "";
+    while (this.currentChar != null && Types.isAlphanumeric(this.currentChar)) {
+      result += this.currentChar;
+      this.advance();
     }
-    
-    return currentOperator;
+    if (ReserverKeywords[result]) {
+      return ReserverKeywords[result];
+    }
+    return new Token(TokenTypes.Id, result);
+  }
+
+  getOperator() {
+    let operatorKeys = Object.keys(Operators);
+    let currentOperatorKey = this.getCoincidence(operatorKeys);
+    if (Operators[currentOperatorKey]) {
+      return Operators[currentOperatorKey];
+    }
+    return null;
   }
 
   /**
@@ -176,76 +266,13 @@ class Lexer {
       }
     }
 
-    // Operators:
-    // Arithmetic operators:
-    //   +, -, *, /
-    // Logic operators:
-    //   $eq, $ne, $lt, $gt, $lte, $gte, $and, $or
-    //   ==, !=, <>, <, >, <=, >=, &&, ||
-    // Other:
-    //   (, )
     let operator = this.getOperator();
     if (operator) { // Not null.
-      if (operator == '+') {
-        return new Token(TokenTypes.OpPlus, '+');
-      }
-      if (operator == '-') {
-        return new Token(TokenTypes.OpMinus, '-');
-      }
-      if (operator == '*') {
-        return new Token(TokenTypes.OpMultiplication, '*');
-      }
-      if (operator == '/') {
-        return new Token(TokenTypes.OpDivision, '/');
-      }
-      if (operator == '%') {
-        return new Token(TokenTypes.OpModulus, '%');
-      }
+      return operator;
+    }
 
-      if (operator == '++') {
-        return new Token(TokenTypes.OpIncrement, '++');
-      }
-      if (operator == '--') {
-        return new Token(TokenTypes.OpDecrement, '--');
-      }
-
-      if (operator == '!' || operator == '$not') {
-        return new Token(TokenTypes.OpNot, '!');
-      }
-      if (operator == '==' || operator == '$eq') {
-        return new Token(TokenTypes.OpEqual, '==');
-      }
-      if (operator == '!=' || operator == '<>' || operator == '$ne') {
-        return new Token(TokenTypes.OpNotEqual, '!=');
-      }
-      if (operator == '<' || operator == '$lt') {
-        return new Token(TokenTypes.OpLowerThan, '<');
-      }
-      if (operator == '>' || operator == '$gt') {
-        return new Token(TokenTypes.OpGreaterThan, '>');
-      }
-      if (operator == '<=' || operator == '$lte') {
-        return new Token(TokenTypes.OpLowerThanEqual, '<=');
-      }
-      if (operator == '>=' || operator == '$gte') {
-        return new Token(TokenTypes.OpGreaterThanEqual, '>=');
-      }
-      if (operator == '&&' || operator == '$and') {
-        return new Token(TokenTypes.OpAnd, '&&');
-      }
-      if (operator == '||' || operator == '$or') {
-        return new Token(TokenTypes.OpOr, '||');
-      }
-      if (operator == '!' || operator == '$not') {
-        return new Token(TokenTypes.OpNot, '!');
-      }
-
-      if (operator == '(') {
-        return new Token(TokenTypes.OpParenthesisOpen, '(');
-      }
-      if (operator == ')') {
-        return new Token(TokenTypes.OpParenthesisClose, ')');
-      }
+    if (Types.isAlpha(this.currentChar)) {
+      return this._id();
     }
 
     this.error();
