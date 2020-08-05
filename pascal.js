@@ -2,13 +2,13 @@
 
 const Readline = require("readline");
 
-const {Lexer} = require("./src/Lexer");
-const {Parser} = require("./src/Parser");
-const {Interpreter} = require('./src/Interpreters/Interpreter');
-//const {RPNTranslator} = require('./src/Interpreters/RPNTranslator');
-//const {LispTranslator} = require('./src/Interpreters/LispTranslator');
-//const {SQLTranslator} = require('./src/Interpreters/SQLTranslator');
-//const {ASTInterpreter} = require('./src/Interpreters/ASTInterpreter');
+const {Lexer} = require("./Pascal/Lexer");
+const {Parser} = require("./Pascal/Parser");
+const {Interpreter} = require('./Pascal/Interpreters/Interpreter');
+//const {RPNTranslator} = require('./Pascal/Interpreters/RPNTranslator');
+//const {LispTranslator} = require('./Pascal/Interpreters/LispTranslator');
+const {SQLTranslator} = require('./Pascal/Interpreters/SQLTranslator');
+const {ASTInterpreter} = require('./Pascal/Interpreters/ASTInterpreter');
 
 
 
@@ -94,7 +94,9 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
               const interpreter = new Interpreter(parser);
               
               result = interpreter.interpret();
-              console.log(result);
+              if (result) {
+                console.log(result);
+              }
             }
           }
         }

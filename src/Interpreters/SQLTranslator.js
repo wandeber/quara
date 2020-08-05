@@ -41,7 +41,79 @@ class SQLTranslator extends NodeVisitor {
 
 
   visit_ASTBinaryOperator(node) {
-    return "("+ this.visit(node.left) +" "+ node.operator.value  +" "+ this.visit(node.right) +")";
+    let result;
+
+    if (node.operator.type == TokenTypes.OpPlus) {
+      result = this.visit(node.left) + this.visit(node.right);
+    }
+    else if (node.operator.type == TokenTypes.OpMinus) {
+      result = this.visit(node.left) - this.visit(node.right);
+    }
+    else if (node.operator.type == TokenTypes.OpMultiplication) {
+      result = this.visit(node.left) * this.visit(node.right);
+    }
+    else if (node.operator.type == TokenTypes.OpDivision) {
+      result = this.visit(node.left) / this.visit(node.right);
+    }
+    else if (node.operator.type == TokenTypes.OpModulus) {
+      result = this.visit(node.left) % this.visit(node.right);
+    }
+
+    else if (node.operator.type == TokenTypes.OpEqual) {
+      result = {};
+      result[this.visit(node.left)] = {$eq: this.visit(node.right)};
+      return result;
+    }
+    else if (node.operator.type == TokenTypes.OpNotEqual) {
+      result = {};
+      result[this.visit(node.left)] = {$ne: this.visit(node.right)};
+      return result;
+    }
+    else if (node.operator.type == TokenTypes.OpLowerThan) {
+      result = {};
+      result[this.visit(node.left)] = {$lt: this.visit(node.right)};
+      return result;
+    }
+    else if (node.operator.type == TokenTypes.OpGreaterThan) {
+      result = {};
+      result[this.visit(node.left)] = {$gt: this.visit(node.right)};
+      return result;
+    }
+    else if (node.operator.type == TokenTypes.OpLowerThanEqual) {
+      result = {};
+      result[this.visit(node.left)] = {$lte: this.visit(node.right)};
+      return result;
+    }
+    else if (node.operator.type == TokenTypes.OpGreaterThanEqual) {
+      result = {};
+      result[this.visit(node.left)] = {$gte: this.visit(node.right)};
+      return result;
+    }
+
+    else if (node.operator.type == TokenTypes.OpAnd) {
+      result = {$and: [this.visit(node.left), this.visit(node.right)]};
+    }
+    else if (node.operator.type == TokenTypes.OpOr) {
+      result = {$or: [this.visit(node.left), this.visit(node.right)]};
+    }
+    
+    return result;
+  }
+
+  visit_ASTUnaryOperator(node) {
+    let result;
+
+    if (node.operator.type == TokenTypes.OpPlus) {
+      result = this.visit(node.expr);
+    }
+    else if (node.operator.type == TokenTypes.OpMinus) {
+      result = -this.visit(node.expr);
+    }
+    else if (node.operator.type == TokenTypes.OpNot) {
+      result = {$not: this.visit(node.expr)};
+    }
+    
+    return result;
   }
 
   visit_ASTNumber(node) {
@@ -52,7 +124,10 @@ class SQLTranslator extends NodeVisitor {
 
   interpret() {
     let tree = this.parser.parse();
-    return this.visit(tree);
+    if (tree) {
+      return this.visit(tree);
+    }
+    return false;
   }
 }
 

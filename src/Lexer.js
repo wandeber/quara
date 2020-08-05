@@ -104,7 +104,7 @@ class Lexer {
     
     let currentOperator = "";
 
-    function filterOperators(index, charToCheck, operators) {
+    function filterOperators(index, charToCheck) {
       let newOperators = []; // Will contain only operators that match the current operator.
       
       for (let op of operators) {
@@ -240,10 +240,10 @@ class Lexer {
         return new Token(TokenTypes.OpNot, '!');
       }
 
-      if (this.currentChar == '(') {
+      if (operator == '(') {
         return new Token(TokenTypes.OpParenthesisOpen, '(');
       }
-      if (this.currentChar == ')') {
+      if (operator == ')') {
         return new Token(TokenTypes.OpParenthesisClose, ')');
       }
     }

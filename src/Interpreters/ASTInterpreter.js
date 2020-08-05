@@ -10,11 +10,12 @@ const {NodeVisitor} = require("../NodeVisitor");
 /**
  *
  */
-class Interpreter extends NodeVisitor {
-  constructor(parser, showDebug = false) {
+class ASTInterpreter extends NodeVisitor {
+  constructor(parser) {
     super();
+    this.showDebug = false;
     this.parser = parser;
-    this.showDebug = showDebug;
+    this.space = "";
   }
 
 
@@ -29,7 +30,7 @@ class Interpreter extends NodeVisitor {
   debug(message = "") {
     if (this.showDebug) {
       this.lexer.debug(message);
-      console.log("-- Interpreter: "+ message);
+      console.log("-- ASTInterpreter: "+ message);
       if (this.currentToken) {
         console.log("  current token - "+ this.currentToken.type +" - "+ this.currentToken.value);
       }
@@ -41,6 +42,10 @@ class Interpreter extends NodeVisitor {
   visit_ASTBinaryOperator(node) {
     let result;
 
+    let prevSpace = this.space;
+    this.space += '    ';
+    console.log(this.space, '('+ node.operator.value +')');
+    
     if (node.operator.type == TokenTypes.OpPlus) {
       result = this.visit(node.left) + this.visit(node.right);
     }
@@ -82,6 +87,8 @@ class Interpreter extends NodeVisitor {
     else if (node.operator.type == TokenTypes.OpOr) {
       result = this.visit(node.left) || this.visit(node.right);
     }
+
+    this.space = prevSpace;
     
     return result;
   }
@@ -89,6 +96,10 @@ class Interpreter extends NodeVisitor {
   visit_ASTUnaryOperator(node) {
     let result;
     
+    let prevSpace = this.space;
+    this.space += '    ';
+    console.log(this.space, "Unary ("+ node.operator.value +")");
+
     if (node.operator.type == TokenTypes.OpPlus) {
       result = this.visit(node.expr);
     }
@@ -99,10 +110,19 @@ class Interpreter extends NodeVisitor {
       result = !this.visit(node.expr);
     }
     
+    //console.log(this.space, result);
+    this.space = prevSpace;
+    
     return result;
   }
 
+
   visit_ASTNumber(node) {
+    let prevSpace = this.space;
+    this.space += '    ';
+    console.log(this.space, node.value);
+    this.space = prevSpace;
+
     return node.value;
   }
 
@@ -110,10 +130,13 @@ class Interpreter extends NodeVisitor {
 
   interpret() {
     let tree = this.parser.parse();
-    return this.visit(tree);
+    if (tree) {
+      return this.visit(tree);
+    }
+    return false;
   }
 }
 
 
 
-module.exports = {Interpreter};
+module.exports = {ASTInterpreter};
