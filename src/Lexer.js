@@ -66,6 +66,8 @@ const Operators = {
   
   '.':    new Token(TokenTypes.OpDot, '.'),
   ';':    new Token(TokenTypes.OpSemicolon, ';'),
+
+  '"':    new Token(TokenTypes.OpQuote, ';'),
 }
 
 
@@ -144,17 +146,28 @@ class Lexer {
     }
   }
 
+  getString() {
+    let str = "";
+    this.advance(); // Skip " opening.
+    while (this.currentChar != '"') {
+      str += this.currentChar;
+      this.advance();
+    }
+    this.advance(); // Skip " closure.
+    return str;
+  }
+
   getNumber() {
     let posAtStart = this.pos;
     let number = "";
-    let dots = 0;
+    //let dots = 0;
     while (
       this.currentChar == '.'
       || Types.isInteger(this.currentChar)
     ) {
-      if (this.currentChar == '.') {
-        dots++;
-      }
+      //if (this.currentChar == '.') {
+      //  dots++;
+      //}
       number += ""+ this.currentChar;
       this.advance();
     }
@@ -250,6 +263,14 @@ class Lexer {
       return token;
     }
 
+    // Strings:
+    if (this.currentChar == '"') {
+      let str = this.getString();
+      if (typeof str !== "undefined") {
+        return new Token(TokenTypes.TypeString, str);
+      }
+    }
+
     /* if the character is a digit then convert it to
     integer, create an TypeInteger token, increment this.pos
     index to point to the next character after the digit,
@@ -266,11 +287,13 @@ class Lexer {
       }
     }
 
+    // Operators.
     let operator = this.getOperator();
     if (operator) { // Not null.
       return operator;
     }
 
+    // Reserved keywords and variable names.
     if (Types.isAlpha(this.currentChar)) {
       return this._id();
     }

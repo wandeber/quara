@@ -8,19 +8,48 @@ const {NodeVisitor} = require("../NodeVisitor");
 
 
 const AvailableVariables = {
-  sample: 4
+  sampleNumber: 4,
+  sampleString: "un string",
+  
+  sampleObject: {
+    prop1: "prop1 value",
+    prop2: "prop2 value"
+  },
+
+  sampleSimpleArray: [
+    "value 1", "value 2"
+  ],
+
+  sampleArray: [
+    {
+      id: 1,
+      prop1: "prop1 value",
+      prop2: "prop2 value"
+    },
+    {
+      id: 2,
+      prop1: "prop1 value",
+      prop2: "prop2 value"
+    }
+  ]
 };
 
-
+/*
+"prop1" in sampleObject
+"value 1" in sampleSimpleArray
+1 in sampleSimpleArray[any].id
+*/
 
 /**
  *
  */
 class Interpreter extends NodeVisitor {
-  constructor(parser, showDebug = false) {
+  constructor(parser, variables = {}, showDebug = false) {
     super();
     this.parser = parser;
     this.showDebug = showDebug;
+    this.variables = AvailableVariables;
+    Object.assign(this.variables, variables);
   }
 
 
@@ -128,8 +157,12 @@ class Interpreter extends NodeVisitor {
     return node.value;
   }
 
+  visit_ASTString(node) {
+    return node.value;
+  }
+
   visit_ASTVariable(node) {
-    return AvailableVariables[node.name];
+    return this.variables[node.name];
   }
 
 

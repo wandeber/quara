@@ -94,7 +94,13 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
               const interpreter = new Interpreter(parser);
               
               result = interpreter.interpret();
-              console.log(result);
+              switch (typeof result) {
+                case 'string':
+                  console.log('"'+ result +'"');
+                  break;
+                default:
+                  console.log(result);
+              }
             }
           }
         }

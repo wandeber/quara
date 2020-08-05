@@ -22,6 +22,7 @@ const Dot = "Dot"; // .
 const TypeInteger = "TypeInteger"; // 1
 const TypeDecimal = "TypeDecimal"; // 1.1
 const TypeBoolean = "TypeBoolean"; // true, false
+const TypeString = "TypeString";
 
 const OpPlus = "OpPlus"; // "+"
 const OpMinus = "OpMinus"; // "-"
@@ -48,6 +49,7 @@ const OpOr = "OpOr";
 
 const OpDot = "OpDot";
 const OpSemicolon = "OpSemicolon";
+const OpQuote = "OpQuote";
 
 const OpParenthesisOpen = 'OpParenthesisOpen';
 const OpParenthesisClose = 'OpParenthesisClose';
@@ -61,18 +63,19 @@ const TokenTypes = {
 
   Space, Dot,
 
-  TypeInteger, TypeDecimal, TypeBoolean,
+  TypeInteger, TypeDecimal, TypeBoolean, TypeString,
   
   OpPlus, OpMinus,
   OpMultiplication, OpDivision, OpModulus, OpPow, OpSqrt,
   OpIncrement, OpDecrement,
-  OpDot, OpSemicolon,
   
   OpNot,
   OpEqual, OpLaxEqual, OpNotEqual, OpLaxNotEqual,
   OpLowerThan, OpGreaterThan, OpLowerThanEqual, OpGreaterThanEqual,
   OpAnd, OpOr,
   
+  OpDot, OpSemicolon,
+  OpQuote,
   OpParenthesisOpen, OpParenthesisClose,
 
   EoF

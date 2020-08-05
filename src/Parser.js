@@ -3,6 +3,7 @@
 const {TokenTypes} = require("./Token");
 const {ASTNumber} = require("./ASTNumber");
 const {ASTBoolean} = require("./ASTBoolean");
+const {ASTString} = require("./ASTString");
 const {ASTUnaryOperator} = require("./ASTUnaryOperator");
 const {ASTBinaryOperator} = require("./ASTBinaryOperator");
 const {ASTVariable} = require("./ASTVariable");
@@ -71,7 +72,9 @@ const {ASTVariable} = require("./ASTVariable");
  * term       -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
  * pow        -> factor (OpPow factor)*
  * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
- *               | (TypeInteger | TypeDecimal | TypeBoolean)
+ *               | TypeBoolean
+ *               | (TypeInteger | TypeDecimal)
+ *               | TypeString
  *               | (OpParenthesisOpen expr OpParenthesisClose)
  *               | variable
  */
@@ -138,8 +141,9 @@ class Parser {
 
   /**
    * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
+   *               | TypeBoolean
    *               | (TypeInteger | TypeDecimal)
-   *               | (TypeBoolean)
+   *               | TypeString
    *               | (OpParenthesisOpen expr OpParenthesisClose)
    *               | variable
    */
@@ -168,14 +172,20 @@ class Parser {
       // We eat the parenthesis closure (we can just ignore it).
       this.operator([TokenTypes.OpParenthesisClose]); // Close.
     }
+    // Boolean
+    else if (this.currentToken.type == TokenTypes.TypeBoolean) {
+      node = new ASTBoolean(this.currentToken);
+      this.eat(TokenTypes.TypeBoolean);
+    }
     // Number:
     else if ([TokenTypes.TypeInteger, TokenTypes.TypeDecimal].includes(this.currentToken.type)) {
       node = new ASTNumber(this.currentToken);
       this.eat([TokenTypes.TypeInteger, TokenTypes.TypeDecimal]);
     }
-    else if (this.currentToken.type == TokenTypes.TypeBoolean) {
-      node = new ASTBoolean(this.currentToken);
-      this.eat(TokenTypes.TypeBoolean);
+    // String
+    else if (this.currentToken.type == TokenTypes.TypeString) {
+      node = new ASTString(this.currentToken);
+      this.eat(TokenTypes.TypeString);
     }
     else if (this.currentToken.type == TokenTypes.Id) {
       node = new ASTVariable(this.currentToken);
