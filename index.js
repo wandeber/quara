@@ -27,7 +27,22 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
  * @see https://ruslanspivak.com/lsbasi-part1/ Implemented following Ruslan's guide.
  */
 (() => {
-  function head() {
+  function devStatus() {
+    console.log(
+       "  - Supported operators:\n"
+      +"      +, -, *, /, %, ^, ¬/\n"
+      +"      !, ==, !=, ~=, !~=, <>, <, >, <=, >=, &&, ||\n"
+      +"      $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
+      +"      (, )\n"
+      +"  - Supported types:\n"
+      +"      - Booleans.\n"
+      +"      - Integer and decimal numbers.\n"
+      +"      - Strings.\n"
+      +"\n"
+    );
+  }
+  
+  function info() {
     console.log(
        "   ___                                 \n"
       +"  / _ \\   _   _    __ _   _ __    __ _\n"
@@ -38,14 +53,9 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
       +"  Query as Sara...                 v0.3\n"
       +"\n"
       +"\n"
-      +"  - Supported operators:\n"
-      +"      +, -, *, /, %, !, ==, !=, <>, <, >, <=, >=, &&, ||\n"
-      +"      $not, $ne, $lt, $gt, $lte, $gte, $and, $or\n"
-      +"      (, )\n"
-      +"  - Supported types:\n"
-      +"      Integer and decimal numbers.\n"
-      +"\n"
     );
+
+    devStatus();
   }
 
   function close() {
@@ -72,6 +82,7 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
   };
   commands.bye = commands.close;
   commands.exit = commands.close;
+  commands.info = info;
   
   let result;
   function prompt() {
@@ -117,6 +128,6 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
 
 
   rl.on("close", close);
-  head();
+  info();
   prompt();
 })();
