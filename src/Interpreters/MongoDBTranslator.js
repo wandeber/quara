@@ -12,7 +12,7 @@ const {NodeVisitor} = require("../NodeVisitor");
  * Example:
  *   (2 + 3 * 5)   ->    (+ 2 (* 3 5)).
  */
-class SQLTranslator extends NodeVisitor {
+class MongoDBTranslator extends NodeVisitor {
   constructor(parser) {
     super();
     this.showDebug = false;
@@ -31,7 +31,7 @@ class SQLTranslator extends NodeVisitor {
   debug(message = "") {
     if (this.showDebug) {
       this.lexer.debug(message);
-      console.log("-- SQLTranslator: "+ message);
+      console.log("-- MongoDBTranslator: "+ message);
       if (this.currentToken) {
         console.log("  current token - "+ this.currentToken.type +" - "+ this.currentToken.value);
       }
@@ -116,7 +116,15 @@ class SQLTranslator extends NodeVisitor {
     return result;
   }
 
+  visit_ASTBoolean(node) {
+    return node.value;
+  }
+
   visit_ASTNumber(node) {
+    return node.value;
+  }
+
+  visit_ASTString(node) {
     return node.value;
   }
 
@@ -133,4 +141,4 @@ class SQLTranslator extends NodeVisitor {
 
 
 
-module.exports = {SQLTranslator};
+module.exports = {MongoDBTranslator};

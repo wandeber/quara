@@ -7,7 +7,8 @@ const {Parser} = require("./src/Parser");
 const {Interpreter} = require('./src/Interpreters/Interpreter');
 //const {RPNTranslator} = require('./src/Interpreters/RPNTranslator');
 //const {LispTranslator} = require('./src/Interpreters/LispTranslator');
-//const {SQLTranslator} = require('./src/Interpreters/SQLTranslator');
+//const {MongoDBTranslator} = require('./src/Interpreters/MongoDBTranslator');
+//const {BAPIFiltersTranslator} = require('./src/Interpreters/BAPIFiltersTranslator');
 //const {ASTInterpreter} = require('./src/Interpreters/ASTInterpreter');
 
 
@@ -100,7 +101,8 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
     
               //const interpreter = new RPNTranslator(parser);
               //const interpreter = new LispTranslator(parser);
-              //const interpreter = new SQLTranslator(parser);
+              //const interpreter = new MongoDBTranslator(parser);
+              //const interpreter = new BAPIFiltersTranslator(parser);
               //const interpreter = new ASTInterpreter(parser);
               const interpreter = new Interpreter(parser);
               
@@ -108,6 +110,9 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
               switch (typeof result) {
                 case 'string':
                   console.log('"'+ result +'"');
+                  break;
+                case 'object':
+                  console.log(JSON.stringify(result, null, 2));
                   break;
                 default:
                   console.log(result);
