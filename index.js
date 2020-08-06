@@ -23,6 +23,10 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
  * - Support decimal numbers.
  * - Support unary operator + and -.
  * - Support logic operators (!, !=, <, >, <=, >=, &&, ||).
+ * - Support pow (^) and sqrt (¬/) operators. 
+ * - Support assign operators (=, +=, -=, *=, /=, %=, ^=).
+ * - Support strings.
+ * - Variables and reserved keywords.
  * 
  * @author wandeber
  * @see https://ruslanspivak.com/lsbasi-part1/ Implemented following Ruslan's guide.
@@ -32,6 +36,7 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
     console.log(
        "  - Supported operators:\n"
       +"      +, -, *, /, %, ^, ¬/\n"
+      +"      =, +=, -=, *=, /=, %=, ^=\n"
       +"      !, ==, !=, ~=, !~=, <>, <, >, <=, >=, &&, ||\n"
       +"      $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
       +"      (, )\n"
@@ -39,6 +44,7 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
       +"      - Booleans.\n"
       +"      - Integer and decimal numbers.\n"
       +"      - Strings.\n"
+      +"  - Variables and reserved keywords.\n"
       +"\n"
     );
   }
