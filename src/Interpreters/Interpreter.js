@@ -200,8 +200,8 @@ class Interpreter extends NodeVisitor {
     for (let child of node.children) {
       result.push(this.visit(child));
     }
-    if (result.length == 1) {
-      return result[0];
+    if (result.length > 0) {
+      return result[result.length - 1];
     }
   }
 

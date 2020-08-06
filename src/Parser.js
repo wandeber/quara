@@ -438,9 +438,9 @@ class Parser {
     this.debug("Get statement");
     let node = this.assign();
     // Optional semicolon (;) at the end of every statement.
-    if (this.currentToken.type == TokenTypes.OpSemicolon) {
+    /*if (this.currentToken.type == TokenTypes.OpSemicolon) {
       this.eat(TokenTypes.OpSemicolon);
-    }
+    }*/
 
     // You could prefer returns an ASTEmpty or something like that here if node is empty.
     
@@ -452,15 +452,17 @@ class Parser {
    */
   script() {
     this.debug("Get script");
-    let node = this.statement();
     let root = new ASTCompound();
+    
+    let node = this.statement();
     if (node) { // For empty lines.
       root.children.push(node);
     }
     while (this.currentToken.type == TokenTypes.OpSemicolon) {
+      this.eat(TokenTypes.OpSemicolon);
+      node = this.statement();
       if (node) { // For empty lines.
-        this.eat(TokenTypes.OpSemicolon);
-        root.children.push(this.statement());
+        root.children.push(node);
       }
     }
     return root;

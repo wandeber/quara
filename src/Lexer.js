@@ -341,7 +341,7 @@ class Lexer {
     }
 
     /* if the character is a digit then convert it to
-    integer, create an TypeInteger token, increment this.pos
+    integer, create a TypeInteger token, increment this.pos
     index to point to the next character after the digit,
     and return the TypeInteger token */
     if (this.currentChar == '.' || Types.isInteger(this.currentChar)) {
