@@ -4,9 +4,30 @@ const {Token, TokenTypes} = require("./Token");
 const {Types} = require("../helpers/BLib.js");
 
 
+/*
+int holaMundo(string algo, integer algo) {
+
+}
+its internal name will be "holaMundo(string, integer)"
 
 
+int (string algo, integer algo) => {
 
+}
+
+
+[type] [name] ([ [type] <name>[, [type] <name>] ]) [=>] {
+
+}
+
+
+Permitir "2a" -> "a" es un nombre de variable. Se interpretará como "(2 * a)".
+Permitir "2a b c" -> "a", "b" y "c" son nombres de variable. Se interpretará como "(2 * a * b * c)".
+3 * 2a b -> 3 * (2 * a * b)
+*/
+
+
+const VariableNameRegExp = /^[a-z0-9_$]+$/i;
 
 const ReserverKeywords = {
   "BEGIN": new Token("BEGIN", "BEGIN"),
@@ -18,6 +39,21 @@ const ReserverKeywords = {
   "false": new Token(TokenTypes.TypeBoolean, false),
   //"no":    new Token("FALSE", "false"),
   //"ko":    new Token("FALSE", "false"),
+
+  
+  //"var"
+  //"const"
+
+  // Types:
+  /*
+  "any"
+  "boolean"
+  "char"
+  "int", "integer"
+  "float", "decimal"
+  "double"
+  "string"
+  */
 };
 
 const Operators = {
@@ -121,6 +157,9 @@ class Lexer {
   }
 
 
+  static isValidVariableName(str) {
+    return str.match(VariableNameRegExp);
+  }
 
   getCurrentChar() {
     if (this.pos < this.text.length) {
@@ -228,7 +267,7 @@ class Lexer {
 
   _id() {
     let result = "";
-    while (this.currentChar != null && Types.isAlphanumeric(this.currentChar)) {
+    while (this.currentChar != null && Lexer.isValidVariableName(this.currentChar)) {
       result += this.currentChar;
       this.advance();
     }
@@ -303,7 +342,7 @@ class Lexer {
     }
 
     // Reserved keywords and variable names.
-    if (Types.isAlpha(this.currentChar)) {
+    if (Types.isAlpha(this.currentChar) || this.currentChar == '_' || this.currentChar == '$') {
       return this._id();
     }
 

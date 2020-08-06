@@ -93,6 +93,7 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
   
   let result;
   function prompt() {
+    let text = "";
     rl.question("> ", (input) => {
       if (typeof commands[input] == "function") {
         commands[input]();
