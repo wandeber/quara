@@ -16,6 +16,9 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
 
 
 /**
+ * TODO: Quara debe soportar alguna forma de definir strings en varias líneas.
+ *   Permitirá hacer que el texto se alinee en espacios en funcion de la primera línea.
+ * 
  * Update:
  * - Support expressions with several operations: 5 + 6 - 2 ...
  * - Support expressions with operators * and /. They have precedence over + and -.
@@ -33,8 +36,11 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
  */
 (() => {
   function devStatus() {
-    console.log(
-       "  - Supported operators:\n"
+    console.log( 
+       "  - Supported comments:\n"
+      +"      - Line comments: // ...\n"
+      +"      - Block comments: /* ... */\n"
+      +"  - Supported operators:\n"
       +"      +, -, *, /, %, ^, ¬/\n"
       +"      =, +=, -=, *=, /=, %=, ^=\n"
       +"      !, ==, !=, ~=, !~=, <>, <, >, <=, >=, &&, ||\n"
@@ -45,6 +51,9 @@ const {Interpreter} = require('./src/Interpreters/Interpreter');
       +"      - Integer and decimal numbers.\n"
       +"      - Strings.\n"
       +"  - Variables and reserved keywords.\n"
+      +"  - Reserved valid names:\n"
+      +"      $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
+      +"      true, false\n"
       +"\n"
     );
   }

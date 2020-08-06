@@ -4,21 +4,15 @@ const {Token, TokenTypes} = require("./Token");
 const {Types} = require("../helpers/BLib.js");
 
 
-/*
-int holaMundo(string algo, integer algo) {
 
-}
+
+
+/*
+int holaMundo(string algo, integer algo) {}
 its internal name will be "holaMundo(string, integer)"
 
-
-int (string algo, integer algo) => {
-
-}
-
-
-[type] [name] ([ [type] <name>[, [type] <name>] ]) [=>] {
-
-}
+int (string algo, integer algo) => {}
+[type] [name] ([ [type] <name>[, [type] <name>] ]) [=>] {}
 
 
 Permitir "2a" -> "a" es un nombre de variable. Se interpretará como "(2 * a)".
@@ -170,16 +164,16 @@ class Lexer {
     }
   }
 
-  peek() {
-    let peekPos = this.pos + 1;
+  peek(advance = 1) {
+    let peekPos = this.pos + advance;
     if (peekPos < this.text.length) {
       return this.text[peekPos];
     }
     return null;
   }
 
-  advance() {
-    this.pos++;
+  advance(advance = 1) {
+    this.pos += advance;
     this.getCurrentChar();
   }
 
@@ -192,6 +186,21 @@ class Lexer {
     while (this.currentChar == " ") {
       this.advance();
     }
+  }
+
+  skipLineComment() {
+    this.advance(2); // Skips //,
+    while (this.currentChar != null && this.currentChar != "\n") {
+      this.advance();
+    }
+  }
+  
+  skipBlockComment() {
+    this.advance(2); // Skips /*.
+    while (this.currentChar != null && (this.currentChar != "*" || this.peek() != '/')) {
+      this.advance();
+    }
+    this.advance(2); // Skips */,
   }
 
   getString() {
@@ -310,6 +319,18 @@ class Lexer {
       this.advance();
       return token;
     }
+
+    // Skip block comment:
+    if (this.currentChar == '/' && this.peek() == '*') {
+      this.skipBlockComment();
+      return this.getNextToken(skipSpaces);
+    }
+    // Skip line comment:
+    if (this.currentChar == '/' && this.peek() == '/') {
+      this.skipLineComment();
+      return this.getNextToken(skipSpaces);
+    }
+
 
     // Strings:
     if (this.currentChar == '"') {

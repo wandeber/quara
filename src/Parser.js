@@ -60,12 +60,19 @@ const {ASTAssign} = require("./ASTNodes/ASTAssign");
  * v 3                 Left           ^, ¬/          Power ans sqrt              // Pending
  *
  * script     -> (statement)*
- * 
  * statement  -> assign
  *               | expr
- * 
- * assign     -> variable OpAssign expr
- * 
+ *               | empty
+ * empty      ->
+ * assign     -> variable (
+ *                 OpAssign
+ *                 | OpPlusAssign
+ *                 | OpMinusAssign
+ *                 | OpMultiplicationAssign
+ *                 | OpDivisionAssign
+ *                 | OpModulusAssign
+ *                 | OpPowAssign
+ *               ) expr
  * expr       -> or ((OpOr) or)*
  * or         -> and ((OpAnd) and)*
  * and        -> equality ((OpEqual | OpNotEqual) equality)*
@@ -387,6 +394,17 @@ class Parser {
     return node;
   }
 
+  /**
+   * assign     -> variable (
+   *                 OpAssign
+   *                 | OpPlusAssign
+   *                 | OpMinusAssign
+   *                 | OpMultiplicationAssign
+   *                 | OpDivisionAssign
+   *                 | OpModulusAssign
+   *                 | OpPowAssign
+   *               ) expr
+   */
   assign() {
     this.debug("Get assign");
     let node = this.expr();
@@ -411,6 +429,11 @@ class Parser {
     return node;
   }
 
+  /**
+   * statement  -> assign
+   *               | expr
+   *               | empty
+   */
   statement() {
     this.debug("Get statement");
     let node = this.assign();
@@ -418,17 +441,27 @@ class Parser {
     if (this.currentToken.type == TokenTypes.OpSemicolon) {
       this.eat(TokenTypes.OpSemicolon);
     }
+
+    // You could prefer returns an ASTEmpty or something like that here if node is empty.
+    
     return node;
   }
 
+  /**
+   * script     -> (statement)*
+   */
   script() {
     this.debug("Get script");
     let node = this.statement();
     let root = new ASTCompound();
-    root.children.push(node);
+    if (node) { // For empty lines.
+      root.children.push(node);
+    }
     while (this.currentToken.type == TokenTypes.OpSemicolon) {
-      this.eat(TokenTypes.OpSemicolon);
-      root.children.push(this.statement());
+      if (node) { // For empty lines.
+        this.eat(TokenTypes.OpSemicolon);
+        root.children.push(this.statement());
+      }
     }
     return root;
   }
