@@ -47,6 +47,14 @@ const OpGreaterThanEqual = "OpGreaterThanEqual";
 const OpAnd = "OpAnd";
 const OpOr = "OpOr";
 
+const OpAssign = "OpAssign";
+const OpPlusAssign = "OpPlusAssign";
+const OpMinusAssign = "OpMinusAssign";
+const OpMultiplicationAssign = "OpMultiplicationAssign";
+const OpDivisionAssign = "OpDivisionAssign";
+const OpModulusAssign = "OpModulusAssign";
+const OpPowAssign = "OpPowAssign";
+
 const OpDot = "OpDot";
 const OpSemicolon = "OpSemicolon";
 const OpQuote = "OpQuote";
@@ -74,6 +82,11 @@ const TokenTypes = {
   OpLowerThan, OpGreaterThan, OpLowerThanEqual, OpGreaterThanEqual,
   OpAnd, OpOr,
   
+  OpAssign,
+  OpPlusAssign, OpMinusAssign,
+  OpMultiplicationAssign, OpDivisionAssign, OpModulusAssign,
+  OpPowAssign,
+
   OpDot, OpSemicolon,
   OpQuote,
   OpParenthesisOpen, OpParenthesisClose,

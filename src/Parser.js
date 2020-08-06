@@ -7,6 +7,8 @@ const {ASTString} = require("./ASTNodes/ASTString");
 const {ASTUnaryOperator} = require("./ASTNodes/ASTUnaryOperator");
 const {ASTBinaryOperator} = require("./ASTNodes/ASTBinaryOperator");
 const {ASTVariable} = require("./ASTNodes/ASTVariable");
+const {ASTCompound} = require("./ASTNodes/ASTCompound");
+const {ASTAssign} = require("./ASTNodes/ASTAssign");
 
 
 
@@ -57,6 +59,13 @@ const {ASTVariable} = require("./ASTNodes/ASTVariable");
  * | 4                 Left           !, +, -        Unary plus and minus
  * v 3                 Left           ^, ¬/          Power ans sqrt              // Pending
  *
+ * script     -> (statement)*
+ * 
+ * statement  -> assign
+ *               | expr
+ * 
+ * assign     -> variable OpAssign expr
+ * 
  * expr       -> or ((OpOr) or)*
  * or         -> and ((OpAnd) and)*
  * and        -> equality ((OpEqual | OpNotEqual) equality)*
@@ -378,10 +387,56 @@ class Parser {
     return node;
   }
 
+  assign() {
+    this.debug("Get assign");
+    let node = this.expr();
+    let allowedOperators = [
+      TokenTypes.OpAssign,
+      TokenTypes.OpPlusAssign,
+      TokenTypes.OpMinusAssign,
+      TokenTypes.OpMultiplicationAssign,
+      TokenTypes.OpDivisionAssign,
+      TokenTypes.OpModulusAssign,
+      TokenTypes.OpPowAssign,
+    ];
+    if (allowedOperators.includes(this.currentToken.type)) {
+      node = new ASTAssign(
+        node,
+        // We expect the current token to be an arithmetic operator token (+ or -).
+        this.operator(allowedOperators),
+        // We expect the current token to be a number (1, 14, 1.4...).
+        this.assign()
+      );
+    }
+    return node;
+  }
+
+  statement() {
+    this.debug("Get statement");
+    let node = this.assign();
+    // Optional semicolon (;) at the end of every statement.
+    if (this.currentToken.type == TokenTypes.OpSemicolon) {
+      this.eat(TokenTypes.OpSemicolon);
+    }
+    return node;
+  }
+
+  script() {
+    this.debug("Get script");
+    let node = this.statement();
+    let root = new ASTCompound();
+    root.children.push(node);
+    while (this.currentToken.type == TokenTypes.OpSemicolon) {
+      this.eat(TokenTypes.OpSemicolon);
+      root.children.push(this.statement());
+    }
+    return root;
+  }
+
 
 
   parse() {
-    return this.expr();
+    return this.script();
   }
 }
 

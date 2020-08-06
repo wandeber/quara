@@ -7,7 +7,7 @@ const {NodeVisitor} = require("../NodeVisitor");
 
 
 
-const AvailableVariables = {
+const DefaultVariables = {
   sampleNumber: 4,
   sampleString: "un string",
   
@@ -48,8 +48,9 @@ class Interpreter extends NodeVisitor {
     super();
     this.parser = parser;
     this.showDebug = showDebug;
-    this.variables = AvailableVariables;
-    Object.assign(this.variables, variables);
+    this.globalScope = DefaultVariables;
+
+    Object.assign(this.globalScope, variables);
   }
 
 
@@ -162,7 +163,46 @@ class Interpreter extends NodeVisitor {
   }
 
   visit_ASTVariable(node) {
-    return this.variables[node.name];
+    return this.globalScope[node.name];
+  }
+
+  visit_ASTAssign(node) {
+    let value;
+    switch (node.operator.type) {
+      case TokenTypes.OpAssign:
+        value = this.visit(node.right);
+        break;
+      case TokenTypes.OpPlusAssign:
+        value = this.visit(node.left) + this.visit(node.right);
+        break;
+      case TokenTypes.OpMinusAssign:
+        value = this.visit(node.left) - this.visit(node.right);
+        break;
+      case TokenTypes.OpMultiplicationAssign:
+        value = this.visit(node.left) * this.visit(node.right);
+        break;
+      case TokenTypes.OpDivisionAssign:
+        value = this.visit(node.left) / this.visit(node.right);
+        break;
+      case TokenTypes.OpModulusAssign:
+        value = this.visit(node.left) % this.visit(node.right);
+        break;
+      case TokenTypes.OpPowAssign:
+        value = Math.pow(this.visit(node.left), this.visit(node.right));
+        break;
+    }
+    this.globalScope[node.left.name] = value;
+    return this.globalScope[node.left.name];
+  }
+
+  visit_ASTCompound(node) {
+    let result = [];
+    for (let child of node.children) {
+      result.push(this.visit(child));
+    }
+    if (result.length == 1) {
+      return result[0];
+    }
   }
 
 
@@ -172,7 +212,7 @@ class Interpreter extends NodeVisitor {
     return this.visit(tree);
   }
 }
-
+ 
 
 
 module.exports = {Interpreter};
