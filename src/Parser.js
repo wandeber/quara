@@ -1,12 +1,12 @@
 "use strict";
 
 const {TokenTypes} = require("./Token");
-const {ASTNumber} = require("./ASTNumber");
-const {ASTBoolean} = require("./ASTBoolean");
-const {ASTString} = require("./ASTString");
-const {ASTUnaryOperator} = require("./ASTUnaryOperator");
-const {ASTBinaryOperator} = require("./ASTBinaryOperator");
-const {ASTVariable} = require("./ASTVariable");
+const {ASTNumber} = require("./ASTNodes/ASTNumber");
+const {ASTBoolean} = require("./ASTNodes/ASTBoolean");
+const {ASTString} = require("./ASTNodes/ASTString");
+const {ASTUnaryOperator} = require("./ASTNodes/ASTUnaryOperator");
+const {ASTBinaryOperator} = require("./ASTNodes/ASTBinaryOperator");
+const {ASTVariable} = require("./ASTNodes/ASTVariable");
 
 
 
