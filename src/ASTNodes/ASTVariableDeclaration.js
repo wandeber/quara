@@ -1,17 +1,15 @@
 "use strict";
 
-const {AST} = require('./AST');
+const {ASTCompound} = require('./ASTCompound');
 
 
 
 
 
-class ASTVariableDeclaration extends AST {
-  constructor(varNode, typeNode, right) {
+class ASTVariableDeclaration extends ASTCompound {
+  constructor(typeNode) {
     super();
-    this.varNode = varNode;
     this.typeNode = typeNode;
-    this.right = right;
   }
 }
 

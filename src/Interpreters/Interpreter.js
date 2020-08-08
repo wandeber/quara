@@ -2,6 +2,7 @@
 
 const {TokenTypes} = require("../Token");
 const {NodeVisitor} = require("../NodeVisitor");
+const Token = require("../Token");
 
 
 
@@ -166,6 +167,10 @@ class Interpreter extends NodeVisitor {
     return this.globalScope[node.name];
   }
 
+  visit_ASTType(node) {
+    return node.value;
+  }
+
   visit_ASTAssign(node) {
     if (typeof this.globalScope[node.left.name] == "undefined") {
       throw new Error("La variable "+ node.left.name +" no ha sido declarada.");
@@ -200,37 +205,66 @@ class Interpreter extends NodeVisitor {
   }
 
   visit_ASTVariableDeclaration(node) {
+    let type = "any"; // Default any or deduce from value?
+    if (node.nodeType) {
+      type = this.visit(node.nodeType);
+    }
+    //console.log("Type: ", type);
+    
     let name;
-    if (node.varNode.left && node.varNode.left.name) {
-      name = node.varNode.left.name;
-    }
-    else {
-      name = node.varNode.name;
+    for (let child of node.children) {
+      //console.log("child", child);
+      if (child.left && child.left.name) {
+        name = child.left.name;
+      }
+      else {
+        name = child.name;
+      }
+
+      if (typeof this.globalScope[name] != "undefined") {
+        throw new Error(`Variable ${name} already declared.`);
+      }
+
+      // Declaration...
+      this.globalScope[name] = null;
+
+      // Maybe initialization...
+      this.visit(child);
     }
 
-    if (typeof this.globalScope[name] != "undefined") {
-      throw new Error(`Variable ${name} already declared.`);
-    }
-
-    this.globalScope[name] = null;
-    return this.visit(node.varNode);
+    return this.globalScope[name];
   }
 
   visit_ASTConstantDeclaration(node) {
+    this.debug("visit_ASTConstantDeclaration");
+    let type = "any"; // Const puede ser any? Que sea como no ponerlo?
+    if (node.nodeType) {
+      type = this.visit(node.nodeType);
+    }
+    //console.log("Type: ", type);
+    
     let name;
-    if (node.varNode.left && node.varNode.left.name) {
-      name = node.varNode.left.name;
-    }
-    else {
-      name = node.varNode.name;
+    for (let child of node.children) {
+      //console.log("child", child);
+      if (child.left && child.left.name) {
+        name = child.left.name;
+      }
+      else {
+        name = child.name;
+      }
+
+      if (typeof this.globalScope[name] != "undefined") {
+        throw new Error(`Variable ${name} already declared.`);
+      }
+
+      // Declaration...
+      this.globalScope[name] = null;
+
+      // Maybe initialization...
+      this.visit(child);
     }
 
-    if (typeof this.globalScope[name] != "undefined") {
-      throw new Error(`Variable ${name} already declared.`);
-    }
-
-    this.globalScope[name] = null;
-    return this.visit(node.varNode);
+    return this.globalScope[name];
   }
 
   visit_ASTCompound(node) {

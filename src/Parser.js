@@ -12,8 +12,39 @@ const {ASTConstantDeclaration} = require("./ASTNodes/ASTConstantDeclaration");
 const {ASTVariable} = require("./ASTNodes/ASTVariable");
 const {ASTCompound} = require("./ASTNodes/ASTCompound");
 const {ASTAssign} = require("./ASTNodes/ASTAssign");
+const Token = require("./Token");
 
 
+
+const constantTypes = [
+  TokenTypes.TypeBoolean,
+  TokenTypes.TypeInteger,
+  TokenTypes.TypeFloat,
+  TokenTypes.TypeDouble,
+  TokenTypes.TypeString,
+];
+
+const variableTypes = [
+  TokenTypes.TypeAny,
+  ...constantTypes
+];
+
+const assignOperators = [
+  TokenTypes.OpAssign,
+  TokenTypes.OpPlusAssign,
+  TokenTypes.OpMinusAssign,
+  TokenTypes.OpMultiplicationAssign,
+  TokenTypes.OpDivisionAssign,
+  TokenTypes.OpModulusAssign,
+  TokenTypes.OpPowAssign,
+];
+
+const availableConstants = [
+  TokenTypes.BooleanConstant,
+  TokenTypes.IntegerConstant,
+  TokenTypes.DecimalConstant,
+  TokenTypes.StringConstant
+];
 
 
 
@@ -68,9 +99,17 @@ const {ASTAssign} = require("./ASTNodes/ASTAssign");
  *                | expr
  *                | empty
  * empty       ->
- * declaration -> (ModConst | ModVar)? typeSpec? commaAssign
- * commaAssign -> assignment (OpComma assignment)*
- * assignment  -> variable ((
+ *
+ * declaration -> (constDecl | varDecl)
+ * 
+ * constDecl   -> ModConst typeSpec? commaDecl
+ * varDecl     -> (ModVar | ModVar? typeSpec) commaDecl
+ * 
+ * commaDecl -> declAssign (OpComma declAssign)*
+ * 
+ * declAssign  -> variable (OpAssign (assign* | expr))?
+ * 
+ * assign      -> variable ((
  *                  OpAssign
  *                  | OpPlusAssign
  *                  | OpMinusAssign
@@ -79,7 +118,11 @@ const {ASTAssign} = require("./ASTNodes/ASTAssign");
  *                  | OpModulusAssign
  *                  | OpPowAssign
  *                ) assignment* | expr)
+ * 
+ * 
+ * 
  * expr        -> or ((OpOr) or)*
+ *                | variable (OpIncrement | OpDecrement)
  * or          -> and ((OpAnd) and)*
  * and         -> equality ((OpEqual | OpNotEqual) equality)*
  * equality    -> relational (
@@ -93,14 +136,13 @@ const {ASTAssign} = require("./ASTNodes/ASTAssign");
  * relational  -> term ((OpPlus | OpMinus) term)*
  * term        -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
  * pow         -> factor (OpPow factor)*
- * factor      -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
- *                | BooleanConstant
- *                | CharConstant
- *                | (IntegerConstant | DecimalConstant)
- *                | StringConstant
- *                | (OpParenthesisOpen expr OpParenthesisClose)
- *                | variable
+ * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
+ *               | (OpIncrement | OpDecrement) variable                          // Pre.
+ *               | constant
+ *               | (OpParenthesisOpen expr OpParenthesisClose)
+ *               | variable
  * variable    -> ID
+ * constant    -> (BooleanConstant | (IntegerConstant | DecimalConstant) | StringConstant)
  * typeSpec    -> (TypeAny | TypeBoolean | TypeInteger | TypeFloat | TypeDouble | TypeString)
  */
 class Parser {
@@ -164,47 +206,17 @@ class Parser {
 
 
 
-  /**
-   * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
-   *               | BooleanConstant
-   *               | CharConstant
-   *               | (IntegerConstant | DecimalConstant)
-   *               | StringConstant
-   *               | (OpParenthesisOpen expr OpParenthesisClose)
-   *               | variable
-   */
-  factor() {
-    this.debug("Get factor");
-    
-    let node;
-    // Unary operator + or -:
-    let allowedOperators = [
-      TokenTypes.OpMinus,
-      TokenTypes.OpPlus,
-      TokenTypes.OpNot,
-      TokenTypes.OpSqrt
-    ];
+  typeSpec() {
+    let node = new ASTType(this.currentToken);
+    this.eat(variableTypes);
+    return node;
+  }
 
-    if (allowedOperators.includes(this.currentToken.type)) {
-      node = new ASTUnaryOperator(this.operator(allowedOperators), this.factor());
-    }
-    // If current token is a parenthesis aperture "(":
-    else if (this.currentToken.type == TokenTypes.OpParenthesisOpen) {
-      // We eat the parenthesis opening (we can just ignore it).
-      this.operator([TokenTypes.OpParenthesisOpen]); // Open.
-      /* We support a full expression inside the parenthesis. This includes from a single numbber to
-      complex expression like other ones with parenthesis. */
-      node = this.expr();
-      // We eat the parenthesis closure (we can just ignore it).
-      this.operator([TokenTypes.OpParenthesisClose]); // Close.
-    }
-    // Boolean
-    else if (this.currentToken.type == TokenTypes.BooleanConstant) {
+  constant() {
+    //console.log("this.currentToken", this.currentToken);
+    let node;
+    if (this.currentToken.type == TokenTypes.BooleanConstant) {
       node = new ASTBoolean(this.currentToken);
-      this.eat(TokenTypes.BooleanConstant);
-    }
-    else if (this.currentToken.type == TokenTypes.CharConstant) {
-      node = new ASTChar(this.currentToken);
       this.eat(TokenTypes.BooleanConstant);
     }
     // Number:
@@ -217,9 +229,59 @@ class Parser {
       node = new ASTString(this.currentToken);
       this.eat(TokenTypes.StringConstant);
     }
+    return node;
+  }
+
+  variable() {
+    let node = new ASTVariable(this.currentToken);
+    this.eat(TokenTypes.Id);
+    return node;
+  }
+
+  /**
+   * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
+   *               | (OpIncrement | OpDecrement) variable                       // Pre.
+   *               | constant
+   *               | (OpParenthesisOpen expr OpParenthesisClose)
+   *               | variable
+   */
+  factor() {
+    this.debug("Get factor");
+    let node;
+    // Unary operator + or -:
+    let allowedOperators = [
+      TokenTypes.OpMinus,
+      TokenTypes.OpPlus,
+      TokenTypes.OpNot,
+      TokenTypes.OpSqrt
+    ];
+
+    if (allowedOperators.includes(this.currentToken.type)) {
+      node = new ASTUnaryOperator(this.operator(allowedOperators), this.factor());
+    }
+    /*
+    else if ([TokenTypes.OpIncrement, TokenTypes.OpDecrement].includes(this.currentToken.type)) {
+      node = new ASTUnaryOperator(
+        this.operator([TokenTypes.OpIncrement, TokenTypes.OpDecrement]),
+        this.variable()
+      );
+    }
+    */
+    // If current token is a parenthesis aperture "(":
+    else if (this.currentToken.type == TokenTypes.OpParenthesisOpen) {
+      // We eat the parenthesis opening (we can just ignore it).
+      this.operator([TokenTypes.OpParenthesisOpen]); // Open.
+      /* We support a full expression inside the parenthesis. This includes from a single numbber to
+      complex expression like other ones with parenthesis. */
+      node = this.expr();
+      // We eat the parenthesis closure (we can just ignore it).
+      this.operator([TokenTypes.OpParenthesisClose]); // Close.
+    }
+    else if (availableConstants.includes(this.currentToken.type)) {
+      node = this.constant();
+    }
     else if (this.currentToken.type == TokenTypes.Id) {
-      node = new ASTVariable(this.currentToken);
-      this.eat(TokenTypes.Id);
+      node = this.variable();
     }
     
     return node;
@@ -396,7 +458,7 @@ class Parser {
 
     // We expect the current token to be a number (1, 14, 1.4...).
     let node = this.or();
-
+    
     while (TokenTypes.OpOr == this.currentToken.type) {
       node = new ASTBinaryOperator(
         node,
@@ -424,96 +486,136 @@ class Parser {
   assign() {
     this.debug("Get assign");
     let node = this.expr();
-    let allowedOperators = [
-      TokenTypes.OpAssign,
-      TokenTypes.OpPlusAssign,
-      TokenTypes.OpMinusAssign,
-      TokenTypes.OpMultiplicationAssign,
-      TokenTypes.OpDivisionAssign,
-      TokenTypes.OpModulusAssign,
-      TokenTypes.OpPowAssign,
-    ];
-    if (allowedOperators.includes(this.currentToken.type)) {
+    if (
+      node && node.token && node.token.type == TokenTypes.Id
+      && assignOperators.includes(this.currentToken.type)
+    ) {
       node = new ASTAssign(
         node,
         // We expect the current token to be an arithmetic operator token (+ or -).
-        this.operator(allowedOperators),
+        this.operator(assignOperators),
         // We expect the current token to be a number (1, 14, 1.4...).
         this.assign()
       );
     }
     return node;
   }
-
-  declaration() {
-    this.debug("Get declaration");
-    let parent = new ASTCompound(), node, typeNode = null;
-    let isDecl = false, isConst = false;
-    
-    if (this.currentToken.type == TokenTypes.ModConst) {
-      isDecl = true;
-      isConst = true;
-      this.eat(TokenTypes.ModConst);
-    }
-    else if (this.currentToken.type == TokenTypes.ModVar) {
-      isDecl = true;
-      this.eat(TokenTypes.ModVar);
-    }
-
-    let allowedTypes = [
-      TokenTypes.TypeAny,
-      TokenTypes.TypeBoolean,
-      TokenTypes.TypeInteger,
-      TokenTypes.TypeFloat,
-      TokenTypes.TypeDouble,
-      TokenTypes.TypeString,
-    ];
-    if (allowedTypes.includes(this.currentToken.type)) {
-      isDecl = true;
-      typeNode = new ASTType(this.currentToken);
-      this.eat(allowedTypes);
-    }
-    
-    node = this.assign();
-    if (node && isDecl) {
-      if (isConst) {
-        node = new ASTConstantDeclaration(node, typeNode);
+  
+  /**
+   * First assign must use the simple assign operator.
+   * declAssign  -> variable (OpAssign assign)?
+   */
+  declAssign() {
+    this.debug("Get declAssign");
+    let node = this.variable();
+    if (this.currentToken.type == TokenTypes.OpAssign) {
+      let operator = this.operator(TokenTypes.OpAssign);
+      let right;
+      if (this.currentToken.type == TokenTypes.Id) {
+        right = this.assign();
       }
       else {
-        node = new ASTVariableDeclaration(node, typeNode);
+        right = this.expr();
       }
-      parent.children.push(node);
+      node = new ASTAssign(
+        node,
+        // We expect the current token to be an arithmetic operator token (+ or -).
+        operator,
+        // We expect the current token to be a number (1, 14, 1.4...).
+        right
+      );
     }
-  
-    while (this.currentToken.type == TokenTypes.OpComma) {
-      this.eat(TokenTypes.OpComma);
-      node = this.assign();
-      if (node && isDecl) {
-        if (isConst) {
-          node = new ASTConstantDeclaration(node, typeNode);
-        }
-        else {
-          node = new ASTVariableDeclaration(node, typeNode);
-        }
-        parent.children.push(node);
-      }
-    }
-
     return node;
   }
 
   /**
-   * statement  -> assign
+   * commaDecl -> declAssign (OpComma declAssign)*
+   */
+  commaDecl() {
+    this.debug("commaDecl");
+    let declarationNodes = [
+      this.declAssign()
+    ];
+    while (this.currentToken.type == TokenTypes.OpComma) {
+      this.eat(TokenTypes.OpComma);
+      declarationNodes.push(this.declAssign());
+    }
+    return declarationNodes;
+  }
+
+  /**
+   * varDecl     -> (ModVar typeSpec? | ModVar? typeSpec) commaDecl
+   */
+  varDecl() {
+    this.debug("varDecl");
+    let root = new ASTVariableDeclaration();
+    
+    // If ModVar is present, typeSpec is optional.
+    if (this.currentToken.type == TokenTypes.ModVar) { 
+      this.eat(TokenTypes.ModVar);
+      if (variableTypes.includes(this.currentToken.type)) { // Optional
+        root.typeNode = this.typeSpec();
+      }
+    }
+    else { // If ModVar is not present, typeSpec is required.
+      root.typeNode = this.typeSpec();
+    }
+    
+    root.children = this.commaDecl();
+
+    return root;
+  }
+
+  /**
+   * constDecl   -> ModConst typeSpec? commaDecl
+   */
+  constDecl() {
+    this.debug("constDecl");
+    let root = new ASTConstantDeclaration();
+    this.eat(TokenTypes.ModConst); // Required.
+    
+    if (constantTypes.includes(this.currentToken.type)) { // Optional.
+      root.typeNode = this.typeSpec();
+    }
+    
+    root.children = this.commaDecl();
+    return root;
+  }
+
+  /**
+   * declaration -> (constDecl | varDecl)?
+   */
+  declaration() {
+    this.debug("declaration");
+    let node = null;
+    if (this.currentToken.type == TokenTypes.ModConst) {
+      // Constant declaration
+      node = this.constDecl();
+    }
+    else if ([TokenTypes.ModVar, ...variableTypes].includes(this.currentToken.type)) {
+      node = this.varDecl();
+    }
+    return node;
+  }
+
+  /**
+   * statement  -> declaration
+   *               //| assign
    *               | expr
    *               | empty
    */
   statement() {
     this.debug("Get statement");
     let node = this.declaration();
-    // Optional semicolon (;) at the end of every statement.
-    /*if (this.currentToken.type == TokenTypes.OpSemicolon) {
-      this.eat(TokenTypes.OpSemicolon);
-    }*/
+
+    if (!node) {
+      //if (this.currentToken.type == TokenTypes.Id) {
+        node = this.assign();
+      //}
+      //else {
+        //node = this.expr();
+      //}
+    }
 
     // You could prefer returns an ASTEmpty or something like that here if node is empty.
     
