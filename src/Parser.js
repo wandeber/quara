@@ -6,6 +6,9 @@ const {ASTBoolean} = require("./ASTNodes/ASTBoolean");
 const {ASTString} = require("./ASTNodes/ASTString");
 const {ASTUnaryOperator} = require("./ASTNodes/ASTUnaryOperator");
 const {ASTBinaryOperator} = require("./ASTNodes/ASTBinaryOperator");
+const {ASTType} = require("./ASTNodes/ASTType");
+const {ASTVariableDeclaration} = require("./ASTNodes/ASTVariableDeclaration");
+const {ASTConstantDeclaration} = require("./ASTNodes/ASTConstantDeclaration");
 const {ASTVariable} = require("./ASTNodes/ASTVariable");
 const {ASTCompound} = require("./ASTNodes/ASTCompound");
 const {ASTAssign} = require("./ASTNodes/ASTAssign");
@@ -59,40 +62,46 @@ const {ASTAssign} = require("./ASTNodes/ASTAssign");
  * | 4                 Left           !, +, -        Unary plus and minus
  * v 3                 Left           ^, ¬/          Power ans sqrt              // Pending
  *
- * script     -> (statement)*
- * statement  -> assign
- *               | expr
- *               | empty
- * empty      ->
- * assign     -> variable (
- *                 OpAssign
- *                 | OpPlusAssign
- *                 | OpMinusAssign
- *                 | OpMultiplicationAssign
- *                 | OpDivisionAssign
- *                 | OpModulusAssign
- *                 | OpPowAssign
- *               ) expr
- * expr       -> or ((OpOr) or)*
- * or         -> and ((OpAnd) and)*
- * and        -> equality ((OpEqual | OpNotEqual) equality)*
- * equality   -> relational (
- *                 (
- *                   OpGreaterThan
- *                   | OpLowerThan
- *                   | OpGreaterThanEqual
- *                   | OpLowerThanEqual
- *                 ) relational
- *               )*
- * relational -> term ((OpPlus | OpMinus) term)*
- * term       -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
- * pow        -> factor (OpPow factor)*
- * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
- *               | TypeBoolean
- *               | (TypeInteger | TypeDecimal)
- *               | TypeString
- *               | (OpParenthesisOpen expr OpParenthesisClose)
- *               | variable
+ * script      -> (statement)*
+ * statement   -> declaration
+ *                | assignment
+ *                | expr
+ *                | empty
+ * empty       ->
+ * declaration -> (ModConst | ModVar)? typeSpec? commaAssign
+ * commaAssign -> assignment (OpComma assignment)*
+ * assignment  -> variable ((
+ *                  OpAssign
+ *                  | OpPlusAssign
+ *                  | OpMinusAssign
+ *                  | OpMultiplicationAssign
+ *                  | OpDivisionAssign
+ *                  | OpModulusAssign
+ *                  | OpPowAssign
+ *                ) assignment* | expr)
+ * expr        -> or ((OpOr) or)*
+ * or          -> and ((OpAnd) and)*
+ * and         -> equality ((OpEqual | OpNotEqual) equality)*
+ * equality    -> relational (
+ *                  (
+ *                    OpGreaterThan
+ *                    | OpLowerThan
+ *                    | OpGreaterThanEqual
+ *                    | OpLowerThanEqual
+ *                  ) relational
+ *                )*
+ * relational  -> term ((OpPlus | OpMinus) term)*
+ * term        -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
+ * pow         -> factor (OpPow factor)*
+ * factor      -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
+ *                | BooleanConstant
+ *                | CharConstant
+ *                | (IntegerConstant | DecimalConstant)
+ *                | StringConstant
+ *                | (OpParenthesisOpen expr OpParenthesisClose)
+ *                | variable
+ * variable    -> ID
+ * typeSpec    -> (TypeAny | TypeBoolean | TypeInteger | TypeFloat | TypeDouble | TypeString)
  */
 class Parser {
   constructor(lexer) {
@@ -157,9 +166,10 @@ class Parser {
 
   /**
    * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
-   *               | TypeBoolean
-   *               | (TypeInteger | TypeDecimal)
-   *               | TypeString
+   *               | BooleanConstant
+   *               | CharConstant
+   *               | (IntegerConstant | DecimalConstant)
+   *               | StringConstant
    *               | (OpParenthesisOpen expr OpParenthesisClose)
    *               | variable
    */
@@ -189,19 +199,23 @@ class Parser {
       this.operator([TokenTypes.OpParenthesisClose]); // Close.
     }
     // Boolean
-    else if (this.currentToken.type == TokenTypes.TypeBoolean) {
+    else if (this.currentToken.type == TokenTypes.BooleanConstant) {
       node = new ASTBoolean(this.currentToken);
-      this.eat(TokenTypes.TypeBoolean);
+      this.eat(TokenTypes.BooleanConstant);
+    }
+    else if (this.currentToken.type == TokenTypes.CharConstant) {
+      node = new ASTChar(this.currentToken);
+      this.eat(TokenTypes.BooleanConstant);
     }
     // Number:
-    else if ([TokenTypes.TypeInteger, TokenTypes.TypeDecimal].includes(this.currentToken.type)) {
+    else if ([TokenTypes.IntegerConstant, TokenTypes.DecimalConstant].includes(this.currentToken.type)) {
       node = new ASTNumber(this.currentToken);
-      this.eat([TokenTypes.TypeInteger, TokenTypes.TypeDecimal]);
+      this.eat([TokenTypes.IntegerConstant, TokenTypes.DecimalConstant]);
     }
     // String
-    else if (this.currentToken.type == TokenTypes.TypeString) {
+    else if (this.currentToken.type == TokenTypes.StringConstant) {
       node = new ASTString(this.currentToken);
-      this.eat(TokenTypes.TypeString);
+      this.eat(TokenTypes.StringConstant);
     }
     else if (this.currentToken.type == TokenTypes.Id) {
       node = new ASTVariable(this.currentToken);
@@ -335,6 +349,8 @@ class Parser {
     let allowedOperators = [
       TokenTypes.OpEqual,
       TokenTypes.OpNotEqual,
+      TokenTypes.OpLaxEqual,
+      TokenTypes.OpLaxNotEqual,
     ];
 
     while (allowedOperators.includes(this.currentToken.type)) {
@@ -403,7 +419,7 @@ class Parser {
    *                 | OpDivisionAssign
    *                 | OpModulusAssign
    *                 | OpPowAssign
-   *               ) expr
+   *               ) (assignment* | expr)
    */
   assign() {
     this.debug("Get assign");
@@ -429,6 +445,63 @@ class Parser {
     return node;
   }
 
+  declaration() {
+    this.debug("Get declaration");
+    let parent = new ASTCompound(), node, typeNode = null;
+    let isDecl = false, isConst = false;
+    
+    if (this.currentToken.type == TokenTypes.ModConst) {
+      isDecl = true;
+      isConst = true;
+      this.eat(TokenTypes.ModConst);
+    }
+    else if (this.currentToken.type == TokenTypes.ModVar) {
+      isDecl = true;
+      this.eat(TokenTypes.ModVar);
+    }
+
+    let allowedTypes = [
+      TokenTypes.TypeAny,
+      TokenTypes.TypeBoolean,
+      TokenTypes.TypeInteger,
+      TokenTypes.TypeFloat,
+      TokenTypes.TypeDouble,
+      TokenTypes.TypeString,
+    ];
+    if (allowedTypes.includes(this.currentToken.type)) {
+      isDecl = true;
+      typeNode = new ASTType(this.currentToken);
+      this.eat(allowedTypes);
+    }
+    
+    node = this.assign();
+    if (node && isDecl) {
+      if (isConst) {
+        node = new ASTConstantDeclaration(node, typeNode);
+      }
+      else {
+        node = new ASTVariableDeclaration(node, typeNode);
+      }
+      parent.children.push(node);
+    }
+  
+    while (this.currentToken.type == TokenTypes.OpComma) {
+      this.eat(TokenTypes.OpComma);
+      node = this.assign();
+      if (node && isDecl) {
+        if (isConst) {
+          node = new ASTConstantDeclaration(node, typeNode);
+        }
+        else {
+          node = new ASTVariableDeclaration(node, typeNode);
+        }
+        parent.children.push(node);
+      }
+    }
+
+    return node;
+  }
+
   /**
    * statement  -> assign
    *               | expr
@@ -436,7 +509,7 @@ class Parser {
    */
   statement() {
     this.debug("Get statement");
-    let node = this.assign();
+    let node = this.declaration();
     // Optional semicolon (;) at the end of every statement.
     /*if (this.currentToken.type == TokenTypes.OpSemicolon) {
       this.eat(TokenTypes.OpSemicolon);

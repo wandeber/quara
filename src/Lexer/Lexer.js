@@ -1,7 +1,10 @@
 "use strict";
 
-const {Token, TokenTypes} = require("./Token");
-const {Types} = require("../helpers/BLib.js");
+const {Token, TokenTypes} = require("../Token");
+const {Types} = require("../../helpers/BLib.js");
+const {ReservedKeywords} = require("./ReservedKeywords");
+const {Operators} = require("./Operators");
+const {Validation} = require("./Validation");
 
 
 
@@ -19,97 +22,6 @@ Permitir "2a" -> "a" es un nombre de variable. Se interpretará como "(2 * a)".
 Permitir "2a b c" -> "a", "b" y "c" son nombres de variable. Se interpretará como "(2 * a * b * c)".
 3 * 2a b -> 3 * (2 * a * b)
 */
-
-
-const VariableNameRegExp = /^[a-z0-9_$]+$/i;
-
-const ReserverKeywords = {
-  "BEGIN": new Token("BEGIN", "BEGIN"),
-  "END":   new Token("END", "END"),
-  
-  "true":  new Token(TokenTypes.TypeBoolean, true),
-  //"yes":   new Token("TRUE", "true"),
-  //"ok":    new Token("TRUE", "true"),
-  "false": new Token(TokenTypes.TypeBoolean, false),
-  //"no":    new Token("FALSE", "false"),
-  //"ko":    new Token("FALSE", "false"),
-
-  
-  //"var"
-  //"const"
-
-  // Types:
-  /*
-  "any"
-  "boolean"
-  "char"
-  "int", "integer"
-  "float", "decimal"
-  "double"
-  "string"
-  */
-};
-
-const Operators = {
-  "!":    new Token(TokenTypes.OpNot, "!"),
-  "$not": new Token(TokenTypes.OpNot, "!"),
-  
-  "||":   new Token(TokenTypes.OpOr, "||"),
-  "$or":  new Token(TokenTypes.OpOr, "||"),
-  "&&":   new Token(TokenTypes.OpAnd, "&&"),
-  "$and": new Token(TokenTypes.OpAnd, "&&"),
-
-  "==":   new Token(TokenTypes.OpEqual, "=="), // ===
-  "$eq":  new Token(TokenTypes.OpEqual, "=="), // ===
-  "!=":   new Token(TokenTypes.OpNotEqual, "!="), // !==
-  "<>":   new Token(TokenTypes.OpNotEqual, "!="), // !==
-  "$ne":  new Token(TokenTypes.OpNotEqual, "!="), // !==
-  
-  "~=":   new Token(TokenTypes.OpLaxEqual, "~="), // Lax equality: == without type checking.
-  "$leq": new Token(TokenTypes.OpLaxEqual, "~="), // Lax equality: == without type checking.
-  "!~=":  new Token(TokenTypes.OpLaxNotEqual, "!~="), // Lax: != without type checking.
-  "$lne": new Token(TokenTypes.OpLaxNotEqual, "!~="), // Lax: != without type checking.
-  
-  '<':    new Token(TokenTypes.OpLowerThan, '<'),
-  "$lt":  new Token(TokenTypes.OpLowerThan, '<'),
-  '>':    new Token(TokenTypes.OpGreaterThan, '>'),
-  "$gt":  new Token(TokenTypes.OpGreaterThan, '>'),
-  "<=":   new Token(TokenTypes.OpLowerThanEqual, "<="),
-  "$lte": new Token(TokenTypes.OpLowerThanEqual, "<="),
-  ">=":   new Token(TokenTypes.OpGreaterThanEqual, ">="),
-  "$gte": new Token(TokenTypes.OpGreaterThanEqual, ">="),
-
-  '+':    new Token(TokenTypes.OpPlus, '+'),
-  '-':    new Token(TokenTypes.OpMinus, '-'),
-  '*':    new Token(TokenTypes.OpMultiplication, '*'),
-  '/':    new Token(TokenTypes.OpDivision, '/'),
-  '%':    new Token(TokenTypes.OpModulus, '%'),
-  "^":    new Token(TokenTypes.OpPow, "^"),
-  "**":   new Token(TokenTypes.OpPow, "^"),
-  "¬/":   new Token(TokenTypes.OpSqrt, "¬/"),
-  
-  "++":   new Token(TokenTypes.OpIncrement, "++"),
-  "--":   new Token(TokenTypes.OpDecrement, "--"),
-  
-  '=':    new Token(TokenTypes.OpAssign, '='),
-  "+=":   new Token(TokenTypes.OpPlusAssign, "+="),
-  "-=":   new Token(TokenTypes.OpMinusAssign, "-="),
-  "*=":   new Token(TokenTypes.OpMultiplicationAssign, "*="),
-  "/=":   new Token(TokenTypes.OpDivisionAssign, "/="),
-  "%=":   new Token(TokenTypes.OpModulusAssign, "%="),
-  "^=":   new Token(TokenTypes.OpPowAssign, "^="),
-  "**=":  new Token(TokenTypes.OpPowAssign, "^="),
-
-  '(':    new Token(TokenTypes.OpParenthesisOpen, '('),
-  ')':    new Token(TokenTypes.OpParenthesisClose, ')'),
-
-  '.':    new Token(TokenTypes.OpDot, '.'),
-  ';':    new Token(TokenTypes.OpSemicolon, ';'),
-
-  '"':    new Token(TokenTypes.OpQuote, ';'),
-}
-
-
 
 /**
  * Related definitions:
@@ -151,9 +63,6 @@ class Lexer {
   }
 
 
-  static isValidVariableName(str) {
-    return str.match(VariableNameRegExp);
-  }
 
   getCurrentChar() {
     if (this.pos < this.text.length) {
@@ -276,12 +185,12 @@ class Lexer {
 
   _id() {
     let result = "";
-    while (this.currentChar != null && Lexer.isValidVariableName(this.currentChar)) {
+    while (this.currentChar != null && Validation.isValidVariableName(this.currentChar)) {
       result += this.currentChar;
       this.advance();
     }
-    if (ReserverKeywords[result]) {
-      return ReserverKeywords[result];
+    if (ReservedKeywords[result]) {
+      return ReservedKeywords[result];
     }
     return new Token(TokenTypes.Id, result);
   }
@@ -336,22 +245,22 @@ class Lexer {
     if (this.currentChar == '"') {
       let str = this.getString();
       if (typeof str !== "undefined") {
-        return new Token(TokenTypes.TypeString, str);
+        return new Token(TokenTypes.StringConstant, str);
       }
     }
 
     /* if the character is a digit then convert it to
-    integer, create a TypeInteger token, increment this.pos
+    integer, create a IntegerConstant token, increment this.pos
     index to point to the next character after the digit,
-    and return the TypeInteger token */
+    and return the IntegerConstant token */
     if (this.currentChar == '.' || Types.isInteger(this.currentChar)) {
       let number = this.getNumber();
       if (number) {
         if (Types.isInteger(number)) {
-          return new Token(TokenTypes.TypeInteger, parseInt(number));
+          return new Token(TokenTypes.IntegerConstant, parseInt(number));
         }
         else {
-          return new Token(TokenTypes.TypeDecimal, parseFloat(number));
+          return new Token(TokenTypes.DecimalConstant, parseFloat(number));
         }
       }
     }

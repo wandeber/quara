@@ -2,7 +2,7 @@
 
 const Readline = require("readline");
 
-const {Lexer} = require("./src/Lexer");
+const {Lexer} = require("./src/Lexer/Lexer");
 const {Parser} = require("./src/Parser");
 const {Interpreter} = require('./src/Interpreters/Interpreter');
 //const {RPNTranslator} = require('./src/Interpreters/RPNTranslator');

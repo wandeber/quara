@@ -19,10 +19,22 @@ const Id = "Id";
 const Space = "Space"; // " "
 const Dot = "Dot"; // .
 
-const TypeInteger = "TypeInteger"; // 1
-const TypeDecimal = "TypeDecimal"; // 1.1
-const TypeBoolean = "TypeBoolean"; // true, false
+const ModVar = "TypeVar";
+const ModConst = "TypeConst";
+
+const TypeAny = "TypeAny";
+const TypeBoolean = "TypeBoolean";
+const TypeChar = "TypeChar";
+const TypeInteger = "TypeInteger";
+const TypeFloat = "TypeFloat";
+const TypeDouble = "TypeDouble";
 const TypeString = "TypeString";
+
+const BooleanConstant = "BooleanConstant"; // true, false
+const CharConstant = "CharConstant";
+const IntegerConstant = "IntegerConstant"; // 1
+const DecimalConstant = "DecimalConstant"; // 1.1
+const StringConstant = "StringConstant";
 
 const OpPlus = "OpPlus"; // "+"
 const OpMinus = "OpMinus"; // "-"
@@ -58,6 +70,7 @@ const OpPowAssign = "OpPowAssign";
 const OpDot = "OpDot";
 const OpSemicolon = "OpSemicolon";
 const OpQuote = "OpQuote";
+const OpComma = "OpComma";
 
 const OpParenthesisOpen = 'OpParenthesisOpen';
 const OpParenthesisClose = 'OpParenthesisClose';
@@ -68,10 +81,11 @@ const EoF = "EoF"; // Fin.
 
 const TokenTypes = {
   Id,
-
-  Space, Dot,
-
-  TypeInteger, TypeDecimal, TypeBoolean, TypeString,
+  
+  ModVar, ModConst,
+  TypeAny, TypeBoolean, TypeChar, TypeInteger, TypeFloat, TypeDouble, TypeString,
+  
+  BooleanConstant, CharConstant, IntegerConstant, DecimalConstant, StringConstant,
   
   OpPlus, OpMinus,
   OpMultiplication, OpDivision, OpModulus, OpPow, OpSqrt,
@@ -86,8 +100,9 @@ const TokenTypes = {
   OpPlusAssign, OpMinusAssign,
   OpMultiplicationAssign, OpDivisionAssign, OpModulusAssign,
   OpPowAssign,
-
-  OpDot, OpSemicolon,
+  
+  Space, Dot,
+  OpDot, OpSemicolon, OpComma,
   OpQuote,
   OpParenthesisOpen, OpParenthesisClose,
 
@@ -98,7 +113,7 @@ const TokenTypes = {
 
 class Token {
   constructor(type, value) {
-    // token type: TypeInteger, OpPlus, or EoF
+    // token type: IntegerConstant, OpPlus, or EoF
     this.type = type
     // token value: 0, 1, 2. 3, 4, 5, 6, 7, 8, 9, '+', or None
     this.value = value
@@ -107,7 +122,7 @@ class Token {
   /**
    * String representation of the class instance.
    * Examples:
-   * Token(TypeInteger, 3)
+   * Token(IntegerConstant, 3)
    * Token(OpPlus '+')
    */
   toString() {

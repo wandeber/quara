@@ -167,6 +167,10 @@ class Interpreter extends NodeVisitor {
   }
 
   visit_ASTAssign(node) {
+    if (typeof this.globalScope[node.left.name] == "undefined") {
+      throw new Error("La variable "+ node.left.name +" no ha sido declarada.");
+    }
+
     let value;
     switch (node.operator.type) {
       case TokenTypes.OpAssign:
@@ -193,6 +197,40 @@ class Interpreter extends NodeVisitor {
     }
     this.globalScope[node.left.name] = value;
     return this.globalScope[node.left.name];
+  }
+
+  visit_ASTVariableDeclaration(node) {
+    let name;
+    if (node.varNode.left && node.varNode.left.name) {
+      name = node.varNode.left.name;
+    }
+    else {
+      name = node.varNode.name;
+    }
+
+    if (typeof this.globalScope[name] != "undefined") {
+      throw new Error(`Variable ${name} already declared.`);
+    }
+
+    this.globalScope[name] = null;
+    return this.visit(node.varNode);
+  }
+
+  visit_ASTConstantDeclaration(node) {
+    let name;
+    if (node.varNode.left && node.varNode.left.name) {
+      name = node.varNode.left.name;
+    }
+    else {
+      name = node.varNode.name;
+    }
+
+    if (typeof this.globalScope[name] != "undefined") {
+      throw new Error(`Variable ${name} already declared.`);
+    }
+
+    this.globalScope[name] = null;
+    return this.visit(node.varNode);
   }
 
   visit_ASTCompound(node) {
