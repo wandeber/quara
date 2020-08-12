@@ -35,8 +35,8 @@ const {Interpreter} = require('./Interpreters/Interpreter');
  * @see https://ruslanspivak.com/lsbasi-part1/ Implemented following Ruslan's guide.
  */
 (() => {
-  function devStatus() {
-    console.log( 
+  const devStatus = () => {
+    console.log(
        "  - Supported comments:\n"
       +"      - Line comments: // ...\n"
       +"      - Block comments: /* ... */\n"
@@ -56,9 +56,9 @@ const {Interpreter} = require('./Interpreters/Interpreter');
       +"      true, false\n"
       +"\n"
     );
-  }
+  };
   
-  function info() {
+  const info = () => {
     console.log(
        "   ___                                 \n"
       +"  / _ \\   _   _    __ _   _ __    __ _\n"
@@ -72,16 +72,18 @@ const {Interpreter} = require('./Interpreters/Interpreter');
     );
 
     devStatus();
-  }
+  };
 
-  function close() {
+  const close = () => {
     console.log(
       "\n"
       +"  Hope Bernito has solve your doubts. Bye!"
       +"\n"
     );
-    process.exit();
-  }
+  };
+
+  const JSONIndentationSpaces = 2;
+
   
   const rl = Readline.createInterface({
     input: process.stdin,
@@ -101,38 +103,35 @@ const {Interpreter} = require('./Interpreters/Interpreter');
   commands.info = info;
   
   let result;
-  function prompt() {
-    let text = "";
+  const prompt = () => {
+    //let text = "";
     rl.question("> ", (input) => {
       if (typeof commands[input] == "function") {
         commands[input]();
       }
       else {
         try {
-          if (typeof input === "string") {
-            input = input.trim();
-            if (input.length > 0) {
-              const lexer = new Lexer(input);
-              const parser = new Parser(lexer);
-    
-              //const interpreter = new RPNTranslator(parser);
-              //const interpreter = new LispTranslator(parser);
-              //const interpreter = new MongoDBTranslator(parser);
-              //const interpreter = new BAPIFiltersTranslator(parser);
-              //const interpreter = new ASTInterpreter(parser);
-              const interpreter = new Interpreter(parser);
-              
-              result = interpreter.interpret();
-              switch (typeof result) {
-                case 'string':
-                  console.log('"'+ result +'"');
-                  break;
-                case 'object':
-                  console.log(JSON.stringify(result, null, 2));
-                  break;
-                default:
-                  console.log(result);
-              }
+          if (typeof input === "string" && input.length > 0) {
+            const lexer = new Lexer(input);
+            const parser = new Parser(lexer);
+  
+            //const interpreter = new RPNTranslator(parser);
+            //const interpreter = new LispTranslator(parser);
+            //const interpreter = new MongoDBTranslator(parser);
+            //const interpreter = new BAPIFiltersTranslator(parser);
+            //const interpreter = new ASTInterpreter(parser);
+            const interpreter = new Interpreter(parser);
+            
+            result = interpreter.interpret();
+            switch (typeof result) {
+              case 'string':
+                console.log('"'+ result +'"');
+                break;
+              case 'object':
+                console.log(JSON.stringify(result, null, JSONIndentationSpaces));
+                break;
+              default:
+                console.log(result);
             }
           }
         }
@@ -144,7 +143,7 @@ const {Interpreter} = require('./Interpreters/Interpreter');
       
       prompt();
     });
-  }
+  };
   
 
 

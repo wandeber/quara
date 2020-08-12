@@ -156,7 +156,7 @@ class Lexer {
   getCoincidence(allowedValues) {
     let currentValue = "";
 
-    function filterValues(index, charToCheck) {
+    const filterValues = (index, charToCheck) => {
       let remainingAllowedValues = []; // Will contain only operators that match the current operator.
       
       for (let value of allowedValues) {
@@ -171,7 +171,7 @@ class Lexer {
       }
 
       return false;
-    }
+    };
 
     /* If current character match with any value in the position it would have in case of add it
     to currentValue, adds it to currentValue and advance to the next character. */
@@ -220,10 +220,12 @@ class Lexer {
       return new Token(TokenTypes.EoF, null);
     }
     
-    if (skipSpaces) {
-      this.skipSpaces();
-    }
-    else if (this.currentChar === " ") {
+    if (this.currentChar === " ") {
+      if (skipSpaces) {
+        this.skipSpaces();
+        return this.getNextToken(skipSpaces);
+      }
+      
       token = new Token(TokenTypes.Space, " ");
       this.advance();
       return token;
@@ -240,7 +242,6 @@ class Lexer {
       return this.getNextToken(skipSpaces);
     }
 
-
     // Strings:
     if (this.currentChar == '"') {
       let str = this.getString();
@@ -249,10 +250,7 @@ class Lexer {
       }
     }
 
-    /* if the character is a digit then convert it to
-    integer, create a IntegerConstant token, increment this.pos
-    index to point to the next character after the digit,
-    and return the IntegerConstant token */
+    // If point or digit, gets a number, integer or float:
     if (this.currentChar == '.' || Types.isInteger(this.currentChar)) {
       let number = this.getNumber();
       if (number) {
@@ -263,13 +261,13 @@ class Lexer {
       }
     }
 
-    // Operators.
+    // Operators:
     let operator = this.getOperator();
     if (operator) { // Not null.
       return operator;
     }
 
-    // Reserved keywords and variable names.
+    // Reserved keywords and variable names:
     if (Types.isAlpha(this.currentChar) || this.currentChar == '_' || this.currentChar == '$') {
       return this.id();
     }

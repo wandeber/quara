@@ -1,22 +1,28 @@
 {
   "name": "quara",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Query as Sara.",
   "main": "index.js",
   "scripts": {
     "start": "npm run eslint && npm run quara",
     "quara": "npm run shell",
     "shell": "node ./src/shell.js",
+
     "rebuild": "npm run clean && npm run build",
-    "build": "npm run eslint && npm run webpack-prod",
-    "build-dev": "npm run eslint && npm run webpack-dev",
+    "build": "npm run webpack",
+    "build-dev": "npm run prebuild && npm run webpack-dev",
+    "prebuild": "npm run eslint && npm run test",
+
     "precommit": "npm run eslint",
+    
+    "test": "npm run mocha",
+    
+    "clean": "rm -r ./dist",
+
     "webpack": "./node_modules/.bin/webpack --mode production",
     "webpack-dev": "./node_modules/.bin/webpack --mode development",
-    "babel": "./node_modules/.bin/babel src --out-dir dist",
-    "eslint": "./node_modules/.bin/eslint ./src",
-    "clean": "rm -r ./dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "mocha": "./node_modules/.bin/mocha",
+    "eslint": "./node_modules/.bin/eslint ./src && ./node_modules/.bin/eslint ./test"
   },
   "keywords": [
     "query",
@@ -37,6 +43,7 @@
     "@babel/preset-env": "^7.11.0",
     "babel-loader": "^8.1.0",
     "eslint": "^7.6.0",
+    "mocha": "^8.1.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   }

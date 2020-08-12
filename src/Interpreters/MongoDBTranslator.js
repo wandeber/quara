@@ -62,32 +62,26 @@ class MongoDBTranslator extends NodeVisitor {
     else if (node.operator.type == TokenTypes.OpEqual) {
       result = {};
       result[this.visit(node.left)] = {$eq: this.visit(node.right)};
-      return result;
     }
     else if (node.operator.type == TokenTypes.OpNotEqual) {
       result = {};
       result[this.visit(node.left)] = {$ne: this.visit(node.right)};
-      return result;
     }
     else if (node.operator.type == TokenTypes.OpLowerThan) {
       result = {};
       result[this.visit(node.left)] = {$lt: this.visit(node.right)};
-      return result;
     }
     else if (node.operator.type == TokenTypes.OpGreaterThan) {
       result = {};
       result[this.visit(node.left)] = {$gt: this.visit(node.right)};
-      return result;
     }
     else if (node.operator.type == TokenTypes.OpLowerThanEqual) {
       result = {};
       result[this.visit(node.left)] = {$lte: this.visit(node.right)};
-      return result;
     }
     else if (node.operator.type == TokenTypes.OpGreaterThanEqual) {
       result = {};
       result[this.visit(node.left)] = {$gte: this.visit(node.right)};
-      return result;
     }
 
     else if (node.operator.type == TokenTypes.OpAnd) {

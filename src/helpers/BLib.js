@@ -1,11 +1,9 @@
 "use strict";
 
+const AlphaRegExp = /^[a-z]+$/iu;
+const AlphanumericRegExp = /^[a-z0-9]+$/iu;
 
 
-
-
-const AlphaRegExp = /^[a-z]+$/i;
-const AlphanumericRegExp = /^[a-z0-9]+$/i;
 
 
 
@@ -33,7 +31,7 @@ class Types {
 
 const BLib = {
   Types
-}
+};
 
 
 

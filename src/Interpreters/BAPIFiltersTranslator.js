@@ -59,6 +59,7 @@ class BAPIFiltersTranslator extends NodeVisitor {
 
 
 
+  /* eslint-disable-next-line max-lines-per-function */
   visit_ASTBinaryOperator(node) {
     let result;
 

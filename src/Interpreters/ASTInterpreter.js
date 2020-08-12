@@ -40,52 +40,56 @@ class ASTInterpreter extends NodeVisitor {
 
 
   visit_ASTBinaryOperator(node) {
-    let result;
-
-    let prevSpace = this.space;
+    let result,
+        prevSpace = this.space;
+    
     this.space += '    ';
     console.log(this.space, '('+ node.operator.value +')');
     
-    if (node.operator.type == TokenTypes.OpPlus) {
-      result = this.visit(node.left) + this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpMinus) {
-      result = this.visit(node.left) - this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpMultiplication) {
-      result = this.visit(node.left) * this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpDivision) {
-      result = this.visit(node.left) / this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpModulus) {
-      result = this.visit(node.left) % this.visit(node.right);
-    }
+    switch (node.operator.type) {
+      case TokenTypes.OpPlus:
+        result = this.visit(node.left) + this.visit(node.right);
+        break;
+      case TokenTypes.OpMinus:
+        result = this.visit(node.left) - this.visit(node.right);
+        break;
+      case TokenTypes.OpMultiplication:
+        result = this.visit(node.left) * this.visit(node.right);
+        break;
+      case TokenTypes.OpDivision:
+        result = this.visit(node.left) / this.visit(node.right);
+        break;
+      case TokenTypes.OpModulus:
+        result = this.visit(node.left) % this.visit(node.right);
+        break;
+  
+      case TokenTypes.OpEqual:
+        result = this.visit(node.left) === this.visit(node.right);
+        break;
+      case TokenTypes.OpNotEqual:
+        result = this.visit(node.left) !== this.visit(node.right);
+        break;
+      case TokenTypes.OpLowerThan:
+        result = this.visit(node.left) < this.visit(node.right);
+        break;
+      case TokenTypes.OpGreaterThan:
+        result = this.visit(node.left) > this.visit(node.right);
+        break;
+      case TokenTypes.OpLowerThanEqual:
+        result = this.visit(node.left) <= this.visit(node.right);
+        break;
+      case TokenTypes.OpGreaterThanEqual:
+        result = this.visit(node.left) >= this.visit(node.right);
+        break;
+  
+      case TokenTypes.OpAnd:
+        result = this.visit(node.left) && this.visit(node.right);
+        break;
+      case TokenTypes.OpOr:
+        result = this.visit(node.left) || this.visit(node.right);
+        break;
 
-    else if (node.operator.type == TokenTypes.OpEqual) {
-      result = this.visit(node.left) === this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpNotEqual) {
-      result = this.visit(node.left) !== this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpLowerThan) {
-      result = this.visit(node.left) < this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpGreaterThan) {
-      result = this.visit(node.left) > this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpLowerThanEqual) {
-      result = this.visit(node.left) <= this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpGreaterThanEqual) {
-      result = this.visit(node.left) >= this.visit(node.right);
-    }
-
-    else if (node.operator.type == TokenTypes.OpAnd) {
-      result = this.visit(node.left) && this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpOr) {
-      result = this.visit(node.left) || this.visit(node.right);
+      default: break;
     }
 
     this.space = prevSpace;

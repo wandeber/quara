@@ -1,7 +1,8 @@
 {
     "env": {
-        "browser": true,
+        "node": true,
         "commonjs": true,
+        "mocha": true,
         "es2020": true
     },
     "extends": "eslint:recommended",
@@ -62,7 +63,7 @@
             "error",
             "consistent"
         ],
-        "function-paren-newline": "error",
+        "function-paren-newline": "off",
         "generator-star-spacing": "error",
         "global-require": "error",
         "grouped-accessor-pairs": "error",
@@ -94,7 +95,13 @@
         "max-depth": "error",
         "max-len": "off",
         "max-lines": "off",
-        "max-lines-per-function": "error",
+        "max-lines-per-function": [
+            "error",
+            {
+                "skipBlankLines": true,
+                "skipComments": true
+            }
+        ],
         "max-nested-callbacks": "error",
         "max-params": "error",
         "max-statements": "off",
@@ -140,7 +147,12 @@
         "no-lonely-if": "error",
         "no-loop-func": "error",
         "no-loss-of-precision": "error",
-        "no-magic-numbers": "error",
+        "no-magic-numbers": [
+            "error",
+            {
+                "ignore": [0, 1, 2]
+            }
+        ],
         "no-mixed-operators": "error",
         "no-mixed-requires": "error",
         "no-multi-assign": "error",

@@ -73,7 +73,8 @@ class Interpreter extends NodeVisitor {
   }
 
 
-
+  
+  /* eslint-disable-next-line max-lines-per-function, complexity */
   visit_ASTBinaryOperator(node) {
     let result, left, right;
 
@@ -107,7 +108,7 @@ class Interpreter extends NodeVisitor {
         result = this.visit(node.left) !== this.visit(node.right);
         break;
       case TokenTypes.OpLaxNotEqual:
-        result = this.visit(node.left) === this.visit(node.right);
+        result = this.visit(node.left) != this.visit(node.right);
         break;
       case TokenTypes.OpLowerThan:
         result = this.visit(node.left) < this.visit(node.right);
@@ -240,10 +241,10 @@ class Interpreter extends NodeVisitor {
     for (let child of node.children) {
       //console.log("child", child);
       if (child.left && child.left.name) {
-        name = child.left.name;
+        ({name} = child.left);
       }
       else {
-        name = child.name;
+        ({name} = child); // TODO: ¿Esto es necesario?
       }
 
       if (typeof this.globalScope[name] != "undefined") {
@@ -272,10 +273,10 @@ class Interpreter extends NodeVisitor {
     for (let child of node.children) {
       //console.log("child", child);
       if (child.left && child.left.name) {
-        name = child.left.name;
+        ({name} = child.left);
       }
       else {
-        name = child.name;
+        ({name} = child);
       }
 
       if (typeof this.globalScope[name] != "undefined") {
