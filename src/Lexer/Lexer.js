@@ -99,14 +99,14 @@ class Lexer {
 
   skipLineComment() {
     this.advance(2); // Skips //,
-    while (this.currentChar != null && this.currentChar != "\n") {
+    while (this.currentChar !== null && this.currentChar != "\n") {
       this.advance();
     }
   }
   
   skipBlockComment() {
     this.advance(2); // Skips /*.
-    while (this.currentChar != null && (this.currentChar != "*" || this.peek() != '/')) {
+    while (this.currentChar !== null && (this.currentChar != "*" || this.peek() != '/')) {
       this.advance();
     }
     this.advance(2); // Skips */,
@@ -134,7 +134,7 @@ class Lexer {
       //if (this.currentChar == '.') {
       //  dots++;
       //}
-      number += ""+ this.currentChar;
+      number += String(this.currentChar);
       this.advance();
     }
 
@@ -176,16 +176,16 @@ class Lexer {
     /* If current character match with any value in the position it would have in case of add it
     to currentValue, adds it to currentValue and advance to the next character. */
     while (filterValues(currentValue.length, this.currentChar)) {
-      currentValue += ""+ this.currentChar;
+      currentValue += String(this.currentChar);
       this.advance();
     }
     
     return currentValue;
   }
 
-  _id() {
+  id() {
     let result = "";
-    while (this.currentChar != null && Validation.isValidVariableName(this.currentChar)) {
+    while (this.currentChar !== null && Validation.isValidVariableName(this.currentChar)) {
       result += this.currentChar;
       this.advance();
     }
@@ -216,7 +216,7 @@ class Lexer {
     /* is this.pos index past the end of the this.text ?
     if so, then return EoF token because there is no more
     input left to convert into tokens */
-    if (this.currentChar == null) {
+    if (this.currentChar === null) {
       return new Token(TokenTypes.EoF, null);
     }
     
@@ -259,9 +259,7 @@ class Lexer {
         if (Types.isInteger(number)) {
           return new Token(TokenTypes.IntegerConstant, parseInt(number));
         }
-        else {
-          return new Token(TokenTypes.DecimalConstant, parseFloat(number));
-        }
+        return new Token(TokenTypes.DecimalConstant, parseFloat(number));
       }
     }
 
@@ -273,10 +271,10 @@ class Lexer {
 
     // Reserved keywords and variable names.
     if (Types.isAlpha(this.currentChar) || this.currentChar == '_' || this.currentChar == '$') {
-      return this._id();
+      return this.id();
     }
 
-    this.error();
+    return this.error();
   }
 }
 

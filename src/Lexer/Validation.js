@@ -4,7 +4,7 @@
 
 
 
-const VariableNameRegExp = /^[a-z0-9_$]+$/i;
+const VariableNameRegExp = /^[a-z0-9_$]+$/iu;
 
 class Validation {
   static isValidVariableName(str) {

@@ -60,11 +60,13 @@ const Operators = {
   ')':    new Token(TokenTypes.OpParenthesisClose, ')'),
 
   '.':    new Token(TokenTypes.OpDot, '.'),
+  '[':    new Token(TokenTypes.OpArrayAccessorOpen, '['),
+  ']':    new Token(TokenTypes.OpArrayAccessorClose, ']'),
   ';':    new Token(TokenTypes.OpSemicolon, ';'),
   ',':    new Token(TokenTypes.OpComma, ','),
 
   '"':    new Token(TokenTypes.OpQuote, ';'),
-}
+};
 
 
 

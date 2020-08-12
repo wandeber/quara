@@ -1,6 +1,5 @@
 "use strict";
 
-const {TokenTypes} = require("../Token");
 const {NodeVisitor} = require("../NodeVisitor");
 
 

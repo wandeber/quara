@@ -12,7 +12,6 @@ const {ASTConstantDeclaration} = require("./ASTNodes/ASTConstantDeclaration");
 const {ASTVariable} = require("./ASTNodes/ASTVariable");
 const {ASTCompound} = require("./ASTNodes/ASTCompound");
 const {ASTAssign} = require("./ASTNodes/ASTAssign");
-const Token = require("./Token");
 
 
 
@@ -91,7 +90,8 @@ const availableConstants = [
  * | 6                 Left           +, -           Plus and minus
  * | 5                 Left           *, /, %        Factor
  * | 4                 Left           !, +, -        Unary plus and minus
- * v 3                 Left           ^, ¬/          Power ans sqrt              // Pending
+ * | 3                 Left           ^, ¬/          Power ans sqrt              // Pending
+ * v 2                 Left           ., []          Accessors
  *
  * script      -> (statement)*
  * statement   -> declaration
@@ -105,11 +105,11 @@ const availableConstants = [
  * constDecl   -> ModConst typeSpec? commaDecl
  * varDecl     -> (ModVar | ModVar? typeSpec) commaDecl
  * 
- * commaDecl -> declAssign (OpComma declAssign)*
+ * commaDecl   -> declAssign (OpComma declAssign)*
  * 
- * declAssign  -> variable (OpAssign (assign* | expr))?
+ * declAssign  -> member (OpAssign (assign* | expr))?
  * 
- * assign      -> variable ((
+ * assign      -> member ((
  *                  OpAssign
  *                  | OpPlusAssign
  *                  | OpMinusAssign
@@ -118,11 +118,9 @@ const availableConstants = [
  *                  | OpModulusAssign
  *                  | OpPowAssign
  *                ) assignment* | expr)
- * 
- * 
- * 
+ *
  * expr        -> or ((OpOr) or)*
- *                | variable (OpIncrement | OpDecrement)
+ *                | member (OpIncrement | OpDecrement)
  * or          -> and ((OpAnd) and)*
  * and         -> equality ((OpEqual | OpNotEqual) equality)*
  * equality    -> relational (
@@ -136,11 +134,15 @@ const availableConstants = [
  * relational  -> term ((OpPlus | OpMinus) term)*
  * term        -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
  * pow         -> factor (OpPow factor)*
- * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
- *               | (OpIncrement | OpDecrement) variable                          // Pre.
- *               | constant
- *               | (OpParenthesisOpen expr OpParenthesisClose)
- *               | variable
+ * factor      -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
+ *                | (OpIncrement | OpDecrement) member                           // Pre.
+ *                | constant
+ *                | (OpParenthesisOpen expr OpParenthesisClose)
+ *                | member
+ * member      -> variable (
+   *                OpDot variable
+   *                | OpArrayAccessorOpen expr OpArrayAccessorClose
+   *              )*
  * variable    -> ID
  * constant    -> (BooleanConstant | (IntegerConstant | DecimalConstant) | StringConstant)
  * typeSpec    -> (TypeAny | TypeBoolean | TypeInteger | TypeFloat | TypeDouble | TypeString)
@@ -239,11 +241,57 @@ class Parser {
   }
 
   /**
+   * member      -> variable (
+   *                  OpDot variable
+   *                  | OpArrayAccessorOpen expr OpArrayAccessorClose
+   *                )*
+   */
+  member() {
+    this.debug("Get member");
+
+    // Get variable (Id).
+    let node = this.variable();
+    let accessorOperators = [
+      TokenTypes.OpDot,
+      TokenTypes.OpArrayAccessorOpen
+    ];
+
+    while (accessorOperators.includes(this.currentToken.type)) {
+      let arrayAccessor = false;
+      if (this.currentToken.type == TokenTypes.OpArrayAccessorOpen) {
+        arrayAccessor = true;
+      }
+
+      let operator = this.operator(accessorOperators);
+      let right;
+      if (arrayAccessor) {
+        right = this.expr();
+      }
+      else {
+        right = this.variable();
+      }
+
+      node = new ASTBinaryOperator(
+        node,
+        // We expect the current token will be a "." (member accesor).
+        operator,
+        right
+      );
+
+      if (arrayAccessor) {
+        this.eat(TokenTypes.OpArrayAccessorClose);
+      }
+    }
+
+    return node;
+  }
+
+  /**
    * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
-   *               | (OpIncrement | OpDecrement) variable                       // Pre.
+   *               | (OpIncrement | OpDecrement) variable                        // Pre.
    *               | constant
    *               | (OpParenthesisOpen expr OpParenthesisClose)
-   *               | variable
+   *               | member
    */
   factor() {
     this.debug("Get factor");
@@ -281,7 +329,7 @@ class Parser {
       node = this.constant();
     }
     else if (this.currentToken.type == TokenTypes.Id) {
-      node = this.variable();
+      node = this.member();
     }
     
     return node;
@@ -473,7 +521,7 @@ class Parser {
   }
 
   /**
-   * assign     -> variable (
+   * assign     -> member (
    *                 OpAssign
    *                 | OpPlusAssign
    *                 | OpMinusAssign
@@ -503,11 +551,11 @@ class Parser {
   
   /**
    * First assign must use the simple assign operator.
-   * declAssign  -> variable (OpAssign assign)?
+   * declAssign  -> member (OpAssign assign)?
    */
   declAssign() {
     this.debug("Get declAssign");
-    let node = this.variable();
+    let node = this.member();
     if (this.currentToken.type == TokenTypes.OpAssign) {
       let operator = this.operator(TokenTypes.OpAssign);
       let right;

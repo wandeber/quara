@@ -6,11 +6,7 @@ const {ASTBinaryOperator} = require('./ASTBinaryOperator');
 
 
 
-class ASTAssign extends ASTBinaryOperator {
-  constructor(left, operator, right) {
-    super(left, operator, right);
-  }
-}
+class ASTAssign extends ASTBinaryOperator {}
 
 
 

@@ -2,7 +2,6 @@
 
 const {TokenTypes} = require("../Token");
 const {NodeVisitor} = require("../NodeVisitor");
-const Token = require("../Token");
 
 
 
@@ -76,59 +75,81 @@ class Interpreter extends NodeVisitor {
 
 
   visit_ASTBinaryOperator(node) {
-    let result;
+    let result, left, right;
 
-    if (node.operator.type == TokenTypes.OpPlus) {
-      result = this.visit(node.left) + this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpMinus) {
-      result = this.visit(node.left) - this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpMultiplication) {
-      result = this.visit(node.left) * this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpDivision) {
-      result = this.visit(node.left) / this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpModulus) {
-      result = this.visit(node.left) % this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpPow) {
-      result = Math.pow(this.visit(node.left), this.visit(node.right));
+    switch (node.operator.type) {
+      case TokenTypes.OpPlus:
+        result = this.visit(node.left) + this.visit(node.right);
+        break;
+      case TokenTypes.OpMinus:
+        result = this.visit(node.left) - this.visit(node.right);
+        break;
+      case TokenTypes.OpMultiplication:
+        result = this.visit(node.left) * this.visit(node.right);
+        break;
+      case TokenTypes.OpDivision:
+        result = this.visit(node.left) / this.visit(node.right);
+        break;
+      case TokenTypes.OpModulus:
+        result = this.visit(node.left) % this.visit(node.right);
+        break;
+      case TokenTypes.OpPow:
+        result = this.visit(node.left) ** this.visit(node.right);
+        break;
+
+      case TokenTypes.OpEqual:
+        result = this.visit(node.left) === this.visit(node.right);
+        break;
+      case TokenTypes.OpLaxEqual:
+        result = this.visit(node.left) == this.visit(node.right);
+        break;
+      case TokenTypes.OpNotEqual:
+        result = this.visit(node.left) !== this.visit(node.right);
+        break;
+      case TokenTypes.OpLaxNotEqual:
+        result = this.visit(node.left) === this.visit(node.right);
+        break;
+      case TokenTypes.OpLowerThan:
+        result = this.visit(node.left) < this.visit(node.right);
+        break;
+      case TokenTypes.OpGreaterThan:
+        result = this.visit(node.left) > this.visit(node.right);
+        break;
+      case TokenTypes.OpLowerThanEqual:
+        result = this.visit(node.left) <= this.visit(node.right);
+        break;
+      case TokenTypes.OpGreaterThanEqual:
+        result = this.visit(node.left) >= this.visit(node.right);
+        break;
+      
+      case TokenTypes.OpAnd:
+        result = this.visit(node.left) && this.visit(node.right);
+        break;
+      case TokenTypes.OpOr:
+        result = this.visit(node.left) || this.visit(node.right);
+        break;
+      
+      case TokenTypes.OpDot:
+        left = this.visit(node.left);
+        if (
+          typeof left !== "undefined"
+          && typeof node.right.name !== "undefined"
+          && typeof left[node.right.name] !== "function"
+        ) {
+          result = left[node.right.name];
+        }
+        break;
+      case TokenTypes.OpArrayAccessorOpen:
+        left = this.visit(node.left);
+        right = this.visit(node.right);
+        if (typeof left !== "undefined" && typeof left[right] !== "function") {
+          result = left[right];
+        }
+        break;
+
+      default: break;
     }
 
-    else if (node.operator.type == TokenTypes.OpEqual) {
-      result = this.visit(node.left) === this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpLaxEqual) {
-      result = this.visit(node.left) == this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpNotEqual) {
-      result = this.visit(node.left) !== this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpLaxNotEqual) {
-      result = this.visit(node.left) === this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpLowerThan) {
-      result = this.visit(node.left) < this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpGreaterThan) {
-      result = this.visit(node.left) > this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpLowerThanEqual) {
-      result = this.visit(node.left) <= this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpGreaterThanEqual) {
-      result = this.visit(node.left) >= this.visit(node.right);
-    }
-
-    else if (node.operator.type == TokenTypes.OpAnd) {
-      result = this.visit(node.left) && this.visit(node.right);
-    }
-    else if (node.operator.type == TokenTypes.OpOr) {
-      result = this.visit(node.left) || this.visit(node.right);
-    }
-    
     return result;
   }
 
@@ -197,7 +218,11 @@ class Interpreter extends NodeVisitor {
         value = this.visit(node.left) % this.visit(node.right);
         break;
       case TokenTypes.OpPowAssign:
-        value = Math.pow(this.visit(node.left), this.visit(node.right));
+        //value = Math.pow(this.visit(node.left), this.visit(node.right));
+        value = this.visit(node.left) ** this.visit(node.right);
+        break;
+      default:
+        this.error("Unknown operator", node.operator);
         break;
     }
     this.globalScope[node.left.name] = value;
@@ -205,10 +230,10 @@ class Interpreter extends NodeVisitor {
   }
 
   visit_ASTVariableDeclaration(node) {
-    let type = "any"; // Default any or deduce from value?
-    if (node.nodeType) {
-      type = this.visit(node.nodeType);
-    }
+    //let type = "any"; // Default any or deduce from value?
+    //if (node.nodeType) {
+    //  type = this.visit(node.nodeType);
+    //}
     //console.log("Type: ", type);
     
     let name;
@@ -237,10 +262,10 @@ class Interpreter extends NodeVisitor {
 
   visit_ASTConstantDeclaration(node) {
     this.debug("visit_ASTConstantDeclaration");
-    let type = "any"; // Const puede ser any? Que sea como no ponerlo?
-    if (node.nodeType) {
-      type = this.visit(node.nodeType);
-    }
+    //let type = "any"; // Const puede ser any? Que sea como no ponerlo?
+    //if (node.nodeType) {
+    //  type = this.visit(node.nodeType);
+    //}
     //console.log("Type: ", type);
     
     let name;
@@ -273,8 +298,9 @@ class Interpreter extends NodeVisitor {
       result.push(this.visit(child));
     }
     if (result.length > 0) {
-      return result[result.length - 1];
+      result = result[result.length - 1];
     }
+    return result;
   }
 
 

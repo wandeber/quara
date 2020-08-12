@@ -4,8 +4,9 @@
   "description": "Query as Sara.",
   "main": "index.js",
   "scripts": {
+    "eslint": "./node_modules/.bin/eslint ./src",
     "start": "node ./index.js",
-    "quara": "npm start",
+    "quara": "npm run eslint && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -18,5 +19,8 @@
   ],
   "author": "wandeber",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.6.0"
+  }
 }

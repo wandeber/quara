@@ -68,6 +68,8 @@ const OpModulusAssign = "OpModulusAssign";
 const OpPowAssign = "OpPowAssign";
 
 const OpDot = "OpDot";
+const OpArrayAccessorOpen = "OpArrayAccessorOpen";
+const OpArrayAccessorClose = "OpArrayAccessorClose";
 const OpSemicolon = "OpSemicolon";
 const OpQuote = "OpQuote";
 const OpComma = "OpComma";
@@ -102,9 +104,11 @@ const TokenTypes = {
   OpPowAssign,
   
   Space, Dot,
-  OpDot, OpSemicolon, OpComma,
+  OpSemicolon, OpComma,
   OpQuote,
   OpParenthesisOpen, OpParenthesisClose,
+  OpDot,
+  OpArrayAccessorOpen, OpArrayAccessorClose,
 
   EoF
 };
@@ -114,9 +118,9 @@ const TokenTypes = {
 class Token {
   constructor(type, value) {
     // token type: IntegerConstant, OpPlus, or EoF
-    this.type = type
+    this.type = type;
     // token value: 0, 1, 2. 3, 4, 5, 6, 7, 8, 9, '+', or None
-    this.value = value
+    this.value = value;
   }
 
   /**
