@@ -2,14 +2,14 @@
 
 const Readline = require("readline");
 
-const {Lexer} = require("./src/Lexer/Lexer");
-const {Parser} = require("./src/Parser");
-const {Interpreter} = require('./src/Interpreters/Interpreter');
-//const {RPNTranslator} = require('./src/Interpreters/RPNTranslator');
-//const {LispTranslator} = require('./src/Interpreters/LispTranslator');
-//const {MongoDBTranslator} = require('./src/Interpreters/MongoDBTranslator');
-//const {BAPIFiltersTranslator} = require('./src/Interpreters/BAPIFiltersTranslator');
-//const {ASTInterpreter} = require('./src/Interpreters/ASTInterpreter');
+const {Lexer} = require("./Lexer/Lexer");
+const {Parser} = require("./Parser");
+const {Interpreter} = require('./Interpreters/Interpreter');
+//const {RPNTranslator} = require('./Interpreters/RPNTranslator');
+//const {LispTranslator} = require('./Interpreters/LispTranslator');
+//const {MongoDBTranslator} = require('./Interpreters/MongoDBTranslator');
+//const {BAPIFiltersTranslator} = require('./Interpreters/BAPIFiltersTranslator');
+//const {ASTInterpreter} = require('./Interpreters/ASTInterpreter');
 
 
 

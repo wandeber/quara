@@ -1,0 +1,21 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "10.15.3"
+        }
+      }
+    ]
+  ],
+
+  "plugins": [],
+
+  "ignore": [
+    "./src/shell.js"
+  ],
+  "exclude": [
+    "./src/index.js"
+  ]
+}

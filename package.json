@@ -4,9 +4,18 @@
   "description": "Query as Sara.",
   "main": "index.js",
   "scripts": {
+    "start": "npm run eslint && npm run quara",
+    "quara": "npm run shell",
+    "shell": "node ./src/shell.js",
+    "rebuild": "npm run clean && npm run build",
+    "build": "npm run eslint && npm run webpack-prod",
+    "build-dev": "npm run eslint && npm run webpack-dev",
+    "precommit": "npm run eslint",
+    "webpack": "./node_modules/.bin/webpack --mode production",
+    "webpack-dev": "./node_modules/.bin/webpack --mode development",
+    "babel": "./node_modules/.bin/babel src --out-dir dist",
     "eslint": "./node_modules/.bin/eslint ./src",
-    "start": "node ./index.js",
-    "quara": "npm run eslint && npm start",
+    "clean": "rm -r ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,8 +28,16 @@
   ],
   "author": "wandeber",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "@babel/polyfill": "^7.10.4"
+  },
   "devDependencies": {
-    "eslint": "^7.6.0"
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "babel-loader": "^8.1.0",
+    "eslint": "^7.6.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   }
 }

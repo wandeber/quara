@@ -1,6 +1,6 @@
 "use strict";
 
-const {NodeVisitor} = require("../NodeVisitor");
+const {NodeVisitor} = require("./NodeVisitor");
 
 
 

@@ -1,7 +1,7 @@
 "use strict";
 
 const {Token, TokenTypes} = require("../Token");
-const {Types} = require("../../helpers/BLib.js");
+const {Types} = require("../helpers/BLib.js");
 const {ReservedKeywords} = require("./ReservedKeywords");
 const {Operators} = require("./Operators");
 const {Validation} = require("./Validation");
