@@ -1,35 +1,23 @@
 "use strict";
 
-const assert = require("assert");
-const {Quara} = require("../src/index.js");
+//const assert = require("assert");
+const {ExponentiationTests} = require("./BinaryOperators/ArithmeticOperators/ExponentiationTests");
+const {SumTests} = require("./BinaryOperators/ArithmeticOperators/SumTests");
+const {SubstractionTests} = require("./BinaryOperators/ArithmeticOperators/SubstractionTests");
+const {MultiplicationTests} = require("./BinaryOperators/ArithmeticOperators/MultiplicationTests");
+const {DivisionTests} = require("./BinaryOperators/ArithmeticOperators/DivisionTests");
 
 
 
 
 
-describe("Arithmetic operators", () => {
-  describe("Integer sum (a + b)", () => {
-    let num1 = 1;
-    let num2 = 3;
-    let expectedResult = 4;
-    let expression;
-
-    expression = `${num1} + ${num2}`;
-    it(`should return ${expectedResult} when it sums ${num1} and ${num2}`, () => {
-      const quara = new Quara(expression);
-      assert.equal(quara.run(), expectedResult);
-    });
-
-    expression = `${num1}+${num2}`;
-    it(`should return ${expectedResult} when it sums ${num1} and ${num2} without spaces`, () => {
-      const quara = new Quara(expression);
-      assert.equal(quara.run(), expectedResult);
-    });
-
-    expression = `  ${num1}  +  ${num2}  `;
-    it(`should return ${expectedResult} when it sums ${num1} and ${num2} with extra spaces`, () => {
-      const quara = new Quara(expression);
-      assert.equal(quara.run(), expectedResult);
-    });
+describe("Binary operators", () => {
+  describe("Arithmetic operators", () => {
+    describe("Sum operator (+)", SumTests.test);
+    describe("Substract operator (-)", SubstractionTests.test);
+    describe("Multiplication operator (*)", MultiplicationTests.test);
+    describe("Multiplication operator (/)", DivisionTests.test);
+    describe("Exponentietion operator 1 (^)", ExponentiationTests.test1);
+    describe("Exponentietion operator 2 (**)", ExponentiationTests.test2);
   });
 });
