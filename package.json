@@ -1,6 +1,6 @@
 {
   "name": "quara",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Query as Sara.",
   "author": "Bernardo A. Siverio (wandeber)",
   "main": "index.js",
