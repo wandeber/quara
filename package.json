@@ -10,10 +10,13 @@
     "shell": "node ./dist/shell.js",
     "rebuild": "npm run clean && npm run build",
     "clean": "rm -r ./dist",
-    "build": "npm run build-tsc && npm run lint",
+    "build": "npm run build-tsc && npm run check",
+    "preversion": "npm run check",
+    "precommit": "npm run chek",
+    "check": "npm test && npm run lint",
     "build-tsc": "./node_modules/.bin/tsc",
     "lint": "./node_modules/.bin/eslint ./**/*.ts",
-    "test": "jest --forceExit --coverage --verbose"
+    "test": "jest --detectOpenHandles --forceExit --coverage --verbose"
   },
   "keywords": [
     "query",
