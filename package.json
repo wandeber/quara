@@ -1,8 +1,17 @@
 {
   "name": "quara",
   "version": "0.4.1",
-  "description": "Query as Sara.",
   "author": "Bernardo A. Siverio (wandeber)",
+  "license": "ISC",
+  "description": "Query as Sara.",
+  "keywords": [
+    "query",
+    "interpreter",
+    "language",
+    "sql",
+    "database",
+    "filter"
+  ],
   "main": "index.js",
   "scripts": {
     "start": "npm run rebuild && npm run quara",
@@ -12,21 +21,16 @@
     "clean": "rm -r ./dist",
     "build": "npm run build-tsc && npm run check",
     "preversion": "npm run check",
-    "precommit": "npm run check",
     "check": "npm test && npm run lint",
     "build-tsc": "./node_modules/.bin/tsc",
     "lint": "./node_modules/.bin/eslint ./**/*.ts",
     "test": "jest --detectOpenHandles --forceExit --coverage --verbose"
   },
-  "keywords": [
-    "query",
-    "interpreter",
-    "language",
-    "sql",
-    "database",
-    "filter"
-  ],
-  "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run check"
+    }
+  },
   "dependencies": {},
   "devDependencies": {
     "@types/jest": "^26.0.10",
