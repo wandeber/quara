@@ -12,7 +12,7 @@
     "clean": "rm -r ./dist",
     "build": "npm run build-tsc && npm run check",
     "preversion": "npm run check",
-    "precommit": "npm run chek",
+    "precommit": "npm run check",
     "check": "npm test && npm run lint",
     "build-tsc": "./node_modules/.bin/tsc",
     "lint": "./node_modules/.bin/eslint ./**/*.ts",
@@ -34,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
     "eslint": "^7.6.0",
+    "husky": "^4.2.5",
     "jest": "^26.4.0",
     "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
