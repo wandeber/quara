@@ -1,2 +1,8 @@
-node_modules/
+# Built .ts files:
 dist/
+
+# Dependency directory:
+node_modules/
+
+# Coverage reports:
+coverage

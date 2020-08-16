@@ -1,7 +1,7 @@
-"use strict";
 
-const {TokenTypes} = require("../Token");
-const {NodeVisitor} = require("./NodeVisitor");
+
+import NodeVisitor from "./NodeVisitor";
+import TokenTypes from "../Token";
 
 
 
@@ -44,7 +44,7 @@ class BAPIFiltersTranslator extends NodeVisitor {
     if (message) {
       console.log(message, me);
     }
-    throw new Error('Ivalid syntax.');
+    throw new Error("Ivalid syntax.");
   }
   
   debug(message = "") {

@@ -1,6 +1,6 @@
-"use strict";
 
-const {NodeVisitor} = require("./NodeVisitor");
+
+import NodeVisitor from "./NodeVisitor";
 
 
 
@@ -24,7 +24,7 @@ class RPNTranslator extends NodeVisitor {
     if (message) {
       console.log(message, me);
     }
-    throw new Error('Ivalid syntax.');
+    throw new Error("Ivalid syntax.");
   }
   
   debug(message = "") {

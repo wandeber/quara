@@ -1,7 +1,7 @@
-"use strict";
 
-const {TokenTypes} = require("../Token");
-const {NodeVisitor} = require("./NodeVisitor");
+
+import NodeVisitor from "./NodeVisitor";
+import TokenTypes from "../Token";
 
 
 
@@ -18,13 +18,11 @@ class ASTInterpreter extends NodeVisitor {
     this.space = "";
   }
 
-
-
   error(message, me) {
     if (message) {
       console.log(message, me);
     }
-    throw new Error('Ivalid syntax.');
+    throw new Error("Ivalid syntax.");
   }
   
   debug(message = "") {
@@ -43,8 +41,8 @@ class ASTInterpreter extends NodeVisitor {
     let result,
         prevSpace = this.space;
     
-    this.space += '    ';
-    console.log(this.space, '('+ node.operator.value +')');
+    this.space += "    ";
+    console.log(this.space, "("+ node.operator.value +")");
     
     switch (node.operator.type) {
       case TokenTypes.OpPlus:
@@ -101,7 +99,7 @@ class ASTInterpreter extends NodeVisitor {
     let result;
     
     let prevSpace = this.space;
-    this.space += '    ';
+    this.space += "    ";
     console.log(this.space, "Unary ("+ node.operator.value +")");
 
     if (node.operator.type == TokenTypes.OpPlus) {
@@ -123,7 +121,7 @@ class ASTInterpreter extends NodeVisitor {
 
   visit_ASTNumber(node) {
     let prevSpace = this.space;
-    this.space += '    ';
+    this.space += "    ";
     console.log(this.space, node.value);
     this.space = prevSpace;
 
