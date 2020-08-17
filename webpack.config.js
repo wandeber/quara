@@ -38,12 +38,14 @@ const indexSettings = {
     filename: "quara.js",
     libraryTarget: "umd",
     library: "Quara",
-    auxiliaryComment: "@author Bernardo A. Siverio (wandeber)",
+    auxiliaryComment: "@author Bernardo A. Siverio (wandeber) <berthewanderer@gmail.com>",
     globalObject: "this"
   },
   plugins: [
     new BannerPlugin({
-      banner: "Quara: Query as Sara.\n@licence ISC\n@author Bernardo A. Siverio (wandeber)", // the banner as string or function, it will be wrapped in a comment
+      banner: "Quara: Query as Sara.\n"
+        +"@licence ISC\n"
+        +"@author Bernardo A. Siverio (wandeber) <berthewanderer@gmail.com>",
       //raw: boolean, // if true, banner will not be wrapped in a comment
     })
   ]

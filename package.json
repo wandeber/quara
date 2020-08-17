@@ -17,15 +17,16 @@
     "start": "npm run rebuild && npm run shell",
     "shell": "node ./dist/shell.js",
     "rebuild": "npm run clean && npm run build",
-    "clean": "rm -r ./dist",
-    "build": "npm run build-tsc && npm run check",
-    "build-prod": "npm run build-webpack && npm run check",
+    "build": "npm run build-tsc && npm run licence && npm run check",
+    "build-prod": "npm run build-webpack && npm run licence && npm run check",
     "preversion": "npm run check",
     "check": "npm test && npm run lint",
+    "clean": "rm -r ./dist",
+    "licence": "cp -f ./LICENSE ./dist/",
     "build-tsc": "./node_modules/.bin/tsc",
     "build-webpack": "./node_modules/.bin/webpack --mode production",
     "lint": "./node_modules/.bin/eslint ./**/*.ts",
-    "test": "jest --detectOpenHandles --forceExit --coverage --verbose"
+    "test": "./node_modules/.bin/jest --detectOpenHandles --forceExit --coverage --verbose"
   },
   "husky": {
     "hooks": {
