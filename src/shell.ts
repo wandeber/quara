@@ -2,7 +2,6 @@ import Interpreter from "./Interpreters/Interpreter";
 import Lexer from "./Lexer/Lexer";
 import Parser from "./Parser";
 import ReadLine from "readline";
-
 //const {RPNTranslator} = require('./Interpreters/RPNTranslator');
 //const {LispTranslator} = require('./Interpreters/LispTranslator');
 //const {MongoDBTranslator} = require('./Interpreters/MongoDBTranslator');
@@ -102,7 +101,7 @@ import ReadLine from "readline";
   let result;
   const prompt = () => {
     //let text = "";
-    rl.question("> ", (input) => {
+    rl.question("> ", (input: any) => {
       if (typeof commands.get(input) == "function") {
         commands.get(input)();
       }

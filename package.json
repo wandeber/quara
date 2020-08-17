@@ -1,9 +1,8 @@
 {
   "name": "quara",
   "version": "0.4.1",
-  "author": "Bernardo A. Siverio (wandeber)",
-  "license": "ISC",
   "description": "Query as Sara.",
+  "license": "ISC",
   "keywords": [
     "query",
     "interpreter",
@@ -12,17 +11,19 @@
     "database",
     "filter"
   ],
+  "author": "Bernardo A. Siverio (wandeber)",
   "main": "index.js",
   "scripts": {
-    "start": "npm run rebuild && npm run quara",
-    "quara": "npm run shell",
+    "start": "npm run rebuild && npm run shell",
     "shell": "node ./dist/shell.js",
     "rebuild": "npm run clean && npm run build",
     "clean": "rm -r ./dist",
     "build": "npm run build-tsc && npm run check",
+    "build-prod": "npm run build-webpack && npm run check",
     "preversion": "npm run check",
     "check": "npm test && npm run lint",
     "build-tsc": "./node_modules/.bin/tsc",
+    "build-webpack": "./node_modules/.bin/webpack --mode production",
     "lint": "./node_modules/.bin/eslint ./**/*.ts",
     "test": "jest --detectOpenHandles --forceExit --coverage --verbose"
   },
@@ -30,6 +31,9 @@
     "hooks": {
       "pre-commit": "npm run check"
     }
+  },
+  "engines": {
+    "node": ">=10.15.3"
   },
   "dependencies": {},
   "devDependencies": {
@@ -41,6 +45,9 @@
     "husky": "^4.2.5",
     "jest": "^26.4.0",
     "ts-jest": "^26.2.0",
-    "typescript": "^3.9.7"
+    "ts-loader": "^8.0.2",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   }
 }

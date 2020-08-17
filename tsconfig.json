@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "removeComments": true,
+    "alwaysStrict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "lib": [
@@ -9,10 +11,11 @@
     ],
     "target": "ES2016",
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "sourceMap": true,
-    "outDir": "dist",
-    "baseUrl": ".",
+    //"outDir": "dist",
+    //"outFile": "./dist/quara.js",
+    "baseUrl": "./src",
     "paths": {
       "*": [
         "node_modules/*",

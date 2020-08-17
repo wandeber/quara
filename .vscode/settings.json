@@ -7,9 +7,9 @@
     "typescript"
   ],
   "editor.formatOnSave": true,
-  /*"[javascript]": {
+  "[javascript]": {
     "editor.formatOnSave": false
-  },*/
+  },
   "[typescript]": {
     "editor.formatOnSave": false
   },
