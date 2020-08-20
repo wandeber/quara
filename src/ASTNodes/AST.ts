@@ -1,25 +1,29 @@
+import ASTVisitor from "./ASTVisitor";
 import Token from "../Token";
 
 
 
 
 
-export interface ASTWithToken {
+export default class AST {
+  visit(visitor: ASTVisitor) {
+    console.log("Node visitor", visitor);
+    throw new Error("AST node visit...");
+  }
+}
+
+export interface ASTWithToken extends AST {
   token: Token;
 }
 
-export interface ASTWithValue {
+export interface ASTWithValue extends AST {
   value: string|number|boolean;
 }
 
-export interface ASTWithName {
+export interface ASTWithName extends AST {
   name: string;
 }
 
-export interface ASTWithChildren {
+export interface ASTWithChildren extends AST {
   children: AST[];
 }
-
-
-
-export default class AST {}

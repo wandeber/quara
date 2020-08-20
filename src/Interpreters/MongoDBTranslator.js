@@ -1,6 +1,5 @@
 
 
-import NodeVisitor from "./NodeVisitor";
 import TokenTypes from "../Token";
 
 
@@ -12,7 +11,7 @@ import TokenTypes from "../Token";
  * Example:
  *   (2 + 3 * 5)   ->    (+ 2 (* 3 5)).
  */
-class MongoDBTranslator extends NodeVisitor {
+class MongoDBTranslator {
   constructor(parser) {
     super();
     this.showDebug = false;

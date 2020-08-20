@@ -1,8 +1,5 @@
 
 
-import NodeVisitor from "./NodeVisitor";
-
-
 
 
 
@@ -11,7 +8,7 @@ import NodeVisitor from "./NodeVisitor";
  * Example:
  *   (2 + 3 * 5)   ->    (+ 2 (* 3 5)).
  */
-class LispTranslator extends NodeVisitor {
+class LispTranslator {
   constructor(parser) {
     super();
     this.showDebug = false;

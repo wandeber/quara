@@ -1,6 +1,5 @@
 
 
-import NodeVisitor from "./NodeVisitor";
 import TokenTypes from "../Token";
 
 
@@ -10,7 +9,7 @@ import TokenTypes from "../Token";
 /**
  *
  */
-class ASTInterpreter extends NodeVisitor {
+class ASTInterpreter {
   constructor(parser) {
     super();
     this.showDebug = false;

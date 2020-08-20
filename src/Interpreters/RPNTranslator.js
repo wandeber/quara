@@ -1,8 +1,5 @@
 
 
-import NodeVisitor from "./NodeVisitor";
-
-
 
 
 
@@ -11,7 +8,7 @@ import NodeVisitor from "./NodeVisitor";
  * Example:
  *   (5 + 3) * 12 / 3   ->   5 3 + 12 * 3 /
  */
-class RPNTranslator extends NodeVisitor {
+class RPNTranslator {
   constructor(parser) {
     super();
     this.showDebug = false;

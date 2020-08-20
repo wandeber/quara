@@ -1,7 +1,7 @@
 
 
-import NodeVisitor from "./NodeVisitor";
 import TokenTypes from "../Token";
+
 
 
 
@@ -31,7 +31,7 @@ $filter = [
   ]
 ];
 */
-class BAPIFiltersTranslator extends NodeVisitor {
+class BAPIFiltersTranslator {
   constructor(parser) {
     super();
     this.showDebug = false;
