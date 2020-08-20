@@ -6,10 +6,6 @@ import Token from "../Token";
 
 
 
-export interface ASTTypeVisitor extends ASTVisitor {
-  visitASTType(node: ASTType): any;
-}
-
 export default class ASTType extends AST implements ASTWithValue {
   value: string|number|boolean;
 
@@ -20,7 +16,7 @@ export default class ASTType extends AST implements ASTWithValue {
 
 
 
-  visit(nodeVisitor: ASTTypeVisitor) {
+  visit(nodeVisitor: ASTVisitor) {
     return nodeVisitor.visitASTType(this);
   }
 }

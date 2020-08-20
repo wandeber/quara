@@ -6,10 +6,6 @@ import Token from "../Token";
 
 
 
-export interface ASTVariableVisitor extends ASTVisitor {
-  visitASTVariable(node: ASTVariable): any;
-}
-
 export default class ASTVariable extends AST implements ASTWithName {
   name: string;
 
@@ -20,7 +16,7 @@ export default class ASTVariable extends AST implements ASTWithName {
 
 
 
-  visit(nodeVisitor: ASTVariableVisitor) {
+  visit(nodeVisitor: ASTVisitor) {
     return nodeVisitor.visitASTVariable(this);
   }
 }

@@ -5,16 +5,12 @@ import ASTVisitor from "./ASTVisitor";
 
 
 
-export interface ASTCompoundVisitor extends ASTVisitor {
-  visitASTCompound(node: ASTCompound): any;
-}
-
 export default class ASTCompound extends AST {
   children: AST[] = [];
 
 
 
-  visit(nodeVisitor: ASTCompoundVisitor) {
+  visit(nodeVisitor: ASTVisitor) {
     return nodeVisitor.visitASTCompound(this);
   }
 }

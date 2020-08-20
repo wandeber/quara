@@ -1,14 +1,15 @@
-import ASTAssign, {ASTAssignVisitor} from "../ASTNodes/ASTAssign";
-import ASTBinaryOperator, {ASTBinaryOperatorVisitor} from "../ASTNodes/ASTBinaryOperator";
-import ASTBoolean, {ASTBooleanVisitor} from "../ASTNodes/ASTBoolean";
-import ASTCompound, {ASTCompoundVisitor} from "../ASTNodes/ASTCompound";
-import ASTConstantDeclaration, {ASTConstantDeclarationVisitor} from "../ASTNodes/ASTConstantDeclaration";
-import ASTNumber, {ASTNumberVisitor} from "../ASTNodes/ASTNumber";
-import ASTString, {ASTStringVisitor} from "../ASTNodes/ASTString";
-import ASTType, {ASTTypeVisitor} from "../ASTNodes/ASTType";
-import ASTUnaryOperator, {ASTUnaryOperatorVisitor} from "../ASTNodes/ASTUnaryOperator";
-import ASTVariable, {ASTVariableVisitor} from "../ASTNodes/ASTVariable";
+import ASTAssign from "../ASTNodes/ASTAssign";
+import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
+import ASTBoolean from "../ASTNodes/ASTBoolean";
+import ASTCompound from "../ASTNodes/ASTCompound";
+import ASTConstantDeclaration from "../ASTNodes/ASTConstantDeclaration";
+import ASTNumber from "../ASTNodes/ASTNumber";
+import ASTString from "../ASTNodes/ASTString";
+import ASTType from "../ASTNodes/ASTType";
+import ASTUnaryOperator from "../ASTNodes/ASTUnaryOperator";
+import ASTVariable from "../ASTNodes/ASTVariable";
 import ASTVariableDeclaration from "../ASTNodes/ASTVariableDeclaration";
+import ASTVisitor from "../ASTNodes/ASTVisitor";
 import {ASTWithName} from "../ASTNodes/AST";
 import Parser from "../Parser";
 import TokenTypes from "../TokenTypes";
@@ -53,11 +54,7 @@ const DefaultVariables = {
 /**
  *
  */
-export default class Interpreter
-implements
-  ASTAssignVisitor, ASTBinaryOperatorVisitor, ASTBooleanVisitor, ASTCompoundVisitor,
-  ASTConstantDeclarationVisitor, ASTNumberVisitor, ASTNumberVisitor, ASTStringVisitor,
-  ASTTypeVisitor, ASTUnaryOperatorVisitor, ASTVariableVisitor, ASTConstantDeclarationVisitor {
+export default class Interpreter extends ASTVisitor {
   parser: Parser;
 
   globalScope: any;
@@ -67,6 +64,7 @@ implements
 
 
   constructor(parser: Parser, variables = {}, showDebug = false) {
+    super();
     this.parser = parser;
     this.showDebug = showDebug;
     this.globalScope = DefaultVariables;

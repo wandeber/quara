@@ -5,10 +5,6 @@ import ASTVisitor from "./ASTVisitor";
 
 
 
-export interface ASTConstantDeclarationVisitor extends ASTVisitor {
-  visitASTConstantDeclaration(node: ASTConstantDeclaration): any;
-}
-
 export default class ASTConstantDeclaration extends AST {
   children: AST[] = [];
 
@@ -20,7 +16,7 @@ export default class ASTConstantDeclaration extends AST {
   }
 
 
-  visit(nodeVisitor: ASTConstantDeclarationVisitor) {
+  visit(nodeVisitor: ASTVisitor) {
     return nodeVisitor.visitASTConstantDeclaration(this);
   }
 }

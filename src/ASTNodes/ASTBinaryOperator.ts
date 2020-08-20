@@ -6,10 +6,6 @@ import Token from "../Token";
 
 
 
-export interface ASTBinaryOperatorVisitor extends ASTVisitor {
-  visitASTBinaryOperator(node: ASTBinaryOperator): any;
-}
-
 export default class ASTBinaryOperator extends AST implements ASTWithToken {
   token: Token;
 
@@ -22,7 +18,7 @@ export default class ASTBinaryOperator extends AST implements ASTWithToken {
 
 
   
-  visit(nodeVisitor: ASTBinaryOperatorVisitor) {
+  visit(nodeVisitor: ASTVisitor) {
     return nodeVisitor.visitASTBinaryOperator(this);
   }
 }

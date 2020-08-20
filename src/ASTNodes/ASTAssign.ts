@@ -6,10 +6,6 @@ import Token from "../Token";
 
 
 
-export interface ASTAssignVisitor extends ASTVisitor {
-  visitASTAssign(node: ASTAssign): any;
-}
-
 export default class ASTAssign extends AST implements ASTWithToken {
   token: Token;
 
@@ -22,7 +18,7 @@ export default class ASTAssign extends AST implements ASTWithToken {
   
 
 
-  visit(nodeVisitor: ASTAssignVisitor) {
+  visit(nodeVisitor: ASTVisitor) {
     return nodeVisitor.visitASTAssign(this);
   }
 }
