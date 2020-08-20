@@ -15,7 +15,6 @@ import MultiplicationTests from "./ArithmeticOperators/BinaryOperators/Multiplic
 import NotTests from "./LogicOperators/NotTests";
 import OrTests from "./LogicOperators/OrTests";
 import PlusTests from "./ArithmeticOperators/UnaryOperators/PlusTests";
-import Quara from "../src";
 import SquareRootTests from "./ArithmeticOperators/UnaryOperators/SquareRootTests";
 import SubstractionTests from "./ArithmeticOperators/BinaryOperators/SubstractionTests";
 import SumTests from "./ArithmeticOperators/BinaryOperators/SumTests";
