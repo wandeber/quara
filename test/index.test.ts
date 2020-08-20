@@ -1,9 +1,22 @@
+import AndTests from "./LogicOperators/AndTests";
 import DivisionTests from "./ArithmeticOperators/BinaryOperators/DivisionTests";
+import EqualityTests from "./LogicOperators/EqualityTests";
 import ExponentiationTests from "./ArithmeticOperators/BinaryOperators/ExponentiationTests";
+import GreaterThanEqualTests from "./LogicOperators/GreaterThanEqualTests";
+import GreaterThanTests from "./LogicOperators/GreaterThanTests";
+import InequalityTests from "./LogicOperators/InequalityTests";
+import LaxEqualityTests from "./LogicOperators/LaxEqualityTests";
+import LaxInequalityTests from "./LogicOperators/LaxInequalityTests";
+import LessThanEqualTests from "./LogicOperators/LessThanEqualTests";
+import LessThanTests from "./LogicOperators/LessThanTests";
 import MinusTests from "./ArithmeticOperators/UnaryOperators/MinusTests";
 import ModulusTests from "./ArithmeticOperators/BinaryOperators/ModulusTests";
 import MultiplicationTests from "./ArithmeticOperators/BinaryOperators/MultiplicationTests";
+import NotTests from "./LogicOperators/NotTests";
+import OrTests from "./LogicOperators/OrTests";
 import PlusTests from "./ArithmeticOperators/UnaryOperators/PlusTests";
+import Quara from "../src";
+import SquareRootTests from "./ArithmeticOperators/UnaryOperators/SquareRootTests";
 import SubstractionTests from "./ArithmeticOperators/BinaryOperators/SubstractionTests";
 import SumTests from "./ArithmeticOperators/BinaryOperators/SumTests";
 
@@ -23,39 +36,23 @@ describe("Arithmetic operators", () => {
   describe("Unary operators", () => {
     describe("Plus (+ ...)", PlusTests.test);
     describe("Minus (- ...)", MinusTests.test);
-    //describe("Square root (¬/ ...)", SquareRootTests.test);
+    describe("Square root (¬/ ...)", SquareRootTests.test);
     //describe("Pre-increment (++ ...)", PreIncrementTests.test);
     //describe("Pre-decrement (++ ...)", PreDecrementTests.test);
   });
+});
 
-  //describe("Logic operators", () => {
-  /*
-  describe("Not (!)", SumTests.test);
-  describe("Not ($not)", SumTests.test);
 
-  describe("Equality (==)", SumTests.test);
-  describe("Equality ($eq)", SumTests.test);
-  
-  describe("Inequality (!=)", SubstractionTests.test);
-  describe("Inequality ($ne)", SubstractionTests.test);
-  
-  describe("Lax equality (~=)", MultiplicationTests.test);
-  describe("Lax equality ($leq)", MultiplicationTests.test);
-
-  describe("Lax inequality (!~=)", DivisionTests.test);
-  describe("Lax inequality ($lne)", MultiplicationTests.test);
-
-  describe("Less than (<)", ExponentiationTests.test1);
-  describe("Less than ($lt)", ExponentiationTests.test1);
-
-  describe("Greater than (>)", ExponentiationTests.test2);
-  describe("Greater than ($gt)", ExponentiationTests.test2);
-
-  describe("Less than or equal (<=)", ExponentiationTests.test1);
-  describe("Less than or equal ($lte)", ExponentiationTests.test1);
-
-  describe("Greater than or equal (>=)", ExponentiationTests.test2);
-  describe("Greater than or equal ($gte)", ExponentiationTests.test2);
-  */
-  //});
+describe("Logic operators", () => {
+  describe("Not (!, $not)", NotTests.test);
+  describe("Equality (==, $eq)", EqualityTests.test);
+  describe("Inequality (!=, $ne)", InequalityTests.test);
+  describe("Lax equality (~=, $leq)", LaxEqualityTests.test);
+  describe("Lax inequality (!~=, $lne)", LaxInequalityTests.test);
+  describe("Less than (<, $lt)", LessThanTests.test);
+  describe("Greater than (>, $gt)", GreaterThanTests.test);
+  describe("Less than or equal (<=, $lte)", LessThanEqualTests.test);
+  describe("Greater than or equal (>=, $gte)", GreaterThanEqualTests.test);
+  describe("And (&&, $and)", AndTests.test);
+  describe("Or (||, $or)", OrTests.test);
 });
