@@ -57,7 +57,7 @@ const DefaultVariables = {
 export default class Interpreter extends ASTVisitor {
   parser: Parser;
 
-  globalScope: any;
+  globalScope: any = {};
 
   showDebug: boolean;
 
@@ -67,8 +67,7 @@ export default class Interpreter extends ASTVisitor {
     super();
     this.parser = parser;
     this.showDebug = showDebug;
-    this.globalScope = DefaultVariables;
-
+    Object.assign(this.globalScope, DefaultVariables);
     Object.assign(this.globalScope, variables);
   }
 
