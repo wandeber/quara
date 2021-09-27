@@ -4,6 +4,7 @@ import ASTBoolean from "./ASTBoolean";
 import ASTChar from "./ASTChar";
 import ASTCompound from "./ASTCompound";
 import ASTConstantDeclaration from "./ASTConstantDeclaration";
+import ASTFunctionCall from "./ASTFunctionCall";
 import ASTNumber from "./ASTNumber";
 import ASTString from "./ASTString";
 import ASTType from "./ASTType";
@@ -72,6 +73,11 @@ export default class ASTVisitor {
   }
 
   visitASTVariableDeclaration(node: ASTVariableDeclaration): any {
+    console.error("Non processable node", node);
+    throw new Error(`${node.constructor.name} not implemented.`);
+  }
+
+  visitASTFunctionCall(node: ASTFunctionCall): any {
     console.error("Non processable node", node);
     throw new Error(`${node.constructor.name} not implemented.`);
   }

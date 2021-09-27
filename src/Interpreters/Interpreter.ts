@@ -1,3 +1,4 @@
+import {ASTWithName} from "../ASTNodes/AST";
 import ASTAssign from "../ASTNodes/ASTAssign";
 import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
 import ASTBoolean from "../ASTNodes/ASTBoolean";
@@ -10,15 +11,28 @@ import ASTUnaryOperator from "../ASTNodes/ASTUnaryOperator";
 import ASTVariable from "../ASTNodes/ASTVariable";
 import ASTVariableDeclaration from "../ASTNodes/ASTVariableDeclaration";
 import ASTVisitor from "../ASTNodes/ASTVisitor";
-import {ASTWithName} from "../ASTNodes/AST";
 import Parser from "../Parser";
 import TokenTypes from "../TokenTypes";
+import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
 
 
 
 
 
 const DefaultVariables = {
+  fixed(...args: any[]) {
+    return args[0].toFixed(args.slice(1, args.length));
+  },
+  upperCase(...args: any[]) {
+    return args[0].toUpperCase(args.slice(1, args.length));
+  },
+  lowerCase(...args: any[]) {
+    return args[0].toLowerCase(args.slice(1, args.length));
+  },
+  contains(...args: any[]) {
+    return args[0].contains(args.slice(1, args.length));
+  },
+
   sampleNumber: 4,
   sampleString: "un string",
   
@@ -190,6 +204,14 @@ export default class Interpreter extends ASTVisitor {
       result = 0;
     }
     
+    return result;
+  }
+
+  visitASTFunctionCall(node: ASTFunctionCall) {
+    let result;
+    let args = node.right.map((node: any) => node.visit(this));
+    let func = node.left.visit(this);
+    result = func(...args);
     return result;
   }
 
