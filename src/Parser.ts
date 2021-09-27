@@ -4,6 +4,7 @@ import ASTBinaryOperator from "./ASTNodes/ASTBinaryOperator";
 import ASTBoolean from "./ASTNodes/ASTBoolean";
 import ASTCompound from "./ASTNodes/ASTCompound";
 import ASTConstantDeclaration from "./ASTNodes/ASTConstantDeclaration";
+import ASTFunctionCall from "./ASTNodes/ASTFunctionCall";
 import ASTNumber from "./ASTNodes/ASTNumber";
 import ASTString from "./ASTNodes/ASTString";
 import ASTType from "./ASTNodes/ASTType";
@@ -88,11 +89,12 @@ const availableConstants = [
  * | 13                Left           &&             Logical and
  * | 9                 Left           ==, !=         Equality
  * | 8                 Left           <, >, <=, >=   Relational
- * | 6                 Left           +, -           Plus and minus
- * | 5                 Left           *, /, %        Factor
- * | 4                 Left           !, +, -        Unary plus and minus
- * | 3                 Left (change)  ^, ¬/          Power
- * | 2                 Left           ¬/             Sqrt
+ * | 7                 Left           +, -           Plus and minus
+ * | 6                 Left           *, /, %        Factor
+ * | 5                 Left           !, +, -        Unary plus and minus
+ * | 4                 Left (change)  ^, ¬/          Power
+ * | 3                 Left           ¬/             Sqrt
+ * | 2                 Left           ()             Function
  * v 1                 Left           ., []          Accessors
  *
  * script      -> (statement)*
@@ -137,15 +139,17 @@ const availableConstants = [
  * term        -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
  * pow         -> factor (OpPow factor)*
  * factor      -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
- *                | (OpIncrement | OpDecrement) member                           // Pre.
- *                | constant
+ *                //| (OpIncrement | OpDecrement) member                           // Pre.
  *                | (OpParenthesisOpen expr OpParenthesisClose)
- *                | member
+ *                | constant
+ *                | (OpIncrement | OpDecrement)? member funcCall?
  * member      -> variable (
-   *                OpDot variable
-   *                | OpArrayAccessorOpen expr OpArrayAccessorClose
-   *              )*
+ *                  OpDot variable
+ *                  | OpArrayAccessorOpen expr OpArrayAccessorClose
+ *                )*
  * variable    -> ID
+ * funcCall    -> OpParenthesisOpen paramList? OpParenthesisClose
+ * paramList   -> expr (opComma expr)*
  * constant    -> (BooleanConstant | (IntegerConstant | DecimalConstant) | StringConstant)
  * typeSpec    -> (TypeAny | TypeBoolean | TypeInteger | TypeFloat | TypeDouble | TypeString)
  */
@@ -292,11 +296,41 @@ export default class Parser {
   }
 
   /**
+   * paramList   -> expr (OpComma expr)*
+   */
+  paramList(): AST[] {
+    let nodes: AST[] = [];
+    
+    let currExpr = this.expr();
+    if (currExpr !== null) {
+      nodes.push(currExpr);
+      while (this.currentToken.type == TokenTypes.OpComma) {
+        this.eat(TokenTypes.OpComma);
+        nodes.push(this.expr());
+      }
+    }
+    
+    return nodes;
+  }
+
+  /**
+   * funcCall    -> OpParenthesisOpen paramList? OpParenthesisClose
+   */
+  funcCall(): AST[] {
+    // We eat the parenthesis opening (we can just ignore it).
+    this.operator([TokenTypes.OpParenthesisOpen]); // Open.
+    let nodes = this.paramList();
+    // We eat the parenthesis closure (we can just ignore it).
+    this.operator([TokenTypes.OpParenthesisClose]); // Close.
+    return nodes;
+  }
+
+  /**
    * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
-   *               | (OpIncrement | OpDecrement) variable                        // Pre.
-   *               | constant
+   *               //| (OpIncrement | OpDecrement) variable                        // Pre.
    *               | (OpParenthesisOpen expr OpParenthesisClose)
-   *               | member
+   *               | constant
+   *               | (OpIncrement | OpDecrement)? member funcCall?
    */
   factor(): AST|null {
     this.debug("Get factor");
@@ -333,8 +367,24 @@ export default class Parser {
     else if (availableConstants.includes(this.currentToken.type)) {
       node = this.constant();
     }
-    else if (this.currentToken.type == TokenTypes.Id) {
+    else /*if (this.currentToken.type == TokenTypes.Id)*/ {
+      let preOp;
+      if ([TokenTypes.OpIncrement, TokenTypes.OpDecrement].includes(this.currentToken.type)) {
+        preOp = this.operator([TokenTypes.OpIncrement, TokenTypes.OpDecrement]);
+      }
       node = this.member();
+      if ([TokenTypes.OpParenthesisOpen].includes(this.currentToken.type)) {
+        node = new ASTFunctionCall(
+          node,
+          this.funcCall(),
+        );
+      }
+      if (preOp) {
+        node = new ASTUnaryOperator(
+          preOp,
+          node
+        );
+      }
     }
     
     return node;
