@@ -20,17 +20,20 @@ import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
 
 
 const DefaultVariables = {
-  fixed(...args: any[]) {
-    return args[0].toFixed(args.slice(1, args.length));
+  fixed(num: number, ...args: any[]) {
+    return num.toFixed(...args);
   },
-  upperCase(...args: any[]) {
-    return args[0].toUpperCase(args.slice(1, args.length));
+  upperCase(str: string) {
+    return str.toUpperCase();
   },
-  lowerCase(...args: any[]) {
-    return args[0].toLowerCase(args.slice(1, args.length));
+  lowerCase(str: string) {
+    return str.toLowerCase();
   },
-  contains(...args: any[]) {
-    return args[0].contains(args.slice(1, args.length));
+  contains(arr: string|any[], ...args: [any, any]) {
+    return arr.includes(...args);
+  },
+  isNaN(num: number) {
+    return Number.isNaN(num);
   },
 
   sampleNumber: 4,

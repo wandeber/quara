@@ -33,7 +33,6 @@ export default class EqualityTests {
       new TestConfiguration("\"str\" == \"str\" == false", false),
       new TestConfiguration("\"str\" == \"str 2\" == false", true),
 
-
       // Constants comparison:
       new TestConfiguration("6 $eq 6", true),
       new TestConfiguration("6 $eq 5", false),

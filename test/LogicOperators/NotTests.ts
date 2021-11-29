@@ -17,6 +17,7 @@ export default class NotTests {
       new TestConfiguration([`! ${bool2}`, `!${bool2}`], !bool2),
       // eslint-disable-next-line no-implicit-coercion
       new TestConfiguration([`! ! ! ${bool2}`, `! ! !${bool2}`], !!!bool2),
+      new TestConfiguration("!undefined", !undefined),
       new TestConfiguration("! 0", !0),
       new TestConfiguration("! 1", !1),
       // eslint-disable-next-line no-implicit-coercion
