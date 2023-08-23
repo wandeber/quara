@@ -42,7 +42,17 @@ export default class Lexer {
 
   showDebug = false;
 
-  constructor(public text: string) {
+  constructor(public text?: string) {
+    if (text) {
+      this.setText(text);
+    }
+  }
+
+  public setText(text: string) {
+    this.text = text;
+    this.pos = 0;
+    this.currentToken = null;
+    this.currentChar = null;
     this.getCurrentChar();
   }
 

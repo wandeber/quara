@@ -1,9 +1,9 @@
-import {ASTWithName} from "../ASTNodes/AST";
 import ASTAssign from "../ASTNodes/ASTAssign";
 import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
 import ASTBoolean from "../ASTNodes/ASTBoolean";
 import ASTCompound from "../ASTNodes/ASTCompound";
 import ASTConstantDeclaration from "../ASTNodes/ASTConstantDeclaration";
+import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
 import ASTNumber from "../ASTNodes/ASTNumber";
 import ASTString from "../ASTNodes/ASTString";
 import ASTType from "../ASTNodes/ASTType";
@@ -11,9 +11,9 @@ import ASTUnaryOperator from "../ASTNodes/ASTUnaryOperator";
 import ASTVariable from "../ASTNodes/ASTVariable";
 import ASTVariableDeclaration from "../ASTNodes/ASTVariableDeclaration";
 import ASTVisitor from "../ASTNodes/ASTVisitor";
+import {ASTWithName} from "../ASTNodes/AST";
 import Parser from "../Parser";
 import TokenTypes from "../TokenTypes";
-import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
 
 
 
@@ -88,6 +88,10 @@ export default class Interpreter extends ASTVisitor {
     Object.assign(this.globalScope, variables);
   }
 
+
+  setVariables(variables: any) {
+    Object.assign(this.globalScope, variables);
+  }
 
 
   error(message: string, me: any) {
@@ -212,7 +216,7 @@ export default class Interpreter extends ASTVisitor {
 
   visitASTFunctionCall(node: ASTFunctionCall) {
     let result;
-    let args = node.right.map((node: any) => node.visit(this));
+    let args = node.right.map((nodeItem: any) => nodeItem.visit(this));
     let func = node.left.visit(this);
     result = func(...args);
     return result;

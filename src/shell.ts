@@ -14,7 +14,7 @@ import ReadLine from "readline";
 
 /**
  * TODO: Quara debe soportar alguna forma de definir strings en varias líneas.
- *   Permitirá hacer que el texto se alinee en espacios en funcion de la primera línea.
+ *   Permitirá hacer que el texto se alinee en espacios en función de la primera línea.
  * 
  * Update:
  * - Support expressions with several operations: 5 + 6 - 2 ...
@@ -63,7 +63,7 @@ import ReadLine from "readline";
       +" | |_| | | |_| | | (_| | | |    | (_| |\n"
       +"  \\__\\_\\  \\__,_|  \\__,_| |_|     \\__,_|\n"
       +"\n"
-      +"  Query as Sara...                 v0.3\n"
+      +"  Query as Sara...               v0.5.1\n"
       +"\n"
       +"\n"
     );
@@ -99,8 +99,16 @@ import ReadLine from "readline";
   ]);
   
   let result;
+  const lexer = new Lexer();
+  const parser = new Parser(lexer);
+  const interpreter = new Interpreter(parser);
+  //const interpreter = new RPNTranslator(parser);
+  //const interpreter = new LispTranslator(parser);
+  //const interpreter = new MongoDBTranslator(parser);
+  //const interpreter = new BAPIFiltersTranslator(parser);
+  //const interpreter = new ASTInterpreter(parser);
+  
   const prompt = () => {
-    //let text = "";
     rl.question("> ", (input: any) => {
       if (typeof commands.get(input) == "function") {
         commands.get(input)();
@@ -108,16 +116,7 @@ import ReadLine from "readline";
       else {
         try {
           if (typeof input === "string" && input.length > 0) {
-            const lexer = new Lexer(input);
-            const parser = new Parser(lexer);
-  
-            //const interpreter = new RPNTranslator(parser);
-            //const interpreter = new LispTranslator(parser);
-            //const interpreter = new MongoDBTranslator(parser);
-            //const interpreter = new BAPIFiltersTranslator(parser);
-            //const interpreter = new ASTInterpreter(parser);
-            const interpreter = new Interpreter(parser);
-            
+            lexer.setText(input);
             result = interpreter.interpret();
             switch (typeof result) {
               case "string":
@@ -136,7 +135,7 @@ import ReadLine from "readline";
           console.log("\n");
         }
       }
-      
+
       prompt();
     });
   };

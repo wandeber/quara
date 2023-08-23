@@ -158,9 +158,11 @@ export default class Parser {
 
   currentToken: Token;
 
-  constructor(public lexer: Lexer) {
-    
-    this.eat();
+  lexer: Lexer;
+
+  constructor(lexer: Lexer) {
+    this.lexer = lexer;
+    // this.eat();
   }
 
 
@@ -395,25 +397,17 @@ export default class Parser {
    */
   pow() {
     this.debug("Get pow");
-
+    
     /* We expect the current token to be a number (1, 14, 1.4...) or a parenthesis opening
     containing an expression. */
     let node = this.factor();
-    let allowedOperators = [
-      TokenTypes.OpPow,
-    ];
-
-    while (allowedOperators.includes(this.currentToken.type)) {
-      node = new ASTBinaryOperator(
-        node,
-        // We expect the current token to be an arithmetic operator token (+, -, * or /).
-        this.operator(allowedOperators),
-        /* We expect the current token to be a number (1, 14, 1.4...) or a factor opening containing
-        an expression. */
-        this.factor()
-      );
+    let token = this.currentToken;
+  
+    if (token.type === TokenTypes.OpPow) {
+      this.eat(TokenTypes.OpPow);
+      node = new ASTBinaryOperator(node, token, this.pow()); // Note the recursive call to pow here
     }
-
+  
     return node;
   }
 
@@ -732,17 +726,21 @@ export default class Parser {
     this.debug("Get script");
     let root = new ASTCompound();
     
+    this.eat();
     let node = this.statement();
     if (node) { // For empty lines.
       root.children.push(node);
     }
     while (this.currentToken.type == TokenTypes.OpSemicolon) {
       this.eat(TokenTypes.OpSemicolon);
-      node = this.statement();
-      if (node) { // For empty lines.
-        root.children.push(node);
+      if (this.currentToken.type !== TokenTypes.EoF) {
+        node = this.statement();
+        if (node) { // For empty lines.
+          root.children.push(node);
+        }
       }
     }
+    console.log("root", root);
     return root;
   }
 
