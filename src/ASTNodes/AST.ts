@@ -3,27 +3,27 @@ import Token from "../Token";
 
 
 
-
-
-export default class AST {
-  visit(visitor: ASTVisitor) {
-    console.log("Node visitor", visitor);
-    throw new Error("AST node visit...");
-  }
+export interface IASTNode {
+  visit(visitor: ASTVisitor): any;
 }
 
-export interface ASTWithToken extends AST {
+export default abstract class AST implements IASTNode {
+  abstract visit(visitor: ASTVisitor): any;
+}
+
+
+export interface IASTWithToken extends IASTNode {
   token: Token;
 }
 
-export interface ASTWithValue extends AST {
+export interface IASTWithValue extends IASTNode {
   value: string|number|boolean;
 }
 
-export interface ASTWithName extends AST {
+export interface IASTWithName extends IASTNode {
   name: string;
 }
 
-export interface ASTWithChildren extends AST {
+export interface IASTWithChildren extends IASTNode {
   children: AST[];
 }

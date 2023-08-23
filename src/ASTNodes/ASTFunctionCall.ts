@@ -1,4 +1,4 @@
-import AST, {ASTWithToken} from "./AST";
+import AST, {IASTWithToken} from "./AST";
 import ASTVisitor from "./ASTVisitor";
 import Token from "../Token";
 

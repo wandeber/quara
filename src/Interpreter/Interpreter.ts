@@ -1,17 +1,21 @@
 import ASTAssign from "../ASTNodes/ASTAssign";
 import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
 import ASTBoolean from "../ASTNodes/ASTBoolean";
+import ASTBooleanVisitor from "./ASTBooleanVisitor";
 import ASTCompound from "../ASTNodes/ASTCompound";
 import ASTConstantDeclaration from "../ASTNodes/ASTConstantDeclaration";
 import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
 import ASTNumber from "../ASTNodes/ASTNumber";
+import ASTNumberVisitor from "./ASTNumberVisitor";
 import ASTString from "../ASTNodes/ASTString";
+import ASTStringVisitor from "./ASTStringVisitor";
 import ASTType from "../ASTNodes/ASTType";
 import ASTUnaryOperator from "../ASTNodes/ASTUnaryOperator";
+import ASTUnaryOperatorVisitor from "./ASTUnaryOperatorVisitor";
 import ASTVariable from "../ASTNodes/ASTVariable";
 import ASTVariableDeclaration from "../ASTNodes/ASTVariableDeclaration";
 import ASTVisitor from "../ASTNodes/ASTVisitor";
-import {ASTWithName} from "../ASTNodes/AST";
+import {IASTWithName} from "../ASTNodes/AST";
 import Parser from "../Parser";
 import TokenTypes from "../TokenTypes";
 
@@ -192,26 +196,8 @@ export default class Interpreter extends ASTVisitor {
   }
 
   visitASTUnaryOperator(node: ASTUnaryOperator) {
-    let result;
-    
-    if (node.operator.type == TokenTypes.OpPlus) {
-      result = node.expr.visit(this);
-    }
-    else if (node.operator.type == TokenTypes.OpMinus) {
-      result = -node.expr.visit(this);
-    }
-    else if (node.operator.type == TokenTypes.OpNot) {
-      result = !node.expr.visit(this);
-    }
-    else if (node.operator.type == TokenTypes.OpSqrt) {
-      result = Math.sqrt(node.expr.visit(this));
-    }
-
-    if (result === -0) {
-      result = 0;
-    }
-    
-    return result;
+    let visitor = new ASTUnaryOperatorVisitor(this);
+    return visitor.visit(node);
   }
 
   visitASTFunctionCall(node: ASTFunctionCall) {
@@ -223,19 +209,18 @@ export default class Interpreter extends ASTVisitor {
   }
 
   visitASTNumber(node: ASTNumber) {
-    let {value} = node;
-    if (value === -0) {
-      value = 0;
-    }
-    return value;
+    let visitor = new ASTNumberVisitor(this);
+    return visitor.visit(node);
   }
 
   visitASTBoolean(node: ASTBoolean) {
-    return node.value;
+    let visitor = new ASTBooleanVisitor(this);
+    return visitor.visit(node);
   }
 
   visitASTString(node: ASTString) {
-    return node.value;
+    let visitor = new ASTStringVisitor(this);
+    return visitor.visit(node);
   }
 
   visitASTVariable(node: ASTVariable) {
@@ -303,7 +288,7 @@ export default class Interpreter extends ASTVisitor {
         ({name} = childBinaryOperator.left);
       }
       else {
-        ({name} = child as ASTWithName); // TODO: ¿Esto es necesario?
+        ({name} = child as IASTWithName); // TODO: ¿Esto es necesario?
       }
 
       if (typeof this.globalScope[name] != "undefined") {
@@ -336,7 +321,7 @@ export default class Interpreter extends ASTVisitor {
         ({name} = childBinaryOperator.left);
       }
       else {
-        ({name} = child as ASTWithName); // TODO: ¿Esto es necesario?
+        ({name} = child as IASTWithName); // TODO: ¿Esto es necesario?
       }
 
       if (typeof this.globalScope[name] != "undefined") {

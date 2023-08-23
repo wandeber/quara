@@ -1,4 +1,4 @@
-import Interpreter from "./Interpreters/Interpreter";
+import Interpreter from "./Interpreter/Interpreter";
 import Lexer from "./Lexer/Lexer";
 import Parser from "./Parser";
 

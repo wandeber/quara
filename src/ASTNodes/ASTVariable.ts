@@ -1,4 +1,4 @@
-import AST, {ASTWithName} from "./AST";
+import AST, {IASTWithName} from "./AST";
 import ASTVisitor from "./ASTVisitor";
 import Token from "../Token";
 
@@ -6,7 +6,7 @@ import Token from "../Token";
 
 
 
-export default class ASTVariable extends AST implements ASTWithName {
+export default class ASTVariable extends AST implements IASTWithName {
   name: string;
 
   constructor(public token: Token) {

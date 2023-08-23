@@ -1,20 +1,12 @@
-import AST, {ASTWithValue} from "./AST";
 import ASTVisitor from "./ASTVisitor";
-import Token from "../Token";
+import ASTWithValue from "./ASTWithValue";
 
 
 
 
 
-export default class ASTChar extends AST implements ASTWithValue {
+export default class ASTChar extends ASTWithValue {
   value: string|number|boolean;
-
-  constructor(public token: Token) {
-    super();
-    this.value = token.value;
-  }
-
-
 
   visit(nodeVisitor: ASTVisitor) {
     return nodeVisitor.visitASTChar(this);

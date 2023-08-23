@@ -1,21 +1,11 @@
-import AST from "./AST";
+import ASTVariableDeclaration from "./ASTVariableDeclaration";
 import ASTVisitor from "./ASTVisitor";
 
 
 
 
 
-export default class ASTConstantDeclaration extends AST {
-  children: AST[] = [];
-
-  typeNode: any;
-
-  constructor(typeNode: any = null) {
-    super();
-    this.typeNode = typeNode;
-  }
-
-
+export default class ASTConstantDeclaration extends ASTVariableDeclaration {
   visit(nodeVisitor: ASTVisitor) {
     return nodeVisitor.visitASTConstantDeclaration(this);
   }

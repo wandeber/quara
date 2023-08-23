@@ -1,4 +1,4 @@
-import AST, {ASTWithToken} from "./ASTNodes/AST";
+import AST, {IASTWithToken} from "./ASTNodes/AST";
 import ASTAssign from "./ASTNodes/ASTAssign";
 import ASTBinaryOperator from "./ASTNodes/ASTBinaryOperator";
 import ASTBoolean from "./ASTNodes/ASTBoolean";
@@ -582,7 +582,7 @@ export default class Parser {
    */
   assign(): AST {
     this.debug("Get assign");
-    let node = this.expr() as ASTWithToken;
+    let node = this.expr() as IASTWithToken;
     if (
       node && node.token && node.token.type == TokenTypes.Id
       && assignOperators.includes(this.currentToken.type)
@@ -740,7 +740,7 @@ export default class Parser {
         }
       }
     }
-    console.log("root", root);
+    //console.log("root", root);
     return root;
   }
 

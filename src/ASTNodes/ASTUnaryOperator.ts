@@ -1,4 +1,4 @@
-import AST, {ASTWithToken} from "./AST";
+import AST, {IASTWithToken} from "./AST";
 import ASTVisitor from "./ASTVisitor";
 import Token from "../Token";
 
@@ -6,7 +6,7 @@ import Token from "../Token";
 
 
 
-export default class ASTUnaryOperator extends AST implements ASTWithToken {
+export default class ASTUnaryOperator extends AST implements IASTWithToken {
   token: Token;
 
   constructor(public operator: Token, public expr: any) {
