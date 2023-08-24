@@ -59,7 +59,7 @@ export default class LaxInequalityTests {
       new TestConfiguration("\"str\" $lne \"str\" $lne false", false),
       new TestConfiguration("\"str\" $lne \"str 2\" $lne false", true),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

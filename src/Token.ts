@@ -19,6 +19,7 @@ export default class Token {
    * Examples:
    * Token(IntegerConstant, 3)
    * Token(OpPlus '+')
+   * @return {string}
    */
   toString() {
     return `Token(${this.type}, ${this.value})`;

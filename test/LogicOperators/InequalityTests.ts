@@ -59,7 +59,7 @@ export default class InequalityTests {
       new TestConfiguration("\"str\" $ne \"str\" $ne false", false),
       new TestConfiguration("\"str\" $ne \"str 2\" $ne false", true),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

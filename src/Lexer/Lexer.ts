@@ -70,9 +70,9 @@ export default class Lexer {
       console.log("-- Lexer: "+ message);
       console.log("  pos:           ", this.pos);
       console.log("  current char:  ", this.currentChar);
-      //if (this.currentToken) {
-      //  console.log("  current token: ", this.currentToken.value);
-      //}
+      // if (this.currentToken) {
+      //   console.log("  current token: ", this.currentToken.value);
+      // }
     }
   }
 
@@ -117,7 +117,7 @@ export default class Lexer {
       this.advance();
     }
   }
-  
+
   skipBlockComment() {
     this.advance(2); // Skips /*.
     while (this.currentChar !== null && (this.currentChar != "*" || this.peek() != "/")) {
@@ -140,14 +140,14 @@ export default class Lexer {
   getNumber(): string|null {
     let posAtStart = this.pos;
     let number = "";
-    //let dots = 0;
+    // let dots = 0;
     while (
       this.currentChar == "."
       || Types.isInteger(this.currentChar)
     ) {
-      //if (this.currentChar == '.') {
-      //  dots++;
-      //}
+      // if (this.currentChar == '.') {
+      //   dots++;
+      // }
       number += String(this.currentChar);
       this.advance();
     }
@@ -165,20 +165,21 @@ export default class Lexer {
    * si coinciden con alguno de los valores de allowedValues. Para buscar, esta funcián irá
    * comparando caracter a caracter con todos los valores disponibles para descartar los que no
    * coincidan. Se da prioridad a coincidencias largas. Se intentará devolver == antes que =.
-   * @param {*} allowedValues 
+   * @param {*} allowedValues
+   * @return {string|boolean}
    */
   getCoincidence(allowedValues: string[]): string {
     let currentValue = "";
 
     const filterValues = (index: number, charToCheck: string): boolean => {
       let remainingAllowedValues = []; // Will contain only operators that match the current operator.
-      
+
       for (let value of allowedValues) {
         if (value.length > index && charToCheck == value[index]) {
           remainingAllowedValues.push(value);
         }
       }
-      
+
       if (remainingAllowedValues.length > 0) {
         allowedValues = remainingAllowedValues;
         return true;
@@ -193,7 +194,7 @@ export default class Lexer {
       currentValue += String(this.currentChar);
       this.advance();
     }
-    
+
     return currentValue;
   }
 
@@ -223,6 +224,8 @@ export default class Lexer {
    *
    * This method is responsible for breaking a sentence
    * apart into tokens. One token at a time.
+   * @param {boolean} skipSpaces
+   * @return {Token|null}
    */
   getNextToken(skipSpaces = true): Token|null {
     let token = null;
@@ -233,13 +236,13 @@ export default class Lexer {
     if (this.currentChar === null) {
       return new Token(TokenTypes.EoF, null);
     }
-    
+
     if (this.currentChar === " ") {
       if (skipSpaces) {
         this.skipSpaces();
         return this.getNextToken(skipSpaces);
       }
-      
+
       token = new Token(TokenTypes.Space, " ");
       this.advance();
       return token;

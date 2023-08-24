@@ -1,6 +1,4 @@
-import AST, {IASTWithToken} from "./AST";
-import ASTVisitor from "./ASTVisitor";
-import Token from "../Token";
+import AST from "./AST";
 
 
 
@@ -11,11 +9,5 @@ export default class ASTFunctionCall extends AST {
     super();
     this.left = left; // member
     this.right = right; // params
-  }
-
-
-  
-  visit(nodeVisitor: ASTVisitor) {
-    return nodeVisitor.visitASTFunctionCall(this as ASTFunctionCall);
   }
 }

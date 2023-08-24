@@ -59,7 +59,7 @@ export default class LaxEqualityTests {
       new TestConfiguration("\"str\" $leq \"str\" $leq false", false),
       new TestConfiguration("\"str\" $leq \"str 2\" $leq false", true),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

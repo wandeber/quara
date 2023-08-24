@@ -58,7 +58,7 @@ export default class EqualityTests {
       new TestConfiguration("\"str\" $eq \"str\" $eq false", false),
       new TestConfiguration("\"str\" $eq \"str 2\" $eq false", true),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

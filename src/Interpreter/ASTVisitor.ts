@@ -1,18 +1,19 @@
+import ASTInterpreter from "./ASTInterpreter";
 import AST from "../ASTNodes/AST";
-import Interpreter from "./Interpreter";
-
-
 
 export interface IASTVisitor {
+  interpreter: ASTInterpreter;
   visit(node: AST): any;
 }
 
-export default abstract class ASTVisitor implements IASTVisitor {
-  public interpreter: Interpreter;
+export default class ASTVisitor implements IASTVisitor {
+  public interpreter: ASTInterpreter;
 
-  constructor(interpreter: Interpreter) {
+  constructor(interpreter: ASTInterpreter) {
     this.interpreter = interpreter;
   }
 
-  abstract visit(node: AST): any;
+  visit(node: AST) {
+    return node.visit(this);
+  }
 }

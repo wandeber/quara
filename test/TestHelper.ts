@@ -1,6 +1,4 @@
-
-
-//const assert = require("assert");
+// const assert = require("assert");
 import Quara from "../src/index";
 import TestConfiguration from "./TestConfiguration";
 

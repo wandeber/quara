@@ -21,7 +21,7 @@ export default class LessThanEqualTests {
       new TestConfiguration("\"asd\" <= \"asd\"", true),
       new TestConfiguration("\"asdf\" <= \"asd\"", false),
       new TestConfiguration("\"asd\" <= \"asdf\"", true),
-      
+
       new TestConfiguration("5 $lte 5", true),
       new TestConfiguration("5 $lte 6", true),
       new TestConfiguration("6 $lte 5", false),
@@ -35,7 +35,7 @@ export default class LessThanEqualTests {
       new TestConfiguration("\"asdf\" $lte \"asd\"", false),
       new TestConfiguration("\"asd\" $lte \"asdf\"", true),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

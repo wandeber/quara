@@ -36,8 +36,8 @@ describe("Arithmetic operators", () => {
     describe("Plus (+ ...)", PlusTests.test);
     describe("Minus (- ...)", MinusTests.test);
     describe("Square root (¬/ ...)", SquareRootTests.test);
-    //describe("Pre-increment (++ ...)", PreIncrementTests.test);
-    //describe("Pre-decrement (++ ...)", PreDecrementTests.test);
+    // describe("Pre-increment (++ ...)", PreIncrementTests.test);
+    // describe("Pre-decrement (++ ...)", PreDecrementTests.test);
   });
 });
 

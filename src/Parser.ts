@@ -27,7 +27,7 @@ const constantTypes = [
 
 const variableTypes = [
   TokenTypes.TypeAny,
-  ...constantTypes
+  ...constantTypes,
 ];
 
 const assignOperators = [
@@ -44,7 +44,7 @@ const availableConstants = [
   TokenTypes.BooleanConstant,
   TokenTypes.IntegerConstant,
   TokenTypes.DecimalConstant,
-  TokenTypes.StringConstant
+  TokenTypes.StringConstant,
 ];
 
 
@@ -59,14 +59,14 @@ const availableConstants = [
  *
  * - Context-free grammars, grammars, BNF (Backus-Naur Form): Specifies the syntax of a programming
  *   language in a concise manner.
- * 
+ *
  * - Precedence of operators: If the operator * takes its operands before + does, then it has higher
  *   precedence.
  * - Associativity of operators: When an operand like 3 in the expression 7 + 3 + 1 has plus signs
  *   on both sides, we need a convention to decide which operator applies to 3. The operator +
  *   associates to the left because an operand that has plus signs on both sides belongs to the
  *   operator to its left and so we say that the operator + is left-associative.
- * 
+ *
  * Guidelines to code a grammar:
  * - Each rule, R, defined in the grammar, becomes a method with the same name, and references to
  *   that rule become a method call: R(). The body of the method follows the flow of the body of the
@@ -82,7 +82,7 @@ const availableConstants = [
  * - Create an additional non-terminal factor for basic units of expression, in our case, integers.
  *   The general rule is that if you have N levels of precedence, you will need N + 1 non-terminals
  *   in total: one non-terminal for each level plus one non-terminal for basic units of expression.
- * 
+ *
  * Precedence table (from higher to lower):
  * | Precedence level  Associativity  Operators
  * | 14                Left           ||             Logical or
@@ -105,14 +105,14 @@ const availableConstants = [
  * empty       ->
  *
  * declaration -> (constDecl | varDecl)
- * 
+ *
  * constDecl   -> ModConst typeSpec? commaDecl
  * varDecl     -> (ModVar | ModVar? typeSpec) commaDecl
- * 
+ *
  * commaDecl   -> declAssign (OpComma declAssign)*
- * 
+ *
  * declAssign  -> member (OpAssign (assign* | expr))?
- * 
+ *
  * assign      -> member ((
  *                  OpAssign
  *                  | OpPlusAssign
@@ -136,7 +136,7 @@ const availableConstants = [
  *                  ) relational
  *                )*
  * relational  -> term ((OpPlus | OpMinus) term)*
- * term        -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
+ * term        -> pow (([OpMultiplication] | OpDivision | OpModulus) pow)*
  * pow         -> factor (OpPow factor)*
  * factor      -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
  *                //| (OpIncrement | OpDecrement) member                           // Pre.
@@ -173,7 +173,7 @@ export default class Parser {
     }
     throw new Error("Ivalid syntax.");
   }
-  
+
   debug(message = "") {
     if (this.showDebug) {
       this.lexer.debug(message);
@@ -226,7 +226,7 @@ export default class Parser {
   }
 
   constant() {
-    //console.log("this.currentToken", this.currentToken);
+    // console.log("this.currentToken", this.currentToken);
     let node;
     if (this.currentToken.type == TokenTypes.BooleanConstant) {
       node = new ASTBoolean(this.currentToken);
@@ -256,6 +256,7 @@ export default class Parser {
    *                  OpDot variable
    *                  | OpArrayAccessorOpen expr OpArrayAccessorClose
    *                )*
+   * @return {AST}
    */
   member() {
     this.debug("Get member");
@@ -264,7 +265,7 @@ export default class Parser {
     let node: AST = this.variable();
     let accessorOperators = [
       TokenTypes.OpDot,
-      TokenTypes.OpArrayAccessorOpen
+      TokenTypes.OpArrayAccessorOpen,
     ];
 
     while (accessorOperators.includes(this.currentToken.type)) {
@@ -286,7 +287,7 @@ export default class Parser {
         node,
         // We expect the current token will be a "." (member accesor).
         operator,
-        right
+        right,
       );
 
       if (arrayAccessor) {
@@ -299,10 +300,11 @@ export default class Parser {
 
   /**
    * paramList   -> expr (OpComma expr)*
+   * @return {AST[]}
    */
   paramList(): AST[] {
     let nodes: AST[] = [];
-    
+
     let currExpr = this.expr();
     if (currExpr !== null) {
       nodes.push(currExpr);
@@ -311,12 +313,13 @@ export default class Parser {
         nodes.push(this.expr());
       }
     }
-    
+
     return nodes;
   }
 
   /**
    * funcCall    -> OpParenthesisOpen paramList? OpParenthesisClose
+   * @return {AST[]}
    */
   funcCall(): AST[] {
     // We eat the parenthesis opening (we can just ignore it).
@@ -333,6 +336,7 @@ export default class Parser {
    *               | (OpParenthesisOpen expr OpParenthesisClose)
    *               | constant
    *               | (OpIncrement | OpDecrement)? member funcCall?
+   * @return {AST}
    */
   factor(): AST|null {
     this.debug("Get factor");
@@ -342,7 +346,7 @@ export default class Parser {
       TokenTypes.OpMinus,
       TokenTypes.OpPlus,
       TokenTypes.OpNot,
-      TokenTypes.OpSqrt
+      TokenTypes.OpSqrt,
     ];
 
     if (allowedOperators.includes(this.currentToken.type)) {
@@ -369,7 +373,7 @@ export default class Parser {
     else if (availableConstants.includes(this.currentToken.type)) {
       node = this.constant();
     }
-    else /*if (this.currentToken.type == TokenTypes.Id)*/ {
+    else /* if (this.currentToken.type == TokenTypes.Id) */ {
       let preOp;
       if ([TokenTypes.OpIncrement, TokenTypes.OpDecrement].includes(this.currentToken.type)) {
         preOp = this.operator([TokenTypes.OpIncrement, TokenTypes.OpDecrement]);
@@ -384,35 +388,37 @@ export default class Parser {
       if (preOp) {
         node = new ASTUnaryOperator(
           preOp,
-          node
+          node,
         );
       }
     }
-    
+
     return node;
   }
 
   /**
    * pow -> factor (OpPow factor)*
+   * @return {AST}
    */
   pow() {
     this.debug("Get pow");
-    
+
     /* We expect the current token to be a number (1, 14, 1.4...) or a parenthesis opening
     containing an expression. */
     let node = this.factor();
     let token = this.currentToken;
-  
+
     if (token.type === TokenTypes.OpPow) {
       this.eat(TokenTypes.OpPow);
       node = new ASTBinaryOperator(node, token, this.pow()); // Note the recursive call to pow here
     }
-  
+
     return node;
   }
 
   /**
    * term -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
+   * @return {AST}
    */
   term() {
     this.debug("Get term");
@@ -433,7 +439,7 @@ export default class Parser {
         this.operator(allowedOperators),
         /* We expect the current token to be a number (1, 14, 1.4...) or a factor opening containing
         an expression. */
-        this.pow()
+        this.pow(),
       );
     }
 
@@ -442,6 +448,7 @@ export default class Parser {
 
   /**
    * relational -> term ((OpPlus | OpMinus) term)*
+   * @return {AST}
    */
   relational() {
     this.debug("Get relational");
@@ -450,7 +457,7 @@ export default class Parser {
     let node = this.term();
     let allowedOperators = [
       TokenTypes.OpPlus,
-      TokenTypes.OpMinus
+      TokenTypes.OpMinus,
     ];
 
     while (allowedOperators.includes(this.currentToken.type)) {
@@ -459,7 +466,7 @@ export default class Parser {
         // We expect the current token to be an arithmetic operator token (+ or -).
         this.operator(allowedOperators),
         // We expect the current token to be a number (1, 14, 1.4...).
-        this.term()
+        this.term(),
       );
     }
 
@@ -470,10 +477,11 @@ export default class Parser {
    * equality -> relational (
    *               (OpGreaterThan | OpLowerThan | OpGreaterThanEqual | OpLowerThanEqual) relational
    *             )*
+   * @return {AST}
    */
   equality() {
     this.debug("Get equality");
-    
+
     // We expect the current token to be a number (1, 14, 1.4...).
     let node = this.relational();
 
@@ -490,7 +498,7 @@ export default class Parser {
         // We expect the current token to be an arithmetic operator token (+ or -).
         this.operator(allowedOperators),
         // We expect the current token to be a number (1, 14, 1.4...).
-        this.relational()
+        this.relational(),
       );
     }
 
@@ -499,6 +507,7 @@ export default class Parser {
 
   /**
    * and -> equality ((OpEqual | OpNotEqual) equality)*
+   * @return {AST}
    */
   and() {
     this.debug("Get and");
@@ -518,7 +527,7 @@ export default class Parser {
         // We expect the current token to be an arithmetic operator token (+ or -).
         this.operator(allowedOperators),
         // We expect the current token to be a number (1, 14, 1.4...).
-        this.equality()
+        this.equality(),
       );
     }
 
@@ -527,6 +536,7 @@ export default class Parser {
 
   /**
    * or -> and ((OpAnd) and)*
+   * @return {AST}
    */
   or() {
     this.debug("Get or");
@@ -540,7 +550,7 @@ export default class Parser {
         // We expect the current token to be an arithmetic operator token (+ or -).
         this.operator([TokenTypes.OpAnd]),
         // We expect the current token to be a number (1, 14, 1.4...).
-        this.and()
+        this.and(),
       );
     }
 
@@ -549,20 +559,21 @@ export default class Parser {
 
   /**
    * expr -> or ((OpOr) or)*
+   * @return {AST}
    */
   expr() {
     this.debug("Get expr");
 
     // We expect the current token to be a number (1, 14, 1.4...).
     let node = this.or();
-    
+
     while (TokenTypes.OpOr == this.currentToken.type) {
       node = new ASTBinaryOperator(
         node,
         // We expect the current token to be an arithmetic operator token (+ or -).
         this.operator([TokenTypes.OpOr]),
         // We expect the current token to be a number (1, 14, 1.4...).
-        this.or()
+        this.or(),
       );
     }
 
@@ -579,6 +590,7 @@ export default class Parser {
    *                 | OpModulusAssign
    *                 | OpPowAssign
    *               ) (assignment* | expr)
+   * @return {AST}
    */
   assign(): AST {
     this.debug("Get assign");
@@ -592,15 +604,16 @@ export default class Parser {
         // We expect the current token to be an arithmetic operator token (+ or -).
         this.operator(assignOperators),
         // We expect the current token to be a number (1, 14, 1.4...).
-        this.assign()
+        this.assign(),
       );
     }
     return node;
   }
-  
+
   /**
    * First assign must use the simple assign operator.
    * declAssign  -> member (OpAssign assign)?
+   * @return {AST}
    */
   declAssign() {
     this.debug("Get declAssign");
@@ -619,7 +632,7 @@ export default class Parser {
         // We expect the current token to be an arithmetic operator token (+ or -).
         operator,
         // We expect the current token to be a number (1, 14, 1.4...).
-        right
+        right,
       );
     }
     return node;
@@ -627,11 +640,12 @@ export default class Parser {
 
   /**
    * commaDecl -> declAssign (OpComma declAssign)*
+   * @return {AST[]}
    */
   commaDecl() {
     this.debug("commaDecl");
     let declarationNodes = [
-      this.declAssign()
+      this.declAssign(),
     ];
     while (this.currentToken.type == TokenTypes.OpComma) {
       this.eat(TokenTypes.OpComma);
@@ -642,13 +656,14 @@ export default class Parser {
 
   /**
    * varDecl     -> (ModVar typeSpec? | ModVar? typeSpec) commaDecl
+   * @return {AST}
    */
   varDecl() {
     this.debug("varDecl");
     let root = new ASTVariableDeclaration();
-    
+
     // If ModVar is present, typeSpec is optional.
-    if (this.currentToken.type == TokenTypes.ModVar) { 
+    if (this.currentToken.type == TokenTypes.ModVar) {
       this.eat(TokenTypes.ModVar);
       if (variableTypes.includes(this.currentToken.type)) { // Optional
         root.typeNode = this.typeSpec();
@@ -657,7 +672,7 @@ export default class Parser {
     else { // If ModVar is not present, typeSpec is required.
       root.typeNode = this.typeSpec();
     }
-    
+
     root.children = this.commaDecl();
 
     return root;
@@ -665,22 +680,24 @@ export default class Parser {
 
   /**
    * constDecl   -> ModConst typeSpec? commaDecl
+   * @return {AST}
    */
   constDecl() {
     this.debug("constDecl");
     let root = new ASTConstantDeclaration();
     this.eat(TokenTypes.ModConst); // Required.
-    
+
     if (constantTypes.includes(this.currentToken.type)) { // Optional.
       root.typeNode = this.typeSpec();
     }
-    
+
     root.children = this.commaDecl();
     return root;
   }
 
   /**
    * declaration -> (constDecl | varDecl)?
+   * @return {AST}
    */
   declaration() {
     this.debug("declaration");
@@ -700,32 +717,33 @@ export default class Parser {
    *               //| assign
    *               | expr
    *               | empty
+   * @return {AST}
    */
   statement() {
     this.debug("Get statement");
     let node: AST = this.declaration();
 
     if (!node) {
-      //if (this.currentToken.type == TokenTypes.Id) {
-        node = this.assign();
-      //}
-      //else {
-        //node = this.expr();
-      //}
+      // if (this.currentToken.type == TokenTypes.Id) {
+      node = this.assign();
+      // }
+      // else {
+      //   node = this.expr();
+      // }
     }
 
     // You could prefer returns an ASTEmpty or something like that here if node is empty.
-    
     return node;
   }
 
   /**
    * script     -> (statement)*
+   * @return {AST}
    */
   script() {
     this.debug("Get script");
     let root = new ASTCompound();
-    
+
     this.eat();
     let node = this.statement();
     if (node) { // For empty lines.
@@ -740,7 +758,7 @@ export default class Parser {
         }
       }
     }
-    //console.log("root", root);
+    // console.log("root", root);
     return root;
   }
 

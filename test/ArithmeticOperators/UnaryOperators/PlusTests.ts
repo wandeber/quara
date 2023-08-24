@@ -1,5 +1,3 @@
-
-
 import TestConfiguration from "../../TestConfiguration";
 import TestHelper from "../../TestHelper";
 
@@ -8,9 +6,9 @@ import TestHelper from "../../TestHelper";
 
 export default class PlusTests {
   static test() {
-    let num1 = 6,
-        num2 = -3;
-    
+    let num1 = 6;
+    let num2 = -3;
+
     const tests: TestConfiguration[] = [
       new TestConfiguration([`+ ${num1}`, `+${num1}`], num1),
       new TestConfiguration([`+ + + ${num1}`, `+ + +${num1}`], num1),
@@ -18,7 +16,7 @@ export default class PlusTests {
       new TestConfiguration([`+ + + ${num2}`, `+ + +${num2}`], num2),
       new TestConfiguration("+ 0", 0),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

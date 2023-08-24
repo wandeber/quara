@@ -7,9 +7,9 @@ import TestHelper from "../TestHelper";
 
 export default class NotTests {
   static test() {
-    let bool1 = true,
-        bool2 = false;
-    
+    let bool1 = true;
+    let bool2 = false;
+
     const tests: TestConfiguration[] = [
       new TestConfiguration([`! ${bool1}`, `!${bool1}`], !bool1),
       // eslint-disable-next-line no-implicit-coercion
@@ -34,7 +34,7 @@ export default class NotTests {
       // eslint-disable-next-line no-implicit-coercion
       new TestConfiguration(`$not$not${bool2}`, !!bool2),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

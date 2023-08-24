@@ -21,7 +21,7 @@ export default class GreaterThanTests {
       new TestConfiguration("\"asd\" > \"asd\"", false),
       new TestConfiguration("\"asdf\" > \"asd\"", true),
       new TestConfiguration("\"asd\" > \"asdf\"", false),
-      
+
       new TestConfiguration("5 $gt 5", false),
       new TestConfiguration("5 $gt 6", false),
       new TestConfiguration("6 $gt 5", true),
@@ -35,7 +35,7 @@ export default class GreaterThanTests {
       new TestConfiguration("\"asdf\" $gt \"asd\"", true),
       new TestConfiguration("\"asd\" $gt \"asdf\"", false),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

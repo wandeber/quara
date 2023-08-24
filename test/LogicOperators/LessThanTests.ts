@@ -21,7 +21,7 @@ export default class LessThanTests {
       new TestConfiguration("\"asd\" < \"asd\"", false),
       new TestConfiguration("\"asdf\" < \"asd\"", false),
       new TestConfiguration("\"asd\" < \"asdf\"", true),
-      
+
       new TestConfiguration("5 $lt 5", false),
       new TestConfiguration("5 $lt 6", true),
       new TestConfiguration("6 $lt 5", false),
@@ -35,7 +35,7 @@ export default class LessThanTests {
       new TestConfiguration("\"asdf\" $lt \"asd\"", false),
       new TestConfiguration("\"asd\" $lt \"asdf\"", true),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

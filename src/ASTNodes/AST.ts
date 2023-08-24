@@ -1,4 +1,4 @@
-import ASTVisitor from "./ASTVisitor";
+import ASTVisitor from "../Interpreter/ASTVisitor";
 import Token from "../Token";
 
 
@@ -7,8 +7,11 @@ export interface IASTNode {
   visit(visitor: ASTVisitor): any;
 }
 
-export default abstract class AST implements IASTNode {
-  abstract visit(visitor: ASTVisitor): any;
+export default class AST implements IASTNode {
+  visit(visitor: ASTVisitor): any {
+    // console.log("AST.visit", visitor);
+    return visitor.visit(this);
+  }
 }
 
 

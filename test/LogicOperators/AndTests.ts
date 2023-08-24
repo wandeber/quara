@@ -18,7 +18,6 @@ export default class AndTests {
 
       new TestConfiguration("\"1\" && true", true),
       new TestConfiguration("\"0\" && true", true),
-      
 
       new TestConfiguration("true $and true", true),
       new TestConfiguration("false $and true", false),
@@ -30,7 +29,7 @@ export default class AndTests {
       new TestConfiguration("\"1\" $and true", true),
       new TestConfiguration("\"0\" $and true", true),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

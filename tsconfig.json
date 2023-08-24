@@ -5,10 +5,7 @@
     "alwaysStrict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "lib": [
-      "ES2018",
-      "DOM"
-    ],
+    "lib": ["ES2018", "DOM"],
     "target": "ES2016",
     "noImplicitAny": true,
     "moduleResolution": "Node",
@@ -17,13 +14,8 @@
     //"outFile": "./dist/quara.js",
     "baseUrl": "./src",
     "paths": {
-      "*": [
-        "node_modules/*",
-        "src/types/*"
-      ]
-    },
+      "*": ["node_modules/*", "src/types/*"]
+    }
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

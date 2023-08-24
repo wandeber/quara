@@ -21,7 +21,7 @@ export default class GreaterThanEqualTests {
       new TestConfiguration("\"asd\" >= \"asd\"", true),
       new TestConfiguration("\"asdf\" >= \"asd\"", true),
       new TestConfiguration("\"asd\" >= \"asdf\"", false),
-      
+
       new TestConfiguration("5 $gte 5", true),
       new TestConfiguration("5 $gte 6", false),
       new TestConfiguration("6 $gte 5", true),
@@ -35,7 +35,7 @@ export default class GreaterThanEqualTests {
       new TestConfiguration("\"asdf\" $gte \"asd\"", true),
       new TestConfiguration("\"asd\" $gte \"asdf\"", false),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }

@@ -22,7 +22,6 @@ export default class OrTests {
       new TestConfiguration("\"1\" || true", "1"),
       new TestConfiguration("\"0\" || true", "0"),
       new TestConfiguration("\"0\" || false", "0"),
-      
 
       new TestConfiguration("true $or true", true),
       new TestConfiguration("false $or true", true),
@@ -38,7 +37,7 @@ export default class OrTests {
       new TestConfiguration("\"0\" $or true", "0"),
       new TestConfiguration("\"0\" $or false", "0"),
     ];
-  
+
     TestHelper.runTests(tests);
   }
 }
