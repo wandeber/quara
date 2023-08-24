@@ -17,10 +17,8 @@ export default class ASTVariableDeclarationVisitor extends ASTVisitor {
     for (let child of node.children) {
       // console.log("child", child);
       let childBinaryOperator: ASTBinaryOperator = child as ASTBinaryOperator;
-      if (childBinaryOperator.left && childBinaryOperator.left.name) {
-        ({name} = childBinaryOperator.left);
-      }
-      else {
+      name = (childBinaryOperator.left as IASTWithName)?.name;
+      if (!name) {
         ({name} = child as IASTWithName); // TODO: ¿Esto es necesario?
       }
 
@@ -32,7 +30,7 @@ export default class ASTVariableDeclarationVisitor extends ASTVisitor {
       this.interpreter.globalScope[name] = null;
 
       // Maybe initialization...
-      child.visit(this.interpreter);
+      child.accept(this.interpreter);
     }
 
     return this.interpreter.globalScope[name];

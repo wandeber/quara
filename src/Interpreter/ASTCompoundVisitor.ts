@@ -7,7 +7,7 @@ export default class ASTCompoundVisitor extends ASTVisitor {
   visit(node: ASTCompound) {
     let result: any = [];
     for (let child of node.children) {
-      result.push(child.visit(this.interpreter));
+      result.push(child.accept(this.interpreter));
     }
     if (result.length > 0) {
       result = result[result.length - 1];

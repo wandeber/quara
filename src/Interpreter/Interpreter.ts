@@ -42,10 +42,13 @@ const DefaultVariables = {
   sampleObject: {
     prop1: "prop1 value",
     prop2: "prop2 value",
+    prop3: {
+      prop31: "prop31 value",
+    },
   },
 
   sampleSimpleArray: [
-    "value 1", "value 2",
+    "value 1", "value 2", [1, 3, 4],
   ],
 
   sampleArray: [
@@ -53,6 +56,7 @@ const DefaultVariables = {
       id: 1,
       prop1: "prop1 value",
       prop2: "prop2 value",
+      arr: [1, 2, 4],
     },
     {
       id: 2,
@@ -120,17 +124,9 @@ export default class Interpreter extends ASTInterpreter {
     return visitor.visit(node);
   }
 
-  registerVisitor(nodeNameOrVisitor: string|IASTVisitor, visitor?: IASTVisitor) {
-    if (typeof nodeNameOrVisitor !== "string") {
-      visitor = nodeNameOrVisitor;
-      nodeNameOrVisitor = visitor.constructor.name;
-    }
-    this.visitors.set(nodeNameOrVisitor, visitor);
-  }
-
   interpret() {
     let tree = this.parser.parse();
-    return tree.visit(this);
+    return tree.accept(this);
     // return this.visit(tree);
   }
 }

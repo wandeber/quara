@@ -4,11 +4,11 @@ import Token from "../Token";
 
 
 export interface IASTNode {
-  visit(visitor: ASTVisitor): any;
+  accept(visitor: ASTVisitor): any;
 }
 
 export default class AST implements IASTNode {
-  visit(visitor: ASTVisitor): any {
+  accept(visitor: ASTVisitor): any {
     // console.log("AST.visit", visitor);
     return visitor.visit(this);
   }

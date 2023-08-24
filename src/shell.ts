@@ -19,6 +19,7 @@ import ReadLine from "readline";
  * TODO: Error al asignar un valor de tipo incorrecto a una variable tipada.
  *
  * Update:
+ * - Support pre-increment and pre-decrement operators.
  * - Support expressions with several operations: 5 + 6 - 2 ...
  * - Support expressions with operators * and /. They have precedence over + and -.
  * - Support parenthesis.
@@ -45,6 +46,7 @@ import ReadLine from "readline";
       +"      !, ==, !=, ~=, !~=, <>, <, >, <=, >=, &&, ||\n"
       +"      $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
       +"      (, )\n"
+      +"      ++, -- (as pre-increment and pre-decrement)\n"
       +"  - Supported types:\n"
       +"      - Booleans.\n"
       +"      - Integer and decimal numbers.\n"

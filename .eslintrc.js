@@ -2,8 +2,10 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   plugins: [
     "@typescript-eslint",
+    // "prettier",
   ],
   extends: [
+    // "plugin:prettier/recommended",
     "google",
     "plugin:@typescript-eslint/recommended",
   ],
@@ -17,6 +19,7 @@ module.exports = {
     project: "./tsconfig.eslint.json",
   },
   rules: {
+    // "prettier/prettier": "error",
     "max-len": ["error", {code: 120}],
     "no-multiple-empty-lines": ["error", {max: 5}],
     "operator-linebreak": ["error", "before"],
@@ -34,5 +37,6 @@ module.exports = {
     quotes: ["error", "double", {avoidEscape: true}],
     "one-var": ["error", {initialized: "never", uninitialized: "always"}],
     "@typescript-eslint/no-explicit-any": "off",
+
   },
 };

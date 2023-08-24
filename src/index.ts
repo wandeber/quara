@@ -17,10 +17,10 @@ export default class Quara {
 
   interpreter: Interpreter;
 
-  constructor(text: string, globalVariables: any = {}) {
+  constructor(text: string, globalVariables: any = {}, debug = false) {
     this.lexer = new Lexer(text);
     this.parser = new Parser(this.lexer);
-    this.interpreter = new Interpreter(this.parser, globalVariables);
+    this.interpreter = new Interpreter(this.parser, globalVariables, debug);
   }
 
   run() {

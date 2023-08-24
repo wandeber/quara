@@ -1,3 +1,6 @@
+# SO files:
+.DS_Store
+
 # Built .ts files:
 dist/
 

@@ -1,38 +1,44 @@
 import ASTAssign from "../ASTNodes/ASTAssign";
 import ASTVisitor from "./ASTVisitor";
 import TokenTypes from "../TokenTypes";
+import {IASTWithName} from "../ASTNodes/AST";
 
 
 
 export default class ASTAssignVisitor extends ASTVisitor {
   visit(node: ASTAssign) {
-    if (typeof this.interpreter.globalScope[node.left.name] == "undefined") {
-      throw new Error("La variable "+ node.left.name +" no ha sido declarada.");
+    let {name} = node.left as IASTWithName;
+    if (typeof this.interpreter.globalScope[name] == "undefined") {
+      this.interpreter.error("La variable "+ name +" no ha sido declarada.");
     }
+
+    let leftValue = node.left?.accept(this.interpreter);
+    let rightValue = node.right?.accept(this.interpreter);
+    // let leftValue = this.interpreter.visit(node.left);
+    // let rightValue = this.interpreter.visit(node.right);
 
     let value;
     switch (node.operator.type) {
     case TokenTypes.OpAssign:
-      value = node.right.visit(this.interpreter);
+      value = rightValue;
       break;
     case TokenTypes.OpPlusAssign:
-      value = node.left.visit(this.interpreter) + node.right.visit(this.interpreter);
+      value = leftValue + rightValue;
       break;
     case TokenTypes.OpMinusAssign:
-      value = node.left.visit(this.interpreter) - node.right.visit(this.interpreter);
+      value = leftValue - rightValue;
       break;
     case TokenTypes.OpMultiplicationAssign:
-      value = node.left.visit(this.interpreter) * node.right.visit(this.interpreter);
+      value = leftValue * rightValue;
       break;
     case TokenTypes.OpDivisionAssign:
-      value = node.left.visit(this.interpreter) / node.right.visit(this.interpreter);
+      value = leftValue / rightValue;
       break;
     case TokenTypes.OpModulusAssign:
-      value = node.left.visit(this.interpreter) % node.right.visit(this.interpreter);
+      value = leftValue % rightValue;
       break;
     case TokenTypes.OpPowAssign:
-      // value = Math.pow(node.left.visit(this.interpreter), node.right.visit(this.interpreter));
-      value = node.left.visit(this.interpreter) ** node.right.visit(this.interpreter);
+      value = leftValue ** rightValue;
       break;
     default:
       this.interpreter.error("Unknown operator", node.operator);
@@ -43,7 +49,7 @@ export default class ASTAssignVisitor extends ASTVisitor {
       value = 0;
     }
 
-    this.interpreter.globalScope[node.left.name] = value;
-    return this.interpreter.globalScope[node.left.name];
+    this.interpreter.globalScope[name] = value;
+    return this.interpreter.globalScope[name];
   }
 }

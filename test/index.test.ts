@@ -18,6 +18,10 @@ import PlusTests from "./ArithmeticOperators/UnaryOperators/PlusTests";
 import SquareRootTests from "./ArithmeticOperators/UnaryOperators/SquareRootTests";
 import SubstractionTests from "./ArithmeticOperators/BinaryOperators/SubstractionTests";
 import SumTests from "./ArithmeticOperators/BinaryOperators/SumTests";
+import FunctionCallsTests from "./FunctionCalls/FunctionCallsTests";
+import ParenthesisTests from "./ParenthesisTests";
+import PreIncrementTests from "./ArithmeticOperators/UnaryOperators/PreIncrementTests";
+import PreDecrementTests from "./ArithmeticOperators/UnaryOperators/PreDecrementTests";
 
 
 
@@ -36,8 +40,8 @@ describe("Arithmetic operators", () => {
     describe("Plus (+ ...)", PlusTests.test);
     describe("Minus (- ...)", MinusTests.test);
     describe("Square root (¬/ ...)", SquareRootTests.test);
-    // describe("Pre-increment (++ ...)", PreIncrementTests.test);
-    // describe("Pre-decrement (++ ...)", PreDecrementTests.test);
+    describe("Pre-increment (++ ...)", PreIncrementTests.test);
+    describe("Pre-decrement (-- ...)", PreDecrementTests.test);
   });
 });
 
@@ -55,3 +59,6 @@ describe("Logic operators", () => {
   describe("And (&&, $and)", AndTests.test);
   describe("Or (||, $or)", OrTests.test);
 });
+
+describe("Function calls", FunctionCallsTests.test);
+describe("Function calls", ParenthesisTests.test);
