@@ -78,8 +78,6 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
         result = leftValue[rightValue];
       }
       break;
-
-    default: break;
     }
 
     if (result === -0) {

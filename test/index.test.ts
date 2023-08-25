@@ -22,6 +22,7 @@ import FunctionCallsTests from "./FunctionCalls/FunctionCallsTests";
 import ParenthesisTests from "./ParenthesisTests";
 import PreIncrementTests from "./ArithmeticOperators/UnaryOperators/PreIncrementTests";
 import PreDecrementTests from "./ArithmeticOperators/UnaryOperators/PreDecrementTests";
+import CommentsTests from "./CommentsTests";
 
 
 
@@ -45,7 +46,6 @@ describe("Arithmetic operators", () => {
   });
 });
 
-
 describe("Logic operators", () => {
   describe("Not (!, $not)", NotTests.test);
   describe("Equality (==, $eq)", EqualityTests.test);
@@ -61,4 +61,5 @@ describe("Logic operators", () => {
 });
 
 describe("Function calls", FunctionCallsTests.test);
-describe("Function calls", ParenthesisTests.test);
+describe("Parenthesis", ParenthesisTests.test);
+describe("Comments", CommentsTests.test);

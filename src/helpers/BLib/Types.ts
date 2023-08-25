@@ -1,28 +1,34 @@
-const AlphaRegExp = /^[a-z]+$/iu;
-const AlphanumericRegExp = /^[a-z0-9]+$/iu;
+const AlphaRegExp = /^[a-zA-ZñÑáéíóúÁÉÍÓÚçÇ]+$/iu;
+const AlphanumericRegExp = /^[a-zA-ZñÑáéíóúÁÉÍÓÚçÇ0-9]+$/iu;
 
 
 
 
 
 export default class Types {
-  static isInteger(str: string|number) {
+  static isInteger(str: string|number): boolean {
     if (isNaN(str as number)) {
       return false;
     }
     let value = parseFloat(str as string); // parseFloat parses 1 to 1.0.
-    return Number.isInteger(value); // isInteger returns true for cases like 1.0.
+    return !!Number.isInteger(value); // isInteger returns true for cases like 1.0.
   }
 
-  static isNumber(str: string|number) {
-    return !isNaN(str as number);
+  static isNumber(value: string|number): boolean {
+    if (typeof value === "number") {
+      return !isNaN(value);
+    }
+    if (typeof value === "string" && value.trim() !== "") {
+      return !isNaN(Number(value));
+    }
+    return false;
   }
 
-  static isAlpha(str: string) {
-    return str.match(AlphaRegExp);
+  static isAlpha(str: string): boolean {
+    return !!str.match(AlphaRegExp);
   }
 
-  static isAlphanumeric(str: string) {
-    return str.match(AlphanumericRegExp);
+  static isAlphanumeric(str: string): boolean {
+    return !!str.match(AlphanumericRegExp);
   }
 }
