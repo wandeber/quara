@@ -12,10 +12,10 @@ export default class ASTAssignVisitor extends ASTVisitor {
       this.interpreter.error("La variable "+ name +" no ha sido declarada.");
     }
 
-    let leftValue = node.left?.accept(this.interpreter);
-    let rightValue = node.right?.accept(this.interpreter);
-    // let leftValue = this.interpreter.visit(node.left);
-    // let rightValue = this.interpreter.visit(node.right);
+    // let leftValue = node.left?.accept(this.interpreter);
+    // let rightValue = node.right?.accept(this.interpreter);
+    let leftValue = this.interpreter.visit(node.left);
+    let rightValue = this.interpreter.visit(node.right);
 
     let value;
     switch (node.operator.type) {

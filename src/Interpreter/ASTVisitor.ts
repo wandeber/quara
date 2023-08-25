@@ -1,5 +1,5 @@
 import ASTInterpreter from "./ASTInterpreter";
-import AST, {IASTNode} from "../ASTNodes/AST";
+import AST, {IASTNode, IASTWithValue} from "../ASTNodes/AST";
 
 export interface IASTVisitor {
   interpreter: ASTInterpreter;
@@ -13,7 +13,9 @@ export default class ASTVisitor implements IASTVisitor {
     this.interpreter = interpreter;
   }
 
-  visit(node: IASTNode) {
-    return node.accept(this);
+  visit(node: IASTNode|IASTWithValue) {
+    // return node.accept(this);
+    // this.interpreter.visit(node);
+    return (node as IASTWithValue).value;
   }
 }

@@ -211,7 +211,7 @@ export default class Parser {
   }
 
   operator(allowed: string|string[]) {
-    this.debug("Get operator");
+    // this.debug("Get operator");
     let token = this.currentToken;
     this.eat(allowed);
     return token;
@@ -443,10 +443,6 @@ export default class Parser {
       );
     }
 
-
-
-
-
     return node;
   }
 
@@ -617,12 +613,13 @@ export default class Parser {
   /**
    * First assign must use the simple assign operator.
    * declAssign  -> member (OpAssign assign)?
+   * @param {boolean} initializationRequired
    * @return {AST}
    */
-  declAssign() {
+  declAssign(initializationRequired = false) {
     this.debug("Get declAssign");
     let node = this.member();
-    if (this.currentToken.type == TokenTypes.OpAssign) {
+    if (this.currentToken.type == TokenTypes.OpAssign || initializationRequired) {
       let operator = this.operator(TokenTypes.OpAssign);
       let right;
       if (this.currentToken.type == TokenTypes.Id) {
@@ -644,16 +641,17 @@ export default class Parser {
 
   /**
    * commaDecl -> declAssign (OpComma declAssign)*
+   * @param {boolean} initializationRequired
    * @return {AST[]}
    */
-  commaDecl() {
+  commaDecl(initializationRequired = false) {
     this.debug("commaDecl");
     let declarationNodes = [
-      this.declAssign(),
+      this.declAssign(initializationRequired),
     ];
     while (this.currentToken.type == TokenTypes.OpComma) {
       this.eat(TokenTypes.OpComma);
-      declarationNodes.push(this.declAssign());
+      declarationNodes.push(this.declAssign(initializationRequired));
     }
     return declarationNodes;
   }
@@ -695,7 +693,7 @@ export default class Parser {
       root.typeNode = this.typeSpec();
     }
 
-    root.children = this.commaDecl();
+    root.children = this.commaDecl(true);
     return root;
   }
 

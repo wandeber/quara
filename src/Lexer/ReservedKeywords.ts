@@ -17,5 +17,5 @@ ReservedKeywords.set("integer", new Token(TokenTypes.TypeInteger, "int"));
 ReservedKeywords.set("float", new Token(TokenTypes.TypeFloat, "float"));
 ReservedKeywords.set("double", new Token(TokenTypes.TypeDouble, "double"));
 ReservedKeywords.set("string", new Token(TokenTypes.TypeString, "string"));
-ReservedKeywords.set("bool", new Token(TokenTypes.TypeString, "string"));
-ReservedKeywords.set("boolean", new Token(TokenTypes.TypeString, "string"));
+ReservedKeywords.set("bool", new Token(TokenTypes.TypeBoolean, "bool"));
+ReservedKeywords.set("boolean", new Token(TokenTypes.TypeBoolean, "boolean"));

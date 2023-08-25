@@ -30,7 +30,8 @@ export default class ASTVariableDeclarationVisitor extends ASTVisitor {
       this.interpreter.globalScope[name] = null;
 
       // Maybe initialization...
-      child.accept(this.interpreter);
+      // child.accept(this.interpreter);
+      this.interpreter.visit(child);
     }
 
     return this.interpreter.globalScope[name];

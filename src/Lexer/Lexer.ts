@@ -161,10 +161,12 @@ export default class Lexer {
   }
 
   /**
-   * Obtiene una cambinación de los siguientes caracteres en a partir de this.text[this.pos] si
-   * si coinciden con alguno de los valores de allowedValues. Para buscar, esta funcián irá
+   * Obtiene una cambinación de los siguientes caracteres a partir de this.text[this.pos] si
+   * coinciden con alguno de los valores de allowedValues. Para buscar, esta funcián irá
    * comparando caracter a caracter con todos los valores disponibles para descartar los que no
-   * coincidan. Se da prioridad a coincidencias largas. Se intentará devolver == antes que =.
+   * coincidan. Se da prioridad a coincidencias largas. Se intentará devolver == antes que =. Es
+   * decir, si se busca uno de los siguientes elementos: ["==", "="], y el texto es "==", se
+   * devolverá "==", omitiendo la primera coincidencia con "=" por ser más corta.
    * @param {*} allowedValues
    * @return {string|boolean}
    */

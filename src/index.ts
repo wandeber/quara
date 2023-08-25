@@ -26,4 +26,9 @@ export default class Quara {
   run() {
     return this.interpreter.interpret();
   }
+
+  static script(text: string, globalVariables: any = {}, debug = false) {
+    const quara = new Quara(text, globalVariables, debug);
+    return quara.run();
+  }
 }

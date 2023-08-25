@@ -16,9 +16,9 @@ export default class VariableDeclarationTests {
       new TestConfiguration("var num1 = 2, num2 = num1; num1 + num2;", 4),
 
       new TestConfiguration("const num = 1; num;", 1),
-      // new TestConfiguration("const num = 1; num = 3; num;", 3),
       new TestConfiguration("const num1 = 1; const num2 = 3; num1 + num2;", 4),
       new TestConfiguration("const num1 = 1, num2 = 3; num1 + num2;", 4),
+      new TestConfiguration("const num1 = 2, num2 = num1; num1 + num2;", 4),
 
       new TestConfiguration("int num = 1; num;", 1),
       new TestConfiguration("integer num = 1; num;", 1),

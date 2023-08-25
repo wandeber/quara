@@ -28,8 +28,8 @@ export default class FunctionCallsTests {
       new TestConfiguration(`isNaN(${num1})`, Number.isNaN(num1)),
       new TestConfiguration(`isNaN("${strLower}")`, Number.isNaN(strLower)),
 
-      new TestConfiguration('contains(sampleSimpleArray, "value 1")', true),
-      new TestConfiguration('contains(sampleSimpleArray, "value asdasd")', false),
+      new TestConfiguration('contains(arr, "value 1")', true, {arr: ["value 1", "value 2"]}),
+      new TestConfiguration('contains(arr, "value asdasd")', false, {arr: ["value 1", "value 2"]}),
       new TestConfiguration('contains("hello world", "world")', true),
       new TestConfiguration('contains("hello world", "mundo")', false),
     ];

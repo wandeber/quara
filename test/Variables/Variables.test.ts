@@ -10,32 +10,38 @@ describe("Variables", () => {
 
   it("should throw an error when access an non declared variable", () => {
     try {
-      const quara = new Quara("num;");
-      expect(quara.run()).toThrow();
+      expect(Quara.script("num;")).toThrow();
     }
     catch (e) {}
   });
 
   it("should throw an error when assign a value to a non declared variable", () => {
     try {
-      const quara = new Quara("num = 1;");
-      expect(quara.run()).toThrow();
+      expect(Quara.script("num = 1;")).toThrow();
     }
     catch (e) {}
   });
 
   it("should throw an error when redeclare a variable", () => {
     try {
-      const quara = new Quara("var num = 1; var num = 2; num");
-      expect(quara.run()).toThrow();
+      expect(Quara.script("var num = 1; var num = 2; num")).toThrow();
     }
     catch (e) {}
   });
 
   it("should throw an error when redeclare a constant", () => {
     try {
-      const quara = new Quara("const num = 1; const num = 2; num");
-      expect(quara.run()).toThrow();
+      expect(Quara.script("const num = 1; const num = 2; num")).toThrow();
+    }
+    catch (e) {}
+  });
+
+  it("should throw an error when declare a constant without value", () => {
+    try {
+      expect(Quara.script("const num1; num1")).toThrow();
+      expect(Quara.script("const num1, num2; num1")).toThrow();
+      expect(Quara.script("const num1 = 1, num2; num1")).toThrow();
+      expect(Quara.script("const num1, num2 = 2; num1")).toThrow();
     }
     catch (e) {}
   });

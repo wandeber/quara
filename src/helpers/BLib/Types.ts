@@ -1,5 +1,5 @@
-const AlphaRegExp = /^[a-zA-ZñÑáéíóúÁÉÍÓÚçÇ]+$/iu;
-const AlphanumericRegExp = /^[a-zA-ZñÑáéíóúÁÉÍÓÚçÇ0-9]+$/iu;
+const AlphaRegExp = /^[a-záéíóúñç]+$/iu;
+const AlphanumericRegExp = /^[a-záéíóúñç0-9]+$/iu;
 
 
 

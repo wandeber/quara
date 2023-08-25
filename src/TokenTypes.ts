@@ -18,9 +18,11 @@ export default class TokenTypes {
 
   static readonly Dot = "Dot"; // .
 
+
   static readonly ModVar = "TypeVar";
 
   static readonly ModConst = "TypeConst";
+
 
   static readonly TypeAny = "TypeAny";
 
@@ -36,6 +38,7 @@ export default class TokenTypes {
 
   static readonly TypeString = "TypeString";
 
+
   static readonly BooleanConstant = "BooleanConstant"; // true, false
 
   static readonly CharConstant = "CharConstant";
@@ -45,6 +48,7 @@ export default class TokenTypes {
   static readonly DecimalConstant = "DecimalConstant"; // 1.1
 
   static readonly StringConstant = "StringConstant";
+
 
   static readonly OpPlus = "OpPlus"; // "+"
 
@@ -115,6 +119,7 @@ export default class TokenTypes {
   static readonly OpParenthesisOpen = "OpParenthesisOpen";
 
   static readonly OpParenthesisClose = "OpParenthesisClose";
+
 
   static readonly EoF = "EoF"; // Fin.
 }

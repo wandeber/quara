@@ -35,35 +35,6 @@ const DefaultVariables = {
   isNaN(num: number) {
     return Number.isNaN(num);
   },
-
-  sampleNumber: 4,
-  sampleString: "un string",
-
-  sampleObject: {
-    prop1: "prop1 value",
-    prop2: "prop2 value",
-    prop3: {
-      prop31: "prop31 value",
-    },
-  },
-
-  sampleSimpleArray: [
-    "value 1", "value 2", [1, 3, 4],
-  ],
-
-  sampleArray: [
-    {
-      id: 1,
-      prop1: "prop1 value",
-      prop2: "prop2 value",
-      arr: [1, 2, 4],
-    },
-    {
-      id: 2,
-      prop1: "prop1 value",
-      prop2: "prop2 value",
-    },
-  ],
 };
 
 /*

@@ -19,6 +19,7 @@ import ReadLine from "readline";
  * TODO: Error al asignar un valor de tipo incorrecto a una variable tipada.
  *
  * Update:
+ * - const declaration requires a value.
  * - Support pre-increment and pre-decrement operators.
  * - Support expressions with several operations: 5 + 6 - 2 ...
  * - Support expressions with operators * and /. They have precedence over + and -.

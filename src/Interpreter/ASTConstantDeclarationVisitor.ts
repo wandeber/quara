@@ -18,10 +18,7 @@ export default class ASTConstantDeclarationVisitor extends ASTVisitor {
     for (let child of node.children) {
       // console.log("child", child);
       let childBinaryOperator: ASTBinaryOperator = child as ASTBinaryOperator;
-      name = (childBinaryOperator.left as IASTWithName)?.name;
-      if (!name) {
-        ({name} = child as IASTWithName); // TODO: ¿Esto es necesario?
-      }
+      name = (childBinaryOperator.left as IASTWithName).name;
 
       if (typeof this.interpreter.globalScope[name] != "undefined") {
         throw new Error(`Constant ${name} already declared.`);
@@ -31,7 +28,8 @@ export default class ASTConstantDeclarationVisitor extends ASTVisitor {
       this.interpreter.globalScope[name] = null;
 
       // Maybe initialization...
-      child.accept(this.interpreter);
+      // child.accept(this.interpreter);
+      this.interpreter.visit(child);
     }
 
     return this.interpreter.globalScope[name];

@@ -8,7 +8,9 @@ export default class ASTUnaryOperatorVisitor extends ASTVisitor {
   visit(node: ASTUnaryOperator) {
     let result;
 
-    let exprValue = node.expr.accept(this.interpreter);
+    // let exprValue = node.expr.accept(this.interpreter);
+    let exprValue = this.interpreter.visit(node.expr);
+
     if (node.operator.type == TokenTypes.OpPlus) {
       result = exprValue;
     }
