@@ -16,7 +16,6 @@ module.exports = {
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
-    project: "./tsconfig.eslint.json",
   },
   rules: {
     // "prettier/prettier": "error",
@@ -37,6 +36,6 @@ module.exports = {
     quotes: ["error", "double", {avoidEscape: true}],
     "one-var": ["error", {initialized: "never", uninitialized: "always"}],
     "@typescript-eslint/no-explicit-any": "off",
-
   },
+  root: true,
 };
