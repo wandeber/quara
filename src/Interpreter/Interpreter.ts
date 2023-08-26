@@ -12,7 +12,6 @@ import ASTVariableDeclarationVisitor from "./ASTVariableDeclarationVisitor";
 import ASTConstantDeclarationVisitor from "./ASTConstantDeclarationVisitor";
 import ASTCompoundVisitor from "./ASTCompoundVisitor";
 import AST from "../ASTNodes/AST";
-import {IASTVisitor} from "./ASTVisitor";
 import ASTInterpreter from "./ASTInterpreter";
 
 
@@ -43,22 +42,38 @@ const DefaultVariables = {
 1 in sampleSimpleArray[any].id
 */
 
-/**
- *
- */
+
+
 export default class Interpreter extends ASTInterpreter {
   parser: Parser;
-  globalScope: any = {};
-  visitors: Map<string, IASTVisitor> = new Map();
 
   showDebug: boolean;
   space: string = "";
 
+  /**
+   * Will be set to visitWithDebug or visitWithoutDebug depending on the value of showDebug.
+   * @param {AST} node
+   * @return {any}
+   */
+  visit: (node: AST) => any;
 
+  /**
+   * AST Interpreter.
+   * @param {Parser} parser
+   * @param {any} [variables = {}]
+   * @param {Boolean} [showDebug = false]
+   */
   constructor(parser: Parser, variables = {}, showDebug = false) {
     super();
     this.parser = parser;
+
     this.showDebug = showDebug;
+    if (this.showDebug) {
+      this.visit = this.visitWithDebug;
+    }
+    else {
+      this.visit = this.visitWithoutDebug;
+    }
 
     this.setVariables(DefaultVariables);
     if (variables) {
@@ -83,31 +98,41 @@ export default class Interpreter extends ASTInterpreter {
     this.registerVisitor("ASTVariable", new ASTVariableVisitor(this));
   }
 
-
+  /**
+   * Add variables to the global scope.
+   * @param {any} variables
+   */
   setVariables(variables: any) {
     Object.assign(this.globalScope, variables);
   }
 
   /**
-   * TODO: We should have two versions of this method, one with debug and one without. We should
-   * decide which one to use in the constructor.
+   * Visit a node without showing debug information.
    * @param {AST} node
    * @return {any}
    */
-  visit(node: AST) {
-    let prevSpace = this.space;
-    if (this.showDebug) {
-      this.space += "  ";
-      console.log(this.space, node.constructor.name);
-    }
-
+  private visitWithoutDebug(node: AST) {
     let visitorName = node.constructor.name;
     if (!this.visitors.has(visitorName)) {
       throw new Error(`Visitor ${visitorName} not found.`);
     }
     let visitor = this.visitors.get(visitorName);
+    return visitor.visit(node);
+  }
 
-    let result = visitor.visit(node);
+  /**
+   * Visit a node showing debug information.
+   * @param {AST} node
+   * @return {any}
+   */
+  private visitWithDebug(node: AST) {
+    let prevSpace = this.space;
+    if (this.showDebug) {
+      this.space += "  ";
+      console.log(this.space +" "+ node.constructor.name);
+    }
+
+    let result = this.visitWithoutDebug(node);
 
     if (this.showDebug) {
       this.space = prevSpace;
@@ -116,10 +141,14 @@ export default class Interpreter extends ASTInterpreter {
     return result;
   }
 
+  /**
+   * Parse and interpret the code.
+   * @return {any}
+   */
   interpret() {
     let tree = this.parser.parse();
     // console.log(tree);
-    return tree.accept(this);
-    // return this.visit(tree);
+    // return tree.accept(this);
+    return this.visit(tree);
   }
 }
