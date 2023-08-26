@@ -97,6 +97,7 @@ export default class Interpreter extends ASTInterpreter {
 
   interpret() {
     let tree = this.parser.parse();
+    // console.log(tree);
     return tree.accept(this);
     // return this.visit(tree);
   }

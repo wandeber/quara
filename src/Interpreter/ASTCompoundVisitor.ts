@@ -13,6 +13,9 @@ export default class ASTCompoundVisitor extends ASTVisitor {
     if (result.length > 0) {
       result = result[result.length - 1];
     }
+    else {
+      result = undefined;
+    }
     return result;
   }
 }
