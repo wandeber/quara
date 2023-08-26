@@ -133,7 +133,7 @@ export default class Lexer {
   }
 
   skipSpaces() {
-    while (this.currentChar == " ") {
+    while ([" ", "\n", "\r", "\t"].includes(this.currentChar)) {
       this.advance();
     }
   }
@@ -268,11 +268,16 @@ export default class Lexer {
 
 
     // Skip spaces:
-    if (this.currentChar === "\n") { // Also an space that should be skipped with spaces.
-      this.line++;
-      this.lineStartPos = this.pos;
-    }
-    if (this.currentChar === " ") {
+    if ([" ", "\n", "\r", "\t"].includes(this.currentChar)) {
+      // New lines: \n, \r\n, \r
+      if (
+        this.currentChar === "\n"
+        || (this.currentChar === "\r" && this.peek() !== "\n")
+      ) {
+        this.line++;
+        this.lineStartPos = this.pos;
+      }
+
       if (skipSpaces) {
         this.skipSpaces();
         return this.getNextToken(skipSpaces);

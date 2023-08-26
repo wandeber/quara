@@ -23,6 +23,7 @@ import ParenthesisTests from "./ParenthesisTests";
 import PreIncrementTests from "./ArithmeticOperators/UnaryOperators/PreIncrementTests";
 import PreDecrementTests from "./ArithmeticOperators/UnaryOperators/PreDecrementTests";
 import CommentsTests from "./CommentsTests";
+import Quara from "../src";
 
 
 
@@ -63,3 +64,19 @@ describe("Logic operators", () => {
 describe("Function calls", FunctionCallsTests.test);
 describe("Parenthesis", ParenthesisTests.test);
 describe("Comments", CommentsTests.test);
+
+describe("Multiine scripts", () => {
+  it("should process multiline scripts", () => {
+    expect(Quara.script(`
+      var num1 = 1;
+      var num2 = 2;
+      num1 + num2;
+    `)).toBe(3);
+  });
+  it("should support tabs", () => {
+    expect(Quara.script("var num1 = 1;\t\tvar num2 = 2;num1 + num2")).toBe(3);
+  });
+  it("should skip unnecessary spaces", () => {
+    expect(Quara.script("var num1 = 1;   var num2 = 2;num1 + num2")).toBe(3);
+  });
+});
