@@ -68,7 +68,7 @@ import ReadLine from "readline";
       +" | |_| | | |_| | | (_| | | |    | (_| |\n"
       +"  \\__\\_\\  \\__,_|  \\__,_| |_|     \\__,_|\n"
       +"\n"
-      +"  Query as Sara...               v0.5.1\n"
+      +"  Query as Sara...               v0.6.0\n"
       +"\n"
       +"\n",
     );
