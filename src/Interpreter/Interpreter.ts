@@ -35,6 +35,7 @@ const DefaultVariables = {
   isNaN(num: number) {
     return Number.isNaN(num);
   },
+  arr: [1, 2, 3],
 };
 
 /*
@@ -48,20 +49,22 @@ const DefaultVariables = {
  */
 export default class Interpreter extends ASTInterpreter {
   parser: Parser;
-
   globalScope: any = {};
-
-  showDebug: boolean;
   visitors: Map<string, IASTVisitor> = new Map();
 
+  showDebug: boolean;
+  space: string = "";
 
 
   constructor(parser: Parser, variables = {}, showDebug = false) {
     super();
     this.parser = parser;
     this.showDebug = showDebug;
-    Object.assign(this.globalScope, DefaultVariables);
-    Object.assign(this.globalScope, variables);
+
+    this.setVariables(DefaultVariables);
+    if (variables) {
+      this.setVariables(variables);
+    }
 
     // TODO: Una opción para sacar esto de aquí es que se registren las clases Visitors después de
     //   ser definidas. Este constructor podría usar esos datos para registrar todos los visitors en
@@ -86,13 +89,32 @@ export default class Interpreter extends ASTInterpreter {
     Object.assign(this.globalScope, variables);
   }
 
+  /**
+   * TODO: We should have two versions of this method, one with debug and one without. We should
+   * decide which one to use in the constructor.
+   * @param {AST} node
+   * @return {any}
+   */
   visit(node: AST) {
+    let prevSpace = this.space;
+    if (this.showDebug) {
+      this.space += "  ";
+      console.log(this.space, node.constructor.name);
+    }
+
     let visitorName = node.constructor.name;
     if (!this.visitors.has(visitorName)) {
       throw new Error(`Visitor ${visitorName} not found.`);
     }
     let visitor = this.visitors.get(visitorName);
-    return visitor.visit(node);
+
+    let result = visitor.visit(node);
+
+    if (this.showDebug) {
+      this.space = prevSpace;
+    }
+
+    return result;
   }
 
   interpret() {

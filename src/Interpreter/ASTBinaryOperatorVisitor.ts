@@ -71,13 +71,18 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
       if (
         typeof leftValue !== "undefined"
         && typeof name !== "undefined"
+        && leftValue.hasOwnProperty(name)
         && typeof leftValue[name] !== "function"
       ) {
         result = leftValue[name];
       }
       break;
     case TokenTypes.OpArrayAccessorOpen:
-      if (typeof leftValue !== "undefined" && typeof leftValue[rightValue] !== "function") {
+      if (
+        typeof leftValue !== "undefined"
+        && leftValue.hasOwnProperty(rightValue)
+        && typeof leftValue[rightValue] !== "function"
+      ) {
         result = leftValue[rightValue];
       }
       break;

@@ -92,9 +92,9 @@ import ReadLine from "readline";
     prompt: "> ",
   });
 
-
   const commandClose = () => {
     rl.close();
+    process.exit(0);
   };
   const commands: Map<string, any> = new Map([
     ["bye", commandClose],
@@ -102,10 +102,15 @@ import ReadLine from "readline";
     ["info", info],
   ]);
 
+
+  // Al inicio de tu script
+  const args = process.argv.slice(2);
+  const isDebugInterpreter = args.includes("--debug-interpreter");
+
   let result;
   const lexer = new Lexer();
   const parser = new Parser(lexer);
-  const interpreter = new Interpreter(parser);
+  const interpreter = new Interpreter(parser, null, isDebugInterpreter);
   // const interpreter = new RPNTranslator(parser);
   // const interpreter = new LispTranslator(parser);
   // const interpreter = new MongoDBTranslator(parser);
