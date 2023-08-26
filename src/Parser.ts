@@ -373,22 +373,20 @@ export default class Parser {
     else if (availableConstants.includes(this.currentToken.type)) {
       node = this.constant();
     }
+    else if ([TokenTypes.OpIncrement, TokenTypes.OpDecrement].includes(this.currentToken.type)) {
+      let preOp = this.operator([TokenTypes.OpIncrement, TokenTypes.OpDecrement]);
+      node = this.member();
+      node = new ASTUnaryOperator(
+        preOp,
+        node,
+      );
+    }
     else /* if (this.currentToken.type == TokenTypes.Id) */ {
-      let preOp;
-      if ([TokenTypes.OpIncrement, TokenTypes.OpDecrement].includes(this.currentToken.type)) {
-        preOp = this.operator([TokenTypes.OpIncrement, TokenTypes.OpDecrement]);
-      }
       node = this.member();
       if ([TokenTypes.OpParenthesisOpen].includes(this.currentToken.type)) {
         node = new ASTFunctionCall(
           node,
           this.funcCall(),
-        );
-      }
-      if (preOp) {
-        node = new ASTUnaryOperator(
-          preOp,
-          node,
         );
       }
     }
@@ -698,7 +696,7 @@ export default class Parser {
   }
 
   /**
-   * declaration -> (constDecl | varDecl)?
+   * declaration -> [constDecl | varDecl]
    * @return {AST}
    */
   declaration() {
@@ -716,7 +714,7 @@ export default class Parser {
 
   /**
    * statement  -> declaration
-   *               //| assign
+   *               | assign
    *               | expr
    *               | empty
    * @return {AST}
@@ -726,12 +724,12 @@ export default class Parser {
     let node: AST = this.declaration();
 
     if (!node) {
-      // if (this.currentToken.type == TokenTypes.Id) {
-      node = this.assign();
-      // }
-      // else {
-      //   node = this.expr();
-      // }
+      if (this.currentToken.type == TokenTypes.Id) {
+        node = this.assign();
+      }
+      else if (this.currentToken.type != TokenTypes.OpSemicolon) {
+        node = this.expr();
+      }
     }
 
     // You could prefer returns an ASTEmpty or something like that here if node is empty.
@@ -747,17 +745,13 @@ export default class Parser {
     let root = new ASTCompound();
 
     this.eat();
-    let node = this.statement();
-    if (node) { // For empty lines.
-      root.children.push(node);
-    }
-    while (this.currentToken.type == TokenTypes.OpSemicolon) {
-      this.eat(TokenTypes.OpSemicolon);
-      if (this.currentToken.type !== TokenTypes.EoF) {
-        node = this.statement();
-        if (node) { // For empty lines.
-          root.children.push(node);
-        }
+    while (this.currentToken.type !== TokenTypes.EoF) {
+      let node = this.statement();
+      if (node) { // For empty lines.
+        root.children.push(node);
+      }
+      if (this.currentToken.type == TokenTypes.OpSemicolon) {
+        this.eat(TokenTypes.OpSemicolon);
       }
     }
     // console.log("root", root);

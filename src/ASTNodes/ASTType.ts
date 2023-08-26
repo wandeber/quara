@@ -10,4 +10,8 @@ export default class ASTType extends AST {
     super();
     this.value = String(token.value);
   }
+
+  toString() {
+    return String(this.value);
+  }
 }

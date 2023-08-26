@@ -14,8 +14,10 @@ export default class ASTBinaryOperator extends AST implements IASTWithToken {
     public right: IASTNode|IASTWithName,
   ) {
     super();
-    this.left = left;
     this.token = operator;
-    this.right = right;
+  }
+
+  toString() {
+    return String(this.left + " " + this.operator.value + " " + this.right);
   }
 }

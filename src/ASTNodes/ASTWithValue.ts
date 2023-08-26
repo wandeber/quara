@@ -10,4 +10,8 @@ export default abstract class ASTWithValue extends AST implements IASTWithValue 
     super();
     this.value = token.value;
   }
+
+  toString() {
+    return String(this.value);
+  }
 }

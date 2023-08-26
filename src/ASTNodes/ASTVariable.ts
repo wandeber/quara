@@ -12,4 +12,8 @@ export default class ASTVariable extends AST implements IASTWithName {
     super();
     this.name = token.value as string; // Change by this.value?
   }
+
+  toString() {
+    return String(this.name);
+  }
 }

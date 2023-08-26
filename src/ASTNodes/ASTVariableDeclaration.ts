@@ -5,10 +5,11 @@ import ASTCompound from "./ASTCompound";
 
 
 export default class ASTVariableDeclaration extends ASTCompound {
-  typeNode: any;
-
-  constructor(typeNode: any = null) {
+  constructor(public typeNode: any = null) {
     super();
-    this.typeNode = typeNode;
+  }
+
+  toString() {
+    return String(this.typeNode);
   }
 }

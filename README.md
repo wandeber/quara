@@ -3,24 +3,24 @@
 
 ## About
 
-- Supported comments:\n"
-  - Line comments: // ...\n"
-  - Block comments: /* ... */\n"
-- Supported operators:\n"
-  +, -, *, /, %, ^, ¬/\n"
-  =, +=, -=, *=, /=, %=, ^=\n"
-  !, ==, !=, ~=, !~=, <>, <, >, <=, >=, &&, ||\n"
-  $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
-  (, )\n"
-  ++, -- (as pre-increment and pre-decrement)\n"
-- Supported types:\n"
-  - Booleans.\n"
-  - Integer and decimal numbers.\n"
-  - Strings.\n"
-- Variables and reserved keywords.\n"
-- Reserved valid names:\n"
-  $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
-  true, false\n"
+- Supported comments:
+  - Line comments: // ...
+  - Block comments: /* ... */
+- Supported operators:
+  +, -, *, /, %, ^, ¬/
+  =, +=, -=, *=, /=, %=, ^=
+  !, ==, !=, ~=, !~=, <>, <, >, <=, >=, &&, ||
+  $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or
+  (, )
+  ++, -- (as pre-increment and pre-decrement)
+- Supported types:
+  - Booleans.
+  - Integer and decimal numbers.
+  - Strings.
+- Variables and reserved keywords.
+- Reserved valid names:
+  $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or
+  true, false
 
 ## Pending
 
@@ -72,4 +72,45 @@ while (condition) {
 for (item, key in list) {
   // ...
 }
+```
+
+## Syntax
+
+```
+script      : (statement [OpSemicolon])* EoF
+
+statement   : declaration | assign | expr | empty
+
+empty       :
+
+declaration : [constDecl | varDecl]
+
+varDecl           : (ModVar | typeSpec) commaDecl
+commaDecl         : declAssign (OpComma declAssign)*
+declAssign        : member [opAssignValue]
+
+constDecl         : ModConst [typeSpec] declEqualAssign [(OpComma declEqualAssign)*]
+declEqualAssign   : member opAssignValue
+
+opAssignValue     : OpAssign assign
+
+equalAssign       : member OpAssign assignValue
+assign            : member anyAssignOperator assignValue
+assignValue       : (assign* | expr)
+
+anyAssignOperator : OpAssign
+                    | OpPlusAssign
+                    | OpMinusAssign
+                    | OpMultiplicationAssign
+                    | OpDivisionAssign
+                    | OpModulusAssign
+                    | OpPowAssign
+
+member    : variable (
+              OpDot variable
+              | OpArrayAccessorOpen expr OpArrayAccessorClose
+            )*
+
+variable  : Letter (Letter | Digit)*    // Identifier
+
 ```

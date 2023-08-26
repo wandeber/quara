@@ -5,9 +5,14 @@ import AST, {IASTNode} from "./AST";
 
 
 export default class ASTFunctionCall extends AST {
-  constructor(public left: IASTNode, public right: IASTNode[]) {
+  constructor(
+    public left: IASTNode, // member
+    public right: IASTNode[], // params
+  ) {
     super();
-    this.left = left; // member
-    this.right = right; // params
+  }
+
+  toString() {
+    return String(this.left + "(" + this.right.join(", ") + ")");
   }
 }

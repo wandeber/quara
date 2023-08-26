@@ -12,6 +12,10 @@ export default class AST implements IASTNode {
     // console.log("AST.visit", visitor);
     return visitor.visit(this);
   }
+
+  toString() {
+    return String(this);
+  }
 }
 
 
