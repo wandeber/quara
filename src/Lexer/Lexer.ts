@@ -35,6 +35,8 @@ Permitir "2a b c" -> "a", "b" y "c" son nombres de variable. Se interpretará co
  */
 export default class Lexer {
   pos = 0;
+  line = 0;
+  lineStartPos = 0;
 
   currentToken?: Token = null;
 
@@ -76,7 +78,9 @@ export default class Lexer {
     }
   }
 
-
+  getLinePosition() {
+    return this.pos - this.lineStartPos;
+  }
 
   getCurrentChar() {
     if (this.pos < this.text.length) {
@@ -239,6 +243,12 @@ export default class Lexer {
       return new Token(TokenTypes.EoF, null);
     }
 
+
+    // Skip spaces:
+    if (this.currentChar === "\n") { // Also an space that should be skipped with spaces.
+      this.line++;
+      this.lineStartPos = this.pos;
+    }
     if (this.currentChar === " ") {
       if (skipSpaces) {
         this.skipSpaces();

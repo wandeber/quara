@@ -19,12 +19,14 @@ import TokenTypes from "./TokenTypes";
 class ParserError extends Error {
   constructor(
     public token: string,
+    public line: number,
     public position: number,
     public nearCode: string,
   ) {
     super(
-      "Ivalid syntax in "+ token
+      "Ivalid syntax in \""+ token +"\""
       +" at position "+ position
+      +" of line "+ line
       +". Near of: "+ nearCode,
     );
   }
@@ -186,8 +188,9 @@ export default class Parser {
       console.log(message, me);
     }
     throw new ParserError(
-      this.currentToken.value as string,
-      this.lexer.pos,
+      String(this.currentToken.value),
+      this.lexer.line + 1,
+      this.lexer.getLinePosition() - (String(this.currentToken.value)).length + 1,
       this.lexer.text.slice(
         this.lexer.pos - 10 < 0 ? 0 : this.lexer.pos - 10,
         this.lexer.pos + 10 > this.lexer.text.length ? this.lexer.text.length : this.lexer.pos + 10,
