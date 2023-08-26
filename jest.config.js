@@ -9,8 +9,8 @@ module.exports = {
     }],
   },
   testMatch: [
-    "**/*.test.(ts|js)",
-    "**/*.spec.(ts|js)",
+    "**/*.test.ts",
+    "**/*.spec.ts",
   ],
   testEnvironment: "node",
 };

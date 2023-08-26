@@ -84,18 +84,18 @@ const availableConstants = [
  *   in total: one non-terminal for each level plus one non-terminal for basic units of expression.
  *
  * Precedence table (from higher to lower):
- * | Precedence level  Associativity  Operators
- * | 14                Left           ||             Logical or
- * | 13                Left           &&             Logical and
- * | 9                 Left           ==, !=         Equality
- * | 8                 Left           <, >, <=, >=   Relational
- * | 7                 Left           +, -           Plus and minus
- * | 6                 Left           *, /, %        Factor
- * | 5                 Left           !, +, -        Unary plus and minus
- * | 4                 Left (change)  ^, ¬/          Power
- * | 3                 Left           ¬/             Sqrt
- * | 2                 Left           ()             Function
- * v 1                 Left           ., []          Accessors
+ * |  Precedence level  Associativity  Operators
+ * |  14                Left           ||             Logical or
+ * |  13                Left           &&             Logical and
+ * |  9                 Left           ==, !=         Equality
+ * |  8                 Left           <, >, <=, >=   Relational
+ * |  7                 Left           +, -           Plus and minus
+ * |  6                 Left           *, /, %        Factor
+ * |  5                 Left           !, +, -        Unary plus and minus
+ * |  4                 Left (change)  ^, ¬/          Power
+ * |  3                 Left           ¬/             Sqrt
+ * |  2                 Left           ()             Function
+ * V  1                 Left           ., []          Accessors
  *
  * script      -> (statement)*
  * statement   -> declaration
