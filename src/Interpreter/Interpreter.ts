@@ -35,7 +35,6 @@ const DefaultVariables = {
   isNaN(num: number) {
     return Number.isNaN(num);
   },
-  arr: [1, 2, 3],
 };
 
 /*
