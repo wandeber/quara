@@ -16,6 +16,20 @@ import Token from "./Token";
 import TokenTypes from "./TokenTypes";
 
 
+class ParserError extends Error {
+  constructor(
+    public token: string,
+    public position: number,
+    public nearCode: string,
+  ) {
+    super(
+      "Ivalid syntax in "+ token
+      +" at position "+ position
+      +". Near of: "+ nearCode,
+    );
+  }
+}
+
 
 const constantTypes = [
   TokenTypes.TypeBoolean,
@@ -171,7 +185,18 @@ export default class Parser {
     if (message) {
       console.log(message, me);
     }
-    throw new Error("Ivalid syntax.");
+    throw new ParserError(
+      this.currentToken.value as string,
+      this.lexer.pos,
+      this.lexer.text.slice(
+        this.lexer.pos - 10 < 0 ? 0 : this.lexer.pos - 10,
+        this.lexer.pos + 10 > this.lexer.text.length ? this.lexer.text.length : this.lexer.pos + 10,
+      ),
+    );
+    // throw new Error(
+    //   "Ivalid syntax in position "+ this.lexer.pos +", in "+ this.currentToken.value
+    //   +". Near of: "+ this.lexer.text.slice(this.lexer.pos - 10, this.lexer.pos + 10) +".",
+    // );
   }
 
   debug(message = "") {
@@ -245,6 +270,10 @@ export default class Parser {
     return node;
   }
 
+  /**
+   * variable -> ID
+   * @return {ASTVariable}
+   */
   variable() {
     let node = new ASTVariable(this.currentToken);
     this.eat(TokenTypes.Id);
@@ -610,7 +639,8 @@ export default class Parser {
 
   /**
    * First assign must use the simple assign operator.
-   * declAssign  -> member (OpAssign assign)?
+   * declAssign  -> member [OpAssign assign]
+   * declAssign  -> member | member OpAssign assign
    * @param {boolean} initializationRequired
    * @return {AST}
    */
@@ -618,20 +648,12 @@ export default class Parser {
     this.debug("Get declAssign");
     let node = this.member();
     if (this.currentToken.type == TokenTypes.OpAssign || initializationRequired) {
-      let operator = this.operator(TokenTypes.OpAssign);
-      let right;
-      if (this.currentToken.type == TokenTypes.Id) {
-        right = this.assign();
-      }
-      else {
-        right = this.expr();
-      }
       node = new ASTAssign(
         node,
         // We expect the current token to be an arithmetic operator token (+ or -).
-        operator,
+        this.operator(TokenTypes.OpAssign),
         // We expect the current token to be a number (1, 14, 1.4...).
-        right,
+        this.assign(),
       );
     }
     return node;
@@ -656,6 +678,7 @@ export default class Parser {
 
   /**
    * varDecl     -> (ModVar typeSpec? | ModVar? typeSpec) commaDecl
+   * varDecl     -> (ModVar | ModVar typeSpec | typeSpec) commaDecl
    * @return {AST}
    */
   varDecl() {
@@ -679,7 +702,7 @@ export default class Parser {
   }
 
   /**
-   * constDecl   -> ModConst typeSpec? commaDecl
+   * constDecl   -> ModConst [typeSpec] commaDecl
    * @return {AST}
    */
   constDecl() {
@@ -696,14 +719,13 @@ export default class Parser {
   }
 
   /**
-   * declaration -> [constDecl | varDecl]
+   * declaration -> constDecl | varDecl
    * @return {AST}
    */
   declaration() {
     this.debug("declaration");
     let node = null;
     if (this.currentToken.type == TokenTypes.ModConst) {
-      // Constant declaration
       node = this.constDecl();
     }
     else if ([TokenTypes.ModVar, ...variableTypes].includes(this.currentToken.type)) {
@@ -721,15 +743,20 @@ export default class Parser {
    */
   statement() {
     this.debug("Get statement");
-    let node: AST = this.declaration();
-
-    if (!node) {
-      if (this.currentToken.type == TokenTypes.Id) {
-        node = this.assign();
-      }
-      else if (this.currentToken.type != TokenTypes.OpSemicolon) {
-        node = this.expr();
-      }
+    let node: AST = null;
+    if (
+      [
+        TokenTypes.ModConst, TokenTypes.ModVar,
+        ...variableTypes,
+      ].includes(this.currentToken.type)
+    ) {
+      node = this.declaration();
+    }
+    else if (this.currentToken.type == TokenTypes.Id) {
+      node = this.assign();
+    }
+    else if (this.currentToken.type != TokenTypes.OpSemicolon) {
+      node = this.expr();
     }
 
     // You could prefer returns an ASTEmpty or something like that here if node is empty.
@@ -737,7 +764,8 @@ export default class Parser {
   }
 
   /**
-   * script     -> (statement)*
+   * script     -> (statement | statement OpSemicolon)* EoF
+   * script     -> (statement [OpSemicolon])* EoF
    * @return {AST}
    */
   script() {

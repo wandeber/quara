@@ -140,7 +140,7 @@ import ReadLine from "readline";
           }
         }
         catch (error) {
-          console.log("Error: ", error);
+          console.log(error);
           console.log("\n");
         }
       }
