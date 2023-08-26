@@ -8,7 +8,21 @@ import Types from "../helpers/BLib/Types";
 import Validation from "./Validation";
 
 
-
+class LexerError extends Error {
+  constructor(
+    public character: string,
+    public line: number,
+    public position: number,
+    public nearCode: string,
+  ) {
+    super(
+      "Ivalid charachter \""+ character +"\""
+      +" found in line "+ line
+      +" at position "+ position
+      +". Near of: "+ nearCode,
+    );
+  }
+}
 
 
 /*
@@ -64,7 +78,16 @@ export default class Lexer {
     if (message) {
       console.log(message, me);
     }
-    throw new Error("Invalid character");
+    throw new LexerError(
+      String(this.currentChar),
+      this.line + 1,
+      this.getLinePosition() + 1,
+      this.text.slice(
+        this.pos - 10 < 0 ? 0 : this.pos - 10,
+        this.pos + 10 > this.text.length ? this.text.length : this.pos + 10,
+      ),
+    );
+    // throw new Error("Invalid character");
   }
 
   debug(message = "") {
