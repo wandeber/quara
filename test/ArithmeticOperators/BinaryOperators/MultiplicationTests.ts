@@ -23,6 +23,7 @@ export default class MultiplicationTests {
       new TestConfiguration(`${num2} * 0`, num2 * 0),
       new TestConfiguration(`0 * ${dec2}`, 0 * dec2),
       new TestConfiguration(`${dec2} * 0`, dec2 * 0),
+      new TestConfiguration("-1 * 0", -0),
     ];
 
     TestHelper.runTests(tests);

@@ -88,10 +88,6 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
       break;
     }
 
-    if (result === -0) {
-      result = 0;
-    }
-
     return result;
   }
 }

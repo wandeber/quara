@@ -18,7 +18,8 @@ export default class MinusTests {
       new TestConfiguration(`- ${num2}`, -num2),
       new TestConfiguration(`- - ${num2}`, num2),
       new TestConfiguration(`- - - ${num2}`, -num2),
-      new TestConfiguration(["- 0", "- - 0"], 0),
+      new TestConfiguration(["- - 0"], 0),
+      new TestConfiguration(["-0", "- - -0"], -0),
     ];
 
     TestHelper.runTests(tests);

@@ -47,8 +47,6 @@ describe("AST class", () => {
 });
 
 describe("AST toString methods", () => {
-  // let consoleLogSpy: jest.SpyInstance;
-
   let tokenName = new Token(TokenTypes.Id, "a");
   let tokenInt = new Token(TokenTypes.TypeInteger, "int");
   let tokenPlus = new Token("+", "+");
@@ -66,20 +64,6 @@ describe("AST toString methods", () => {
   compound.children.push(astVariable);
 
   let astChar = new ASTChar(tokenName);
-
-  // beforeEach(() => {
-  //   consoleLogSpy = jest.spyOn(console, "log");
-  // });
-
-  // afterEach(() => {
-  //   // Limpia el mock para asegurarte de que no afecta a otros tests
-  //   consoleLogSpy.mockRestore();
-  // });
-
-  // test("ASTBinaryOperator.toString method should return an empty string", () => {
-  //   binaryOp.toString();
-  //   expect(consoleLogSpy).toHaveBeenCalledWith("a + a");
-  // });
 
   test("ASTBinaryOperator", () => expect(binaryOp.toString()).toBe("a + a"));
   test("ASTFunctionCall", () => expect(funcCall.toString()).toBe("a(a, a)"));

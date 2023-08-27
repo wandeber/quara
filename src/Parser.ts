@@ -35,6 +35,7 @@ class ParserError extends Error {
 
 const constantTypes = [
   TokenTypes.TypeBoolean,
+  TokenTypes.TypeChar,
   TokenTypes.TypeInteger,
   TokenTypes.TypeFloat,
   TokenTypes.TypeDouble,

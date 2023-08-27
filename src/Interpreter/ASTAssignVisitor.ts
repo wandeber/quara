@@ -40,13 +40,6 @@ export default class ASTAssignVisitor extends ASTVisitor {
     case TokenTypes.OpPowAssign:
       value = leftValue ** rightValue;
       break;
-    default:
-      this.interpreter.error("Unknown operator", node.operator);
-      break;
-    }
-
-    if (value === -0) {
-      value = 0;
     }
 
     this.interpreter.globalScope[name] = value;

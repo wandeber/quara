@@ -325,11 +325,11 @@ export default class Lexer {
     }
 
     // Reserved keywords and variable names:
-    if (Types.isAlpha(this.currentChar) || this.currentChar == "_" || this.currentChar == "$") {
+    if (Validation.isValidStartVariableName(this.currentChar)) {
       return this.id();
     }
 
-    this.error();
-    return null;
+    this.error("Invalid character.");
+    // return null;
   }
 }

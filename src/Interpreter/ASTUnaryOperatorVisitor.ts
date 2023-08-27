@@ -35,10 +35,6 @@ export default class ASTUnaryOperatorVisitor extends ASTVisitor {
       this.interpreter.globalScope[name] = result;
     }
 
-    if (result === -0) {
-      result = 0;
-    }
-
     return result;
   }
 }

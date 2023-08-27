@@ -13,6 +13,7 @@ import ASTConstantDeclarationVisitor from "./ASTConstantDeclarationVisitor";
 import ASTCompoundVisitor from "./ASTCompoundVisitor";
 import AST from "../ASTNodes/AST";
 import ASTInterpreter from "./ASTInterpreter";
+import ASTCharVisitor from "./ASTCharVisitor";
 
 
 
@@ -69,6 +70,7 @@ export default class Interpreter extends ASTInterpreter {
 
     this.showDebug = showDebug;
     if (this.showDebug) {
+      this.debug("Debug is enabled.");
       this.visit = this.visitWithDebug;
     }
     else {
@@ -86,7 +88,7 @@ export default class Interpreter extends ASTInterpreter {
     this.registerVisitor("ASTAssign", new ASTAssignVisitor(this));
     this.registerVisitor("ASTBinaryOperator", new ASTBinaryOperatorVisitor(this));
     this.registerVisitor("ASTBoolean", new ASTBooleanVisitor(this));
-    // this.registerVisitor("ASTChar", new ASTCharVisitor(this));
+    this.registerVisitor("ASTChar", new ASTCharVisitor(this));
     this.registerVisitor("ASTCompound", new ASTCompoundVisitor(this));
     this.registerVisitor("ASTConstantDeclaration", new ASTConstantDeclarationVisitor(this));
     this.registerVisitor("ASTFunctionCall", new ASTFunctionCallVisitor(this));

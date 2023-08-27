@@ -68,10 +68,13 @@ describe("Comments", CommentsTests.test);
 describe("Multiine scripts", () => {
   it("should process multiline scripts", () => {
     expect(Quara.script(`
-      var num1 = 1;
-      var num2 = 2;
-      num1 + num2;
-    `)).toBe(3);
+      var num1 = 1;\n\r
+
+      var num2 = 2;\n
+      var num3 = 3;\r
+
+      num1 + num2 + num3;
+    `)).toBe(6);
   });
   it("should support tabs", () => {
     expect(Quara.script("var num1 = 1;\t\tvar num2 = 2;num1 + num2")).toBe(3);
