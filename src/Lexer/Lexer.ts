@@ -4,7 +4,7 @@ import {Operators} from "./Operators";
 import {ReservedKeywords} from "./ReservedKeywords";
 import Token from "../Token";
 import TokenTypes from "../TokenTypes";
-import Types from "../helpers/BLib/Types";
+import {Types} from "../helpers/BLib/BLib";
 import Validation from "./Validation";
 
 

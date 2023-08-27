@@ -129,7 +129,7 @@ export default class Interpreter extends ASTInterpreter {
     let prevSpace = this.space;
     if (this.showDebug) {
       this.space += "  ";
-      console.log(this.space +" "+ node.constructor.name);
+      console.log(this.space +" "+ node.constructor.name, node.toString());
     }
 
     let result = this.visitWithoutDebug(node);

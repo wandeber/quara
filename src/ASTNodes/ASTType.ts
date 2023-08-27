@@ -1,17 +1,7 @@
-import AST from "./AST";
-import Token from "../Token";
+import ASTWithValue from "./ASTWithValue";
 
 
 
-export default class ASTType extends AST {
+export default class ASTType extends ASTWithValue {
   value: string;
-
-  constructor(public token: Token) {
-    super();
-    this.value = String(token.value);
-  }
-
-  toString() {
-    return String(this.value);
-  }
 }

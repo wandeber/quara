@@ -3,9 +3,15 @@ import AST from "../ASTNodes/AST";
 import Interpreter from "./Interpreter";
 
 
+export interface IASTInterpreter extends IASTVisitor {
+  interpreter: Interpreter;
+  globalScope: any;
+  error(message: string, me?: any): void;
+  debug(message?: string): void;
+  visit(node: AST): any;
+}
 
-
-export default abstract class ASTInterpreter implements IASTVisitor {
+export default abstract class ASTInterpreter implements IASTInterpreter {
   public interpreter: Interpreter;
   globalScope: any = {};
   visitors: Map<string, ASTVisitor> = new Map();
@@ -22,7 +28,7 @@ export default abstract class ASTInterpreter implements IASTVisitor {
     if (message) {
       console.log(message, me);
     }
-    throw new Error("Ivalid syntax.");
+    throw new Error("Error during execution.");
   }
 
   debug(message = "") {

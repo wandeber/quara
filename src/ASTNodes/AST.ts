@@ -3,34 +3,34 @@ import Token from "../Token";
 
 
 
-export interface IASTNode {
+export interface IAST {
   accept(visitor: ASTVisitor): any;
 }
 
-export default class AST implements IASTNode {
+export default class AST implements IAST {
   accept(visitor: ASTVisitor): any {
     // console.log("AST.visit", visitor);
     return visitor.visit(this);
   }
 
   toString() {
-    return String(this);
+    return "";
   }
 }
 
 
-export interface IASTWithToken extends IASTNode {
+export interface IASTWithToken extends IAST {
   token: Token;
 }
 
-export interface IASTWithValue extends IASTNode {
+export interface IASTWithValue extends IAST {
   value: string|number|boolean;
 }
 
-export interface IASTWithName extends IASTNode {
+export interface IASTWithName extends IAST {
   name: string;
 }
 
-export interface IASTWithChildren extends IASTNode {
+export interface IASTWithChildren extends IAST {
   children: AST[];
 }

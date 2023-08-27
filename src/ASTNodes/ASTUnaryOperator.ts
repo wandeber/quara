@@ -1,4 +1,4 @@
-import AST, {IASTNode, IASTWithToken} from "./AST";
+import AST, {IAST, IASTWithToken} from "./AST";
 import Token from "../Token";
 
 
@@ -10,13 +10,13 @@ export default class ASTUnaryOperator extends AST implements IASTWithToken {
 
   constructor(
     public operator: Token,
-    public expr: IASTNode,
+    public expr: IAST,
   ) {
     super();
     this.token = operator;
   }
 
   toString() {
-    return String(this.token);
+    return String(this.operator.value +""+ this.expr);
   }
 }

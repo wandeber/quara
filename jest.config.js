@@ -13,4 +13,8 @@ module.exports = {
     "**/*.spec.ts",
   ],
   testEnvironment: "node",
+  collectCoverageFrom: [
+    "src/**/*.{js,ts}",
+    "!**/node_modules/**",
+  ],
 };

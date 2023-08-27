@@ -1,6 +1,6 @@
 {
   "name": "quara",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Query as Sara.",
   "license": "ISC",
   "keywords": [
@@ -27,7 +27,8 @@
     "build-tsc": "./node_modules/.bin/tsc",
     "build-webpack": "./node_modules/.bin/webpack --mode production",
     "lint": "./node_modules/.bin/eslint ./**/*.ts",
-    "test": "./node_modules/.bin/jest --detectOpenHandles --forceExit --coverage --verbose",
+    "test": "./node_modules/.bin/jest --detectOpenHandles --forceExit --coverage",
+    "test-verbose": "npm run test -- --verbose",
     "format": "prettier --write .",
     "check-format": "prettier --check ."
   },

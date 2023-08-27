@@ -1,4 +1,4 @@
-import AST, {IASTNode} from "./AST";
+import AST, {IAST} from "./AST";
 
 
 
@@ -6,8 +6,8 @@ import AST, {IASTNode} from "./AST";
 
 export default class ASTFunctionCall extends AST {
   constructor(
-    public left: IASTNode, // member
-    public right: IASTNode[], // params
+    public left: IAST, // member
+    public right: IAST[], // params
   ) {
     super();
   }

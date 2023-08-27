@@ -1,4 +1,4 @@
-import {IASTNode} from "../ASTNodes/AST";
+import {IAST} from "../ASTNodes/AST";
 import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
 import ASTVisitor from "./ASTVisitor";
 
@@ -7,7 +7,7 @@ import ASTVisitor from "./ASTVisitor";
 export default class ASTFunctionCallVisitor extends ASTVisitor {
   visit(node: ASTFunctionCall) {
     let result;
-    let args = node.right.map((nodeItem: IASTNode) =>
+    let args = node.right.map((nodeItem: IAST) =>
       // nodeItem.accept(this.interpreter)
       this.interpreter.visit(nodeItem),
     );
