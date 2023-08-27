@@ -15,10 +15,10 @@ import ReadLine from "readline";
 /**
  * TODO: Quara debe soportar alguna forma de definir strings en varias líneas.
  *   Permitirá hacer que el texto se alinee en espacios en función de la primera línea.
- * TODO: Aceptar multiplicaciones tipo: 2a b c, que serán interpretadas como 2 * a * b * c.
  * TODO: Error al asignar un valor de tipo incorrecto a una variable tipada.
  *
  * Update:
+ * - Support multiplication type: 2a(b c 2 2), that will be interpreted as 2*a*(b*c*2*2).
  * - const declaration requires a value.
  * - Support pre-increment and pre-decrement operators.
  * - Support expressions with several operations: 5 + 6 - 2 ...

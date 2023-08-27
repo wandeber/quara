@@ -1,3 +1,4 @@
+import {Operators} from "./Lexer/Operators";
 import AST from "./ASTNodes/AST";
 import ASTAssign from "./ASTNodes/ASTAssign";
 import ASTBinaryOperator from "./ASTNodes/ASTBinaryOperator";
@@ -376,39 +377,60 @@ export default class Parser {
     /* We expect the current token to be a number (1, 14, 1.4...) or a parenthesis opening
     containing an expression. */
     let node = this.factor();
-    let token = this.currentToken;
 
-    if (token.type === TokenTypes.OpPow) {
-      this.eat(TokenTypes.OpPow);
-      node = new ASTBinaryOperator(node, token, this.pow()); // Note the recursive call to pow here
+    if (this.currentToken.type === TokenTypes.OpPow) {
+      node = new ASTBinaryOperator(
+        node,
+        this.operator([TokenTypes.OpPow]),
+        this.pow(),
+      ); // Note the recursive call to pow here
     }
 
     return node;
   }
 
   /**
-   * term -> pow ((OpMultiplication | OpDivision | OpModulus) pow)*
+   * term -> pow ([OpMultiplication | OpDivision | OpModulus] pow)*
+   * algo algo -> algo * algo
    * @return {AST}
    */
   term() {
     /* We expect the current token to be a number (1, 14, 1.4...) or a parenthesis opening
     containing an expression. */
     let node = this.pow();
+    let allowedMembers = [ // For short multiplication: 2a, 2(a), a a, a(a), 2 2
+      TokenTypes.Id,
+      TokenTypes.BooleanConstant,
+      TokenTypes.CharConstant,
+      TokenTypes.IntegerConstant,
+      TokenTypes.DecimalConstant,
+      TokenTypes.OpParenthesisOpen,
+    ];
     let allowedOperators = [
       TokenTypes.OpMultiplication,
       TokenTypes.OpDivision,
       TokenTypes.OpModulus,
     ];
+    let anyAllowed = [
+      ...allowedMembers,
+      ...allowedOperators,
+    ];
 
-    while (allowedOperators.includes(this.currentToken.type)) {
-      node = new ASTBinaryOperator(
-        node,
-        // We expect the current token to be an arithmetic operator token (+, -, * or /).
-        this.operator(allowedOperators),
-        /* We expect the current token to be a number (1, 14, 1.4...) or a factor opening containing
-        an expression. */
-        this.pow(),
-      );
+    while (anyAllowed.includes(this.currentToken.type)) {
+      if (allowedMembers.includes(this.currentToken.type)) {
+        node = new ASTBinaryOperator(
+          node,
+          Operators.get("*"),
+          this.pow(),
+        );
+      }
+      else {
+        node = new ASTBinaryOperator(
+          node,
+          this.operator(allowedOperators),
+          this.pow(),
+        );
+      }
     }
 
     return node;
@@ -540,19 +562,24 @@ export default class Parser {
    *              | OpDivisionAssign
    *              | OpModulusAssign
    *              | OpPowAssign
-   *            ) assignOperand)
+   *            ) expr)*
    * @return {AST}
    */
   expr() {
     let startingWithId = this.currentToken.type == TokenTypes.Id;
 
     let node: AST = this.assignOperand();
-    if (startingWithId && assignOperators.includes(this.currentToken.type)) {
-      node = new ASTAssign(
-        node,
-        this.operator(assignOperators),
-        this.expr(),
-      );
+    if (startingWithId) {
+      if (assignOperators.includes(this.currentToken.type)) {
+        node = new ASTAssign(
+          node,
+          this.operator(assignOperators),
+          this.expr(),
+        );
+      }
+      else if (this.currentToken.type == TokenTypes.Id) {
+        this.error("Invalid syntax", this.currentToken.value);
+      }
     }
 
     return node;
@@ -636,7 +663,7 @@ export default class Parser {
   }
 
   /**
-   * declaration -> constDecl | varDecl | expr
+   * declaration -> constDecl | varDecl
    * @return {AST}
    */
   declaration() {
@@ -647,9 +674,9 @@ export default class Parser {
     else if ([TokenTypes.ModVar, ...variableTypes].includes(this.currentToken.type)) {
       node = this.varDecl();
     }
-    else /* if (this.currentToken.type != TokenTypes.OpSemicolon) */ {
-      node = this.expr();
-    }
+    // else /* if (this.currentToken.type != TokenTypes.OpSemicolon) */ {
+    //   node = this.expr();
+    // }
     return node;
   }
 

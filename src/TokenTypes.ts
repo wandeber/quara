@@ -54,7 +54,7 @@ export default class TokenTypes {
 
   static readonly OpMinus = "OpMinus"; // "-"
 
-  static readonly OpMultiplication = "OpTimes"; // "*"
+  static readonly OpMultiplication = "OpMultiplication"; // "*"
 
   static readonly OpDivision = "OpDivision"; // "/"
 
