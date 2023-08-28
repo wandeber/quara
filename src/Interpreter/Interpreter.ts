@@ -16,6 +16,21 @@ import ASTInterpreter from "./ASTInterpreter";
 import ASTCharVisitor from "./ASTCharVisitor";
 import ASTIfVisitor from "./ASTIfVisitor";
 import ASTWhileVisitor from "./ASTWhileVisitor";
+import ASTAssign from "../ASTNodes/ASTAssign";
+import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
+import ASTBoolean from "../ASTNodes/ASTBoolean";
+import ASTChar from "../ASTNodes/ASTChar";
+import ASTCompound from "../ASTNodes/ASTCompound";
+import ASTConstantDeclaration from "../ASTNodes/ASTConstantDeclaration";
+import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
+import ASTIf from "../ASTNodes/ASTIf";
+import ASTNumber from "../ASTNodes/ASTNumber";
+import ASTString from "../ASTNodes/ASTString";
+import ASTType from "../ASTNodes/ASTType";
+import ASTUnaryOperator from "../ASTNodes/ASTUnaryOperator";
+import ASTVariable from "../ASTNodes/ASTVariable";
+import ASTVariableDeclaration from "../ASTNodes/ASTVariableDeclaration";
+import ASTWhile from "../ASTNodes/ASTWhile";
 
 
 
@@ -90,21 +105,21 @@ export default class Interpreter extends ASTInterpreter {
     // TODO: Una opción para sacar esto de aquí es que se registren las clases Visitors después de
     //   ser definidas. Este constructor podría usar esos datos para registrar todos los visitors en
     //   bucle.
-    this.registerVisitor("ASTAssign", new ASTAssignVisitor(this));
-    this.registerVisitor("ASTBinaryOperator", new ASTBinaryOperatorVisitor(this));
-    this.registerVisitor("ASTBoolean", new ASTBooleanVisitor(this));
-    this.registerVisitor("ASTChar", new ASTCharVisitor(this));
-    this.registerVisitor("ASTCompound", new ASTCompoundVisitor(this));
-    this.registerVisitor("ASTConstantDeclaration", new ASTConstantDeclarationVisitor(this));
-    this.registerVisitor("ASTFunctionCall", new ASTFunctionCallVisitor(this));
-    this.registerVisitor("ASTNumber", new ASTNumberVisitor(this));
-    this.registerVisitor("ASTString", new ASTStringVisitor(this));
-    this.registerVisitor("ASTType", new ASTTypeVisitor(this));
-    this.registerVisitor("ASTUnaryOperator", new ASTUnaryOperatorVisitor(this));
-    this.registerVisitor("ASTVariableDeclaration", new ASTVariableDeclarationVisitor(this));
-    this.registerVisitor("ASTVariable", new ASTVariableVisitor(this));
-    this.registerVisitor("ASTIf", new ASTIfVisitor(this));
-    this.registerVisitor("ASTWhile", new ASTWhileVisitor(this));
+    this.registerVisitor(ASTAssign.name, new ASTAssignVisitor(this));
+    this.registerVisitor(ASTBinaryOperator.name, new ASTBinaryOperatorVisitor(this));
+    this.registerVisitor(ASTBoolean.name, new ASTBooleanVisitor(this));
+    this.registerVisitor(ASTChar.name, new ASTCharVisitor(this));
+    this.registerVisitor(ASTCompound.name, new ASTCompoundVisitor(this));
+    this.registerVisitor(ASTConstantDeclaration.name, new ASTConstantDeclarationVisitor(this));
+    this.registerVisitor(ASTFunctionCall.name, new ASTFunctionCallVisitor(this));
+    this.registerVisitor(ASTNumber.name, new ASTNumberVisitor(this));
+    this.registerVisitor(ASTString.name, new ASTStringVisitor(this));
+    this.registerVisitor(ASTType.name, new ASTTypeVisitor(this));
+    this.registerVisitor(ASTUnaryOperator.name, new ASTUnaryOperatorVisitor(this));
+    this.registerVisitor(ASTVariableDeclaration.name, new ASTVariableDeclarationVisitor(this));
+    this.registerVisitor(ASTVariable.name, new ASTVariableVisitor(this));
+    this.registerVisitor(ASTIf.name, new ASTIfVisitor(this));
+    this.registerVisitor(ASTWhile.name, new ASTWhileVisitor(this));
   }
 
   /**

@@ -720,7 +720,8 @@ export default class Parser {
   }
 
   /**
-   * ifStatement    -> If OpParenthesisOpen expr OpParenthesisClose (block | statement) (elseStatement)*
+   * ifStatement    -> If (OpParenthesisOpen expr OpParenthesisClose | expr) [OpColon]
+   *                   (block | statement) (elseStatement)*
    * @return {ASTIf}
    */
   ifStatement() {
@@ -764,7 +765,8 @@ export default class Parser {
   }
 
   /**
-   * whileStatement    -> While OpParenthesisOpen expr OpParenthesisClose (block | statement)
+   * whileStatement    -> While (OpParenthesisOpen expr OpParenthesisClose | expr) [OpColon]
+   *                      (block | statement)
    * @return {ASTIf}
    */
   whileStatement() {
