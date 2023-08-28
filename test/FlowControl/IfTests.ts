@@ -9,6 +9,14 @@ export default class IfTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("if (1) {1}", 1),
+      new TestConfiguration("if 1 {1}", 1),
+      new TestConfiguration("if 0 {1}", undefined),
+      new TestConfiguration("if 1: 1", 1),
+      new TestConfiguration("if 0: 1", undefined),
+      new TestConfiguration("if 1: {1}", 1),
+      new TestConfiguration("if 0: {1}", undefined),
+      new TestConfiguration("if (1): {1}", 1),
+      new TestConfiguration("if (0): {1}", undefined),
       new TestConfiguration("if (0) {1}", undefined),
       new TestConfiguration("if (1) 1", 1),
       new TestConfiguration("if (0) 1", undefined),

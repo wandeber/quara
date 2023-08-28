@@ -39,9 +39,13 @@ if (c) r
 if (c) r;
 if (c) {r}
 if (c) {r;}
+if c: r
+if c {r}
+if c: {r} -- Deprecated
+if (c): {r} -- Deprecated
 ... else r2
-...; else r2;
-...} else r2;
+...; else r2
+...} else r2
 ```
 
 ### Loops
@@ -55,6 +59,10 @@ while (c) r
 while (c) r;
 while (c) {r}
 while (c) {r;}
+while c: r
+while c {r}
+while c: {r} -- Deprecated
+while (c): {r} -- Deprecated
 ```
 
 ## Standard functions
@@ -90,13 +98,6 @@ print(obj{key});
 ```
 
 ### Loops
-
-#### While
-```
-while (condition) {
-  // ...
-}
-```
 
 #### For
 ```
