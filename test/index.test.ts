@@ -24,6 +24,7 @@ import PreIncrementTests from "./ArithmeticOperators/UnaryOperators/PreIncrement
 import PreDecrementTests from "./ArithmeticOperators/UnaryOperators/PreDecrementTests";
 import CommentsTests from "./CommentsTests";
 import Quara from "../src";
+import IfTests from "./FlowControl/IfTests";
 
 
 
@@ -64,6 +65,7 @@ describe("Logic operators", () => {
 describe("Function calls", FunctionCallsTests.test);
 describe("Parenthesis", ParenthesisTests.test);
 describe("Comments", CommentsTests.test);
+describe("FlowControl", IfTests.test);
 
 describe("Multiine scripts", () => {
   it("should process multiline scripts", () => {

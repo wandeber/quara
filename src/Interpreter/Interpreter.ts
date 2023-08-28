@@ -14,6 +14,7 @@ import ASTCompoundVisitor from "./ASTCompoundVisitor";
 import AST from "../ASTNodes/AST";
 import ASTInterpreter from "./ASTInterpreter";
 import ASTCharVisitor from "./ASTCharVisitor";
+import ASTIfVisitor from "./ASTIfVisitor";
 
 
 
@@ -98,6 +99,7 @@ export default class Interpreter extends ASTInterpreter {
     this.registerVisitor("ASTUnaryOperator", new ASTUnaryOperatorVisitor(this));
     this.registerVisitor("ASTVariableDeclaration", new ASTVariableDeclarationVisitor(this));
     this.registerVisitor("ASTVariable", new ASTVariableVisitor(this));
+    this.registerVisitor("ASTIf", new ASTIfVisitor(this));
   }
 
   /**

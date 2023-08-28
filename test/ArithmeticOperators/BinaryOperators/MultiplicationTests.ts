@@ -24,6 +24,12 @@ export default class MultiplicationTests {
       new TestConfiguration(`0 * ${dec2}`, 0 * dec2),
       new TestConfiguration(`${dec2} * 0`, dec2 * 0),
       new TestConfiguration("-1 * 0", -0),
+
+      new TestConfiguration(`${num1} ${num2}`, num1 * num2),
+      new TestConfiguration(`${num1} ${num2} ${num3}`, num1 * num2 * num3),
+      new TestConfiguration("var n = 4; 4n", 16),
+      new TestConfiguration("var n = 4; -2 + n n", 14),
+      new TestConfiguration(`0 ${num2}`, 0 * num2),
     ];
 
     TestHelper.runTests(tests);

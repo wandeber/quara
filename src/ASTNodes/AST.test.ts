@@ -69,7 +69,7 @@ describe("AST toString methods", () => {
   test("ASTFunctionCall", () => expect(funcCall.toString()).toBe("a(a, a)"));
   test("ASTString", () => expect(astValue.toString()).toBe("a"));
   test("ASTUnaryOperator", () => expect(unaryOp.toString()).toBe("+a"));
-  test("ASTVariableDeclaration", () => expect(declaration.toString()).toBe("int a"));
+  test("ASTVariableDeclaration", () => expect(declaration.toString()).toBe("var int a"));
   test("ASTCompound", () => expect(compound.toString()).toBe("int, a"));
   test("ASTChar", () => expect(astChar.toString()).toBe("a"));
 });

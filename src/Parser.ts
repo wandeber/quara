@@ -15,6 +15,7 @@ import ASTVariableDeclaration from "./ASTNodes/ASTVariableDeclaration";
 import Lexer from "./Lexer/Lexer";
 import Token from "./Token";
 import TokenTypes from "./TokenTypes";
+import ASTIf from "./ASTNodes/ASTIf";
 
 
 class ParserError extends Error {
@@ -374,10 +375,7 @@ export default class Parser {
    * @return {AST}
    */
   pow() {
-    /* We expect the current token to be a number (1, 14, 1.4...) or a parenthesis opening
-    containing an expression. */
     let node = this.factor();
-
     if (this.currentToken.type === TokenTypes.OpPow) {
       node = new ASTBinaryOperator(
         node,
@@ -385,12 +383,14 @@ export default class Parser {
         this.pow(),
       ); // Note the recursive call to pow here
     }
-
     return node;
   }
 
   /**
-   * term -> pow ([OpMultiplication | OpDivision | OpModulus] pow)*
+   * term -> pow (
+   *           (Id | BooleanConstant | CharConstant | IntegerConstant | DecimalConstant)
+   *           | (OpMultiplication | OpDivision | OpModulus) pow
+   *         )*
    * algo algo -> algo * algo
    * @return {AST}
    */
@@ -404,7 +404,7 @@ export default class Parser {
       TokenTypes.CharConstant,
       TokenTypes.IntegerConstant,
       TokenTypes.DecimalConstant,
-      TokenTypes.OpParenthesisOpen,
+      // TokenTypes.OpParenthesisOpen, // Collision with function calls.
     ];
     let allowedOperators = [
       TokenTypes.OpMultiplication,
@@ -417,20 +417,18 @@ export default class Parser {
     ];
 
     while (anyAllowed.includes(this.currentToken.type)) {
+      let operator: Token;
       if (allowedMembers.includes(this.currentToken.type)) {
-        node = new ASTBinaryOperator(
-          node,
-          Operators.get("*"),
-          this.pow(),
-        );
+        operator = Operators.get("*");
       }
       else {
-        node = new ASTBinaryOperator(
-          node,
-          this.operator(allowedOperators),
-          this.pow(),
-        );
+        operator = this.operator(allowedOperators);
       }
+      node = new ASTBinaryOperator(
+        node,
+        operator,
+        this.pow(),
+      );
     }
 
     return node;
@@ -681,12 +679,87 @@ export default class Parser {
   }
 
   /**
+   * block    -> OpCurlyBraceOpen script OpCurlyBraceClose
+   * @return {ASTCompound}
+   */
+  block() {
+    let root = new ASTCompound();
+    this.eat([TokenTypes.OpCurlyBraceOpen]);
+    while (this.currentToken.type !== TokenTypes.OpCurlyBraceClose) {
+      let node = this.statement();
+      if (node) { // For empty lines.
+        root.children.push(node);
+      }
+      if (this.currentToken.type == TokenTypes.OpSemicolon) {
+        this.eat(TokenTypes.OpSemicolon);
+      }
+    }
+    this.eat([TokenTypes.OpCurlyBraceClose]);
+    return root;
+  }
+
+
+  /**
+   * elseStatement  -> Else (ifStatement | block | statement)
+   * @return {AST}
+   */
+  elseStatement() {
+    let node: AST;
+    this.eat([TokenTypes.Else]);
+    if (this.currentToken.type === TokenTypes.If) {
+      node = this.ifStatement();
+    }
+    else if (this.currentToken.type === TokenTypes.OpCurlyBraceOpen) {
+      node = this.block();
+    }
+    else {
+      node = this.statement();
+    }
+    return node;
+  }
+
+  /**
+   * ifStatement    -> If OpParenthesisOpen expr OpParenthesisClose (block | statement) (elseStatement)*
+   * @return {ASTIf}
+   */
+  ifStatement() {
+    let token = this.currentToken;
+    this.eat([TokenTypes.If]);
+    this.eat([TokenTypes.OpParenthesisOpen]);
+    let condition = this.expr();
+    this.eat([TokenTypes.OpParenthesisClose]);
+    let nodeTrue: AST, nodeFalse: AST;
+    if (this.currentToken.type === TokenTypes.OpCurlyBraceOpen) {
+      nodeTrue = this.block();
+    }
+    else {
+      console.log(this.currentToken.type, this.currentToken.value);
+      nodeTrue = this.statement();
+    }
+    if (this.currentToken.type == TokenTypes.Else) {
+      nodeFalse = this.elseStatement();
+    }
+
+    let node = new ASTIf(
+      token,
+      condition,
+      nodeTrue,
+      nodeFalse,
+    );
+
+    return node;
+  }
+
+  /**
    * statement  -> declaration | expr | empty
    * @return {AST}
    */
   statement() {
     let node: AST = null;
-    if (
+    if (this.currentToken.type == TokenTypes.If) {
+      node = this.ifStatement();
+    }
+    else if (
       [
         TokenTypes.ModConst, TokenTypes.ModVar,
         ...variableTypes,
@@ -701,6 +774,10 @@ export default class Parser {
       node = this.expr();
     }
 
+    if (this.currentToken.type == TokenTypes.OpSemicolon) {
+      this.eat(TokenTypes.OpSemicolon);
+    }
+
     // You could prefer returns an ASTEmpty or something like that here if node is empty.
     return node;
   }
@@ -713,7 +790,6 @@ export default class Parser {
   script() {
     let root = new ASTCompound();
 
-    this.eat();
     while (this.currentToken.type !== TokenTypes.EoF) {
       let node = this.statement();
       if (node) { // For empty lines.
@@ -735,6 +811,7 @@ export default class Parser {
   }
 
   parse() {
+    this.eat();
     return this.script();
   }
 }

@@ -11,6 +11,6 @@ export default class ASTVariableDeclaration extends ASTCompound {
   }
 
   toString() {
-    return String(this.typeNode.value +" "+ this.children.join(" "));
+    return String("var "+ this.typeNode?.value +" "+ this.children?.join(" "));
   }
 }
