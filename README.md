@@ -22,6 +22,51 @@
   $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or
   true, false
 
+### If/else
+
+```
+if (condition) {
+  // ...
+}
+else if (condition) {
+  // ...
+}
+else {
+  // ...
+}
+
+if (c) r
+if (c) r;
+if (c) {r}
+if (c) {r;}
+... else r2
+...; else r2;
+...} else r2;
+```
+
+### Loops
+
+#### While
+```
+while (condition) {
+  // ...
+}
+while (c) r
+while (c) r;
+while (c) {r}
+while (c) {r;}
+```
+
+## Standard functions
+```
+fixed
+upperCase
+lowerCase
+contains
+isNaN
+print
+```
+
 ## Pending
 
 ### Arrays
@@ -42,20 +87,6 @@ var obj = {
 };
 print(obj.key1);
 print(obj{key});
-```
-
-### If/else
-
-```
-if (condition) {
-  // ...
-}
-else if (condition) {
-  // ...
-}
-else {
-  // ...
-}
 ```
 
 ### Loops

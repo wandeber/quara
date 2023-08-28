@@ -81,6 +81,7 @@ export default class TokenTypes {
 
   static readonly If = "If";
   static readonly Else = "Else";
+  static readonly While = "While";
 
   static readonly EoF = "EoF"; // Fin.
 }

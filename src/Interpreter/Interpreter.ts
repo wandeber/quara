@@ -15,6 +15,7 @@ import AST from "../ASTNodes/AST";
 import ASTInterpreter from "./ASTInterpreter";
 import ASTCharVisitor from "./ASTCharVisitor";
 import ASTIfVisitor from "./ASTIfVisitor";
+import ASTWhileVisitor from "./ASTWhileVisitor";
 
 
 
@@ -35,6 +36,9 @@ const DefaultVariables = {
   },
   isNaN(num: number) {
     return Number.isNaN(num);
+  },
+  print(arg: any) {
+    console.log(arg);
   },
 };
 
@@ -100,6 +104,7 @@ export default class Interpreter extends ASTInterpreter {
     this.registerVisitor("ASTVariableDeclaration", new ASTVariableDeclarationVisitor(this));
     this.registerVisitor("ASTVariable", new ASTVariableVisitor(this));
     this.registerVisitor("ASTIf", new ASTIfVisitor(this));
+    this.registerVisitor("ASTWhile", new ASTWhileVisitor(this));
   }
 
   /**

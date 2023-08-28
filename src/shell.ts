@@ -18,18 +18,20 @@ import ReadLine from "readline";
  * TODO: Error al asignar un valor de tipo incorrecto a una variable tipada.
  *
  * Update:
- * - Support multiplication type: 2a(b c 2 2), that will be interpreted as 2*a*(b*c*2*2).
- * - const declaration requires a value.
- * - Support pre-increment and pre-decrement operators.
- * - Support expressions with several operations: 5 + 6 - 2 ...
- * - Support expressions with operators * and /. They have precedence over + and -.
- * - Support parenthesis.
- * - Support decimal numbers.
- * - Support unary operator + and -.
- * - Support logic operators (!, !=, <, >, <=, >=, &&, ||).
- * - Support pow (^) and sqrt (¬/) operators.
- * - Support assign operators (=, +=, -=, *=, /=, %=, ^=).
- * - Support strings.
+ * - While loop implemented.
+ * - If/else if/else implemented.
+ * - Added multiplication type: 2a(b c 2 2), that will be interpreted as 2*a*(b*c*2*2).
+ * - const declaration now requires a value.
+ * - Added pre-increment and pre-decrement operators.
+ * - Supports expressions with several operations: 5 + 6 - 2 ...
+ * - Supports expressions with operators * and /. They have precedence over + and -.
+ * - Supports parenthesis.
+ * - Supports decimal numbers.
+ * - Supports unary operator + and -.
+ * - Supports logic operators (!, !=, <, >, <=, >=, &&, ||).
+ * - Supports pow (^) and sqrt (¬/) operators.
+ * - Supports assign operators (=, +=, -=, *=, /=, %=, ^=).
+ * - Supports strings.
  * - Variables and reserved keywords.
  *
  * @author wandeber
@@ -56,6 +58,8 @@ import ReadLine from "readline";
       +"  - Reserved valid names:\n"
       +"      $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
       +"      true, false\n"
+      +"  - if/else if/else\n"
+      +"  - while loop\n"
       +"\n",
     );
   };
@@ -68,8 +72,7 @@ import ReadLine from "readline";
       +" | |_| | | |_| | | (_| | | |    | (_| |\n"
       +"  \\__\\_\\  \\__,_|  \\__,_| |_|     \\__,_|\n"
       +"\n"
-      +"  Query as Sara...               v0.6.0\n"
-      +"\n"
+      +"  Query as Sara...               v0.7.0\n"
       +"\n",
     );
 

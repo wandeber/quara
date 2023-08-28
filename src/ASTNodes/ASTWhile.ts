@@ -6,17 +6,16 @@ import ASTCompound from "./ASTCompound";
 
 
 
-export default class ASTIf extends AST implements IASTWithToken {
+export default class ASTWhile extends AST implements IASTWithToken {
   constructor(
     public token: Token,
     public condition: IAST,
-    public ifTrue: IAST|ASTCompound,
-    public ifFalse?: IAST|ASTIf|ASTCompound,
+    public body?: IAST|ASTCompound,
   ) {
     super();
   }
 
   toString() {
-    return String("if");
+    return String("while");
   }
 }

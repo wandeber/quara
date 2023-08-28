@@ -16,6 +16,7 @@ import Lexer from "./Lexer/Lexer";
 import Token from "./Token";
 import TokenTypes from "./TokenTypes";
 import ASTIf from "./ASTNodes/ASTIf";
+import ASTWhile from "./ASTNodes/ASTWhile";
 
 
 class ParserError extends Error {
@@ -725,9 +726,11 @@ export default class Parser {
   ifStatement() {
     let token = this.currentToken;
     this.eat([TokenTypes.If]);
+
     this.eat([TokenTypes.OpParenthesisOpen]);
     let condition = this.expr();
     this.eat([TokenTypes.OpParenthesisClose]);
+
     let nodeTrue: AST, nodeFalse: AST;
     if (this.currentToken.type === TokenTypes.OpCurlyBraceOpen) {
       nodeTrue = this.block();
@@ -751,13 +754,46 @@ export default class Parser {
   }
 
   /**
-   * statement  -> declaration | expr | empty
+   * whileStatement    -> While OpParenthesisOpen expr OpParenthesisClose (block | statement)
+   * @return {ASTIf}
+   */
+  whileStatement() {
+    let token = this.currentToken;
+    this.eat([TokenTypes.While]);
+
+    this.eat([TokenTypes.OpParenthesisOpen]);
+    let condition = this.expr();
+    this.eat([TokenTypes.OpParenthesisClose]);
+
+    let body: AST;
+    if (this.currentToken.type === TokenTypes.OpCurlyBraceOpen) {
+      body = this.block();
+    }
+    else {
+      console.log(this.currentToken.type, this.currentToken.value);
+      body = this.statement();
+    }
+
+    let node = new ASTWhile(
+      token,
+      condition,
+      body,
+    );
+
+    return node;
+  }
+
+  /**
+   * statement  -> ifStatement | whileStatement | declaration | expr | empty
    * @return {AST}
    */
   statement() {
     let node: AST = null;
     if (this.currentToken.type == TokenTypes.If) {
       node = this.ifStatement();
+    }
+    else if (this.currentToken.type == TokenTypes.While) {
+      node = this.whileStatement();
     }
     else if (
       [
@@ -795,9 +831,9 @@ export default class Parser {
       if (node) { // For empty lines.
         root.children.push(node);
       }
-      if (this.currentToken.type == TokenTypes.OpSemicolon) {
-        this.eat(TokenTypes.OpSemicolon);
-      }
+      // if (this.currentToken.type == TokenTypes.OpSemicolon) {
+      //   this.eat(TokenTypes.OpSemicolon);
+      // }
     }
     // console.log("root", root);
     return root;

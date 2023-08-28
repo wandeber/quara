@@ -21,3 +21,4 @@ ReservedKeywords.set("bool", new Token(TokenTypes.TypeBoolean, "bool"));
 ReservedKeywords.set("boolean", new Token(TokenTypes.TypeBoolean, "boolean"));
 ReservedKeywords.set("if", new Token(TokenTypes.If, "if"));
 ReservedKeywords.set("else", new Token(TokenTypes.Else, "else"));
+ReservedKeywords.set("while", new Token(TokenTypes.While, "while"));
