@@ -57,4 +57,6 @@ Operators.set("}", new Token(TokenTypes.OpCurlyBraceClose, "}"));
 Operators.set(";", new Token(TokenTypes.OpSemicolon, ";"));
 Operators.set(":", new Token(TokenTypes.OpColon, ":"));
 Operators.set(",", new Token(TokenTypes.OpComma, ","));
+Operators.set("->", new Token(TokenTypes.OpArrow, "->"));
+// Operators.set("=>", new Token(TokenTypes.OpArrow, "->"));
 Operators.set("\"", new Token(TokenTypes.OpQuote, "\""));

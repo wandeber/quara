@@ -699,6 +699,41 @@ export default class Parser {
     return root;
   }
 
+  ifColonBlock(end: string[]) {
+    let root = new ASTCompound();
+    this.eat([TokenTypes.OpColon]);
+    while (!end.includes(this.currentToken.type)) {
+      let node = this.statement();
+      if (node) { // For empty lines.
+        root.children.push(node);
+      }
+      if (this.currentToken.type == TokenTypes.OpSemicolon) {
+        this.eat(TokenTypes.OpSemicolon);
+      }
+    }
+    if (this.currentToken.type == TokenTypes.EndIf) {
+      this.eat([TokenTypes.EndIf]);
+    }
+    return root;
+  }
+
+  whileColonBlock(end: string[]) {
+    let root = new ASTCompound();
+    this.eat([TokenTypes.OpColon]);
+    while (!end.includes(this.currentToken.type)) {
+      let node = this.statement();
+      if (node) { // For empty lines.
+        root.children.push(node);
+      }
+      if (this.currentToken.type == TokenTypes.OpSemicolon) {
+        this.eat(TokenTypes.OpSemicolon);
+      }
+    }
+    if (this.currentToken.type == TokenTypes.EndWhile) {
+      this.eat([TokenTypes.EndWhile]);
+    }
+    return root;
+  }
 
   /**
    * elseStatement  -> Else (ifStatement | block | statement)
@@ -713,15 +748,28 @@ export default class Parser {
     else if (this.currentToken.type === TokenTypes.OpCurlyBraceOpen) {
       node = this.block();
     }
+    else if (this.currentToken.type == TokenTypes.OpColon) {
+      node = this.ifColonBlock([TokenTypes.EndIf]);
+    }
     else {
+      if (this.currentToken.type == TokenTypes.OpArrow) {
+        this.eat([TokenTypes.OpArrow]);
+      }
       node = this.statement();
     }
     return node;
   }
 
   /**
-   * ifStatement    -> If (OpParenthesisOpen expr OpParenthesisClose | expr) [OpColon]
-   *                   (block | statement) (elseStatement)*
+   * ifStatement    -> If (
+   *                     (expr OpArrow statement)
+   *                     | ((OpParenthesisOpen expr OpParenthesisClose) | expr)
+   *                       (
+   *                         block
+   *                         | ifColonBLock
+   *                         | OpArrow statement
+   *                       )
+   *                   )
    * @return {ASTIf}
    */
   ifStatement() {
@@ -730,6 +778,7 @@ export default class Parser {
 
     this.eat([TokenTypes.If]);
 
+    // Condition:
     if (this.currentToken.type === TokenTypes.OpParenthesisOpen) {
       this.eat([TokenTypes.OpParenthesisOpen]);
       condition = this.expr();
@@ -739,17 +788,21 @@ export default class Parser {
       condition = this.expr();
     }
 
-    if (this.currentToken.type == TokenTypes.OpColon) {
-      this.eat([TokenTypes.OpColon]);
-    }
-
+    // Body:
     if (this.currentToken.type === TokenTypes.OpCurlyBraceOpen) {
       nodeTrue = this.block();
     }
+    else if (this.currentToken.type == TokenTypes.OpColon) {
+      nodeTrue = this.ifColonBlock([TokenTypes.EndIf, TokenTypes.Else]);
+    }
     else {
-      console.log(this.currentToken.type, this.currentToken.value);
+      if (this.currentToken.type == TokenTypes.OpArrow) {
+        this.eat([TokenTypes.OpArrow]);
+      }
       nodeTrue = this.statement();
     }
+
+    // Else:
     if (this.currentToken.type == TokenTypes.Else) {
       nodeFalse = this.elseStatement();
     }
@@ -784,15 +837,16 @@ export default class Parser {
       condition = this.expr();
     }
 
-    if (this.currentToken.type == TokenTypes.OpColon) {
-      this.eat([TokenTypes.OpColon]);
-    }
-
     if (this.currentToken.type === TokenTypes.OpCurlyBraceOpen) {
       body = this.block();
     }
+    else if (this.currentToken.type == TokenTypes.OpColon) {
+      body = this.whileColonBlock([TokenTypes.EndWhile]);
+    }
     else {
-      console.log(this.currentToken.type, this.currentToken.value);
+      if (this.currentToken.type == TokenTypes.OpArrow) {
+        this.eat([TokenTypes.OpArrow]);
+      }
       body = this.statement();
     }
 

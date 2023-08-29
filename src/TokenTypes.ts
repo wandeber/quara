@@ -73,6 +73,7 @@ export default class TokenTypes {
   static readonly OpColon = "OpColon";
   static readonly OpQuote = "OpQuote";
   static readonly OpComma = "OpComma";
+  static readonly OpArrow = "OpArrow";
 
   static readonly OpParenthesisOpen = "OpParenthesisOpen";
   static readonly OpParenthesisClose = "OpParenthesisClose";
@@ -81,7 +82,9 @@ export default class TokenTypes {
 
   static readonly If = "If";
   static readonly Else = "Else";
+  static readonly EndIf = "EndIf";
   static readonly While = "While";
+  static readonly EndWhile = "EndWhile";
 
   static readonly EoF = "EoF"; // Fin.
 }

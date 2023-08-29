@@ -39,13 +39,13 @@ if (c) r
 if (c) r;
 if (c) {r}
 if (c) {r;}
-if c: r
 if c {r}
-if c: {r} -- Deprecated
-if (c): {r} -- Deprecated
+if c -> r
+if c: r endif;
 ... else r2
 ...; else r2
 ...} else r2
+... else: r2 endif;
 ```
 
 ### Loops
@@ -59,10 +59,9 @@ while (c) r
 while (c) r;
 while (c) {r}
 while (c) {r;}
-while c: r
 while c {r}
-while c: {r} -- Deprecated
-while (c): {r} -- Deprecated
+while c -> r
+while c: r endwhile;
 ```
 
 ## Standard functions

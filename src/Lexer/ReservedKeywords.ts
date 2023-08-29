@@ -20,5 +20,7 @@ ReservedKeywords.set("string", new Token(TokenTypes.TypeString, "string"));
 ReservedKeywords.set("bool", new Token(TokenTypes.TypeBoolean, "bool"));
 ReservedKeywords.set("boolean", new Token(TokenTypes.TypeBoolean, "boolean"));
 ReservedKeywords.set("if", new Token(TokenTypes.If, "if"));
+ReservedKeywords.set("endif", new Token(TokenTypes.EndIf, "endif"));
 ReservedKeywords.set("else", new Token(TokenTypes.Else, "else"));
 ReservedKeywords.set("while", new Token(TokenTypes.While, "while"));
+ReservedKeywords.set("endwhile", new Token(TokenTypes.EndWhile, "endwhile"));
