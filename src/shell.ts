@@ -8,7 +8,8 @@ import ReadLine from "readline";
 
 
 /**
- * TODO: Error al asignar un valor de tipo incorrecto a una variable tipada.
+ * TODO: Type checking when assigning a variable.
+ * TODO: In text processor mode, the interpreter should not print the result of the last expression.
  *
  * @author wandeber
  * Thanks to Ruslan Spivak for his guide.

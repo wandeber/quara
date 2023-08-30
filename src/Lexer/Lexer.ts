@@ -268,22 +268,19 @@ export default class Lexer {
       return new Token(TokenTypes.EoF, null);
     }
 
-    if (this.currentChar == "<" && this.peek() == "<" && this.peek(2) == "<") {
-      this.inTextBlock = true;
-      this.inTextSection = true;
-      let operator = this.getOperator();
-      return operator;
-      // this.advance();
-      // return new Token(TokenTypes.OpTextProcessorStart, "<<<");
+    if (!this.inTextBlock) {
+      if (this.currentChar == "`") {
+        this.inTextBlock = true;
+        this.inTextSection = true;
+        let operator = this.getOperator();
+        return operator;
+      }
     }
-
-    if (this.inTextBlock) {
-      if (this.currentChar == ">" && this.peek() == ">" && this.peek(2) == ">") {
+    else {
+      if (this.currentChar == "`") {
         this.inTextBlock = false;
         let operator = this.getOperator();
         return operator;
-        // this.advance();
-        // return new Token(TokenTypes.OpTextProcessorEnd, ">>>");
       }
 
       if (this.currentChar == "}") {
@@ -296,7 +293,7 @@ export default class Lexer {
         while (
           this.currentChar !== null
           && "{" != this.currentChar
-          && !(this.currentChar == ">" && this.peek() == ">" && this.peek(2) == ">")
+          && this.currentChar != "`"
         ) {
           text += this.currentChar;
           this.advance();

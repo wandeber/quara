@@ -17,8 +17,7 @@
   - , (Comma)
   - ;, :
   - ->
-  - "
-  - <<<, >>>
+  - ", `
 - Supported types:
   - Booleans.
   - Integer and decimal numbers.
@@ -84,50 +83,50 @@ while c: r endwhile;
 
 ## Text processor/templates (WIP, don't use it yet)
 ```
-<<<Hola>>> // Hola
+`Hola` // Hola
 ```
 
 Assign the output to a variable:
 ```
 var name = "Sara";
-var text = <<<Hola, {name}>>>; // Hola Sara
+var text = `Hola, {name}`; // Hola Sara
 ```
 
 Coding:
 ```
 var name = "Sara";
-var text = <<<Hola, {name += " V."; name}>>>; // Hola Sara V.
+var text = `Hola, {name += " V."; name}`; // Hola Sara V.
 ```
 
 ### variables:
 ```
 var name = "Sara";
-<<<Hola, {name}>>> // Hola Sara
+`Hola, {name}` // Hola Sara
 ```
 
 ### if/else statements:
 ```
 var name = "Sara";
 var useName = true;
-<<<
+`
   Hola
   {if useName:}
     , {name}
   {else:}
     !
   {endif}
->>>
+`
 ```
 
 ### While loops:
 ```
 var i = 0;
-<<<
+`
   {while i < 5:}
     {i}
     {i = i + 1}
   {endwhile}
->>>
+`
 ```
 
 ## Standard functions

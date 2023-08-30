@@ -67,7 +67,7 @@ const availableConstants = [
   TokenTypes.IntegerConstant,
   TokenTypes.DecimalConstant,
   TokenTypes.StringConstant,
-  TokenTypes.OpTextProcessorStart,
+  TokenTypes.Backtip,
 ];
 
 
@@ -221,7 +221,7 @@ export default class Parser {
       node = new ASTString(this.currentToken);
       this.eat(TokenTypes.StringConstant);
     }
-    else if (this.currentToken.type == TokenTypes.OpTextProcessorStart) {
+    else if (this.currentToken.type == TokenTypes.Backtip) {
       node = this.textProcessor();
     }
     return node;
@@ -411,7 +411,7 @@ export default class Parser {
       TokenTypes.CharConstant,
       TokenTypes.IntegerConstant,
       TokenTypes.DecimalConstant,
-      TokenTypes.OpTextProcessorStart,
+      TokenTypes.Backtip,
       // TokenTypes.OpParenthesisOpen, // Collision with function calls.
     ];
     let allowedOperators = [
@@ -873,15 +873,15 @@ export default class Parser {
   }
 
   /**
-   * tetxProcessor -> OpTextProcessorStart block OpTextProcessorEnd
+   * tetxProcessor -> Backtip block Backtip
    * @return {ASTTextProcessor}
    */
   textProcessor() {
     let node: ASTTextProcessor = new ASTTextProcessor(this.currentToken);
     // console.log("textProcessor", this.currentToken);
-    this.eat(TokenTypes.OpTextProcessorStart);
+    this.eat(TokenTypes.Backtip);
 
-    while (![TokenTypes.OpTextProcessorEnd, TokenTypes.EoF].includes(this.currentToken.type)) {
+    while (![TokenTypes.Backtip, TokenTypes.EoF].includes(this.currentToken.type)) {
       // if (this.currentToken.type == TokenTypes.OpCurlyBraceOpen) {
       // console.log("textProcessor", this.currentToken);
       node.children.push(this.statement());
@@ -889,8 +889,8 @@ export default class Parser {
     }
 
     // console.log("textProcessor", this.currentToken);
-    if (this.currentToken.type == TokenTypes.OpTextProcessorEnd) {
-      this.eat(TokenTypes.OpTextProcessorEnd);
+    if (this.currentToken.type == TokenTypes.Backtip) {
+      this.eat(TokenTypes.Backtip);
     }
 
     return node;
@@ -919,7 +919,7 @@ export default class Parser {
     else if (this.currentToken.type == TokenTypes.OpSemicolon) {
       // TODO: Implement empty AST?
     }
-    else if (this.currentToken.type == TokenTypes.OpTextProcessorStart) {
+    else if (this.currentToken.type == TokenTypes.Backtip) {
       node = this.textProcessor();
     }
     else if (this.currentToken.type == TokenTypes.TextBlock) {
