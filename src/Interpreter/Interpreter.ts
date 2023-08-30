@@ -31,6 +31,10 @@ import ASTUnaryOperator from "../ASTNodes/ASTUnaryOperator";
 import ASTVariable from "../ASTNodes/ASTVariable";
 import ASTVariableDeclaration from "../ASTNodes/ASTVariableDeclaration";
 import ASTWhile from "../ASTNodes/ASTWhile";
+import ASTTextBlock from "../ASTNodes/ASTTextBlock";
+import ASTTextProcessor from "../ASTNodes/ASTTextProcessor";
+import ASTTextBlockVisitor from "./ASTTextBlockVisitor";
+import ASTTextProcessorVisitor from "./ASTTextProcessorVisitor";
 
 
 
@@ -56,13 +60,6 @@ const DefaultVariables = {
     console.log(arg);
   },
 };
-
-/*
-"prop1" in sampleObject
-"value 1" in sampleSimpleArray
-1 in sampleSimpleArray[any].id
-*/
-
 
 
 export default class Interpreter extends ASTInterpreter {
@@ -105,6 +102,8 @@ export default class Interpreter extends ASTInterpreter {
     // TODO: Una opción para sacar esto de aquí es que se registren las clases Visitors después de
     //   ser definidas. Este constructor podría usar esos datos para registrar todos los visitors en
     //   bucle.
+    // Por otra parte, prefiero dejarlo así por dar la posibilidad de crear diferentes interpreters
+    //   con diferentes visitors.
     this.registerVisitor(ASTAssign.name, new ASTAssignVisitor(this));
     this.registerVisitor(ASTBinaryOperator.name, new ASTBinaryOperatorVisitor(this));
     this.registerVisitor(ASTBoolean.name, new ASTBooleanVisitor(this));
@@ -120,6 +119,8 @@ export default class Interpreter extends ASTInterpreter {
     this.registerVisitor(ASTVariable.name, new ASTVariableVisitor(this));
     this.registerVisitor(ASTIf.name, new ASTIfVisitor(this));
     this.registerVisitor(ASTWhile.name, new ASTWhileVisitor(this));
+    this.registerVisitor(ASTTextProcessor.name, new ASTTextProcessorVisitor(this));
+    this.registerVisitor(ASTTextBlock.name, new ASTTextBlockVisitor(this));
   }
 
   /**

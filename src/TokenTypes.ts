@@ -12,6 +12,8 @@ Other:
 
 
 export default class TokenTypes {
+  static readonly OpTextProcessorStart = "OpTextProcessorStart";
+  static readonly OpTextProcessorEnd = "OpTextProcessorEnd";
   static readonly Id = "Id";
   static readonly Space = "Space"; // " "
   static readonly Dot = "Dot"; // .
@@ -33,6 +35,7 @@ export default class TokenTypes {
   static readonly DecimalConstant = "DecimalConstant"; // 1.1
   static readonly StringConstant = "StringConstant";
 
+  static readonly TextBlock = "TextBlock";
 
   static readonly OpPlus = "OpPlus"; // "+"
   static readonly OpMinus = "OpMinus"; // "-"
@@ -87,4 +90,29 @@ export default class TokenTypes {
   static readonly EndWhile = "EndWhile";
 
   static readonly EoF = "EoF"; // Fin.
+
+  // Pending:
+  static readonly For = "For";
+  static readonly EndFor = "EndFor";
+  static readonly Each = "Each";
+  static readonly In = "In";
+  static readonly EndEach = "EndEach";
+
+  static readonly Function = "Function";
+  static readonly Return = "Return";
+  static readonly EndFunction = "EndFunction";
+
+  static readonly Class = "Class";
+  static readonly EndClass = "EndClass";
+  static readonly Static = "Static";
+  static readonly Abstract = "Abstract";
+  static readonly Private = "Private";
+  static readonly Public = "Public";
+  static readonly Protected = "Protected";
+  static readonly Get = "Get";
+  static readonly Set = "Set";
+  static readonly Extends = "Extends";
+  static readonly Interface = "Interface";
+  static readonly EndInterface = "EndInterface";
+  static readonly Implements = "Implements";
 }

@@ -2,68 +2,19 @@ import Interpreter from "./Interpreter/Interpreter";
 import Lexer from "./Lexer/Lexer";
 import Parser from "./Parser";
 import ReadLine from "readline";
-// const {RPNTranslator} = require('./Interpreters/RPNTranslator');
-// const {LispTranslator} = require('./Interpreters/LispTranslator');
-// const {MongoDBTranslator} = require('./Interpreters/MongoDBTranslator');
-// const {BAPIFiltersTranslator} = require('./Interpreters/BAPIFiltersTranslator');
-// const {ASTInterpreter} = require('./Interpreters/ASTInterpreter');
 
 
 
 
 
 /**
- * TODO: Quara debe soportar alguna forma de definir strings en varias líneas.
- *   Permitirá hacer que el texto se alinee en espacios en función de la primera línea.
  * TODO: Error al asignar un valor de tipo incorrecto a una variable tipada.
  *
- * Update:
- * - While loop implemented.
- * - If/else if/else implemented.
- * - Added multiplication type: 2a(b c 2 2), that will be interpreted as 2*a*(b*c*2*2).
- * - const declaration now requires a value.
- * - Added pre-increment and pre-decrement operators.
- * - Supports expressions with several operations: 5 + 6 - 2 ...
- * - Supports expressions with operators * and /. They have precedence over + and -.
- * - Supports parenthesis.
- * - Supports decimal numbers.
- * - Supports unary operator + and -.
- * - Supports logic operators (!, !=, <, >, <=, >=, &&, ||).
- * - Supports pow (^) and sqrt (¬/) operators.
- * - Supports assign operators (=, +=, -=, *=, /=, %=, ^=).
- * - Supports strings.
- * - Variables and reserved keywords.
- *
  * @author wandeber
- * @see https://ruslanspivak.com/lsbasi-part1/ Implemented following Ruslan's guide.
+ * Thanks to Ruslan Spivak for his guide.
+ * @see https://ruslanspivak.com/lsbasi-part1/
  */
 (() => {
-  const devStatus = () => {
-    console.log(
-      "  - Supported comments:\n"
-      +"      - Line comments: // ...\n"
-      +"      - Block comments: /* ... */\n"
-      +"  - Supported operators:\n"
-      +"      +, -, *, /, %, ^, ¬/\n"
-      +"      =, +=, -=, *=, /=, %=, ^=\n"
-      +"      !, ==, !=, ~=, !~=, <>, <, >, <=, >=, &&, ||\n"
-      +"      $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
-      +"      (, )\n"
-      +"      ++, -- (as pre-increment and pre-decrement)\n"
-      +"  - Supported types:\n"
-      +"      - Booleans.\n"
-      +"      - Integer and decimal numbers.\n"
-      +"      - Strings.\n"
-      +"  - Variables and reserved keywords.\n"
-      +"  - Reserved valid names:\n"
-      +"      $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or\n"
-      +"      true, false\n"
-      +"  - if/else if/else\n"
-      +"  - while loop\n"
-      +"\n",
-    );
-  };
-
   const info = () => {
     console.log(
       "   ___                                 \n"
@@ -72,11 +23,9 @@ import ReadLine from "readline";
       +" | |_| | | |_| | | (_| | | |    | (_| |\n"
       +"  \\__\\_\\  \\__,_|  \\__,_| |_|     \\__,_|\n"
       +"\n"
-      +"  Query as Sara...               v0.7.0\n"
+      +"  Query as Sara...               v0.8.0\n"
       +"\n",
     );
-
-    devStatus();
   };
 
   const close = () => {
@@ -114,11 +63,6 @@ import ReadLine from "readline";
   const lexer = new Lexer();
   const parser = new Parser(lexer);
   const interpreter = new Interpreter(parser, null, isDebugInterpreter);
-  // const interpreter = new RPNTranslator(parser);
-  // const interpreter = new LispTranslator(parser);
-  // const interpreter = new MongoDBTranslator(parser);
-  // const interpreter = new BAPIFiltersTranslator(parser);
-  // const interpreter = new ASTInterpreter(parser);
 
   const prompt = () => {
     rl.question("> ", (input: any) => {

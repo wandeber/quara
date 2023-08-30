@@ -1,6 +1,6 @@
 {
   "name": "quara",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Query as Sara.",
   "license": "ISC",
   "keywords": [
@@ -19,11 +19,12 @@
     "shell": "node ./dist/shell.js",
     "rebuild": "npm run clean; npm run build",
     "build": "npm run build-tsc",
-    "build-prod": "npm run build-webpack && npm run licence && npm run check",
+    "build-prod": "npm run build-webpack && npm run licence && npm run readme && npm run check",
     "preversion": "npm run check",
     "check": "npm test && npm run lint",
     "clean": "rm -r ./dist",
     "licence": "cp -f ./LICENSE ./dist/",
+    "readme": "cp -f ./README.md ./dist/",
     "build-tsc": "./node_modules/.bin/tsc",
     "build-webpack": "./node_modules/.bin/webpack --mode production",
     "lint": "./node_modules/.bin/eslint ./**/*.ts",

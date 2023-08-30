@@ -17,6 +17,8 @@ import Token from "./Token";
 import TokenTypes from "./TokenTypes";
 import ASTIf from "./ASTNodes/ASTIf";
 import ASTWhile from "./ASTNodes/ASTWhile";
+import ASTTextBlock from "./ASTNodes/ASTTextBlock";
+import ASTTextProcessor from "./ASTNodes/ASTTextProcessor";
 
 
 class ParserError extends Error {
@@ -65,6 +67,7 @@ const availableConstants = [
   TokenTypes.IntegerConstant,
   TokenTypes.DecimalConstant,
   TokenTypes.StringConstant,
+  TokenTypes.OpTextProcessorStart,
 ];
 
 
@@ -217,6 +220,9 @@ export default class Parser {
     else if (this.currentToken.type == TokenTypes.StringConstant) {
       node = new ASTString(this.currentToken);
       this.eat(TokenTypes.StringConstant);
+    }
+    else if (this.currentToken.type == TokenTypes.OpTextProcessorStart) {
+      node = this.textProcessor();
     }
     return node;
   }
@@ -405,6 +411,7 @@ export default class Parser {
       TokenTypes.CharConstant,
       TokenTypes.IntegerConstant,
       TokenTypes.DecimalConstant,
+      TokenTypes.OpTextProcessorStart,
       // TokenTypes.OpParenthesisOpen, // Collision with function calls.
     ];
     let allowedOperators = [
@@ -859,8 +866,38 @@ export default class Parser {
     return node;
   }
 
+  textBlock() {
+    let node = new ASTTextBlock(this.currentToken);
+    this.eat(TokenTypes.TextBlock);
+    return node;
+  }
+
   /**
-   * statement  -> ifStatement | whileStatement | declaration | expr | empty
+   * tetxProcessor -> OpTextProcessorStart block OpTextProcessorEnd
+   * @return {ASTTextProcessor}
+   */
+  textProcessor() {
+    let node: ASTTextProcessor = new ASTTextProcessor(this.currentToken);
+    // console.log("textProcessor", this.currentToken);
+    this.eat(TokenTypes.OpTextProcessorStart);
+
+    while (![TokenTypes.OpTextProcessorEnd, TokenTypes.EoF].includes(this.currentToken.type)) {
+      // if (this.currentToken.type == TokenTypes.OpCurlyBraceOpen) {
+      // console.log("textProcessor", this.currentToken);
+      node.children.push(this.statement());
+      // }
+    }
+
+    // console.log("textProcessor", this.currentToken);
+    if (this.currentToken.type == TokenTypes.OpTextProcessorEnd) {
+      this.eat(TokenTypes.OpTextProcessorEnd);
+    }
+
+    return node;
+  }
+
+  /**
+   * statement  -> ifStatement | whileStatement | declaration | expr | textProcessor | empty
    * @return {AST}
    */
   statement() {
@@ -882,7 +919,15 @@ export default class Parser {
     else if (this.currentToken.type == TokenTypes.OpSemicolon) {
       // TODO: Implement empty AST?
     }
+    else if (this.currentToken.type == TokenTypes.OpTextProcessorStart) {
+      node = this.textProcessor();
+    }
+    else if (this.currentToken.type == TokenTypes.TextBlock) {
+      // console.log("Text block");
+      node = this.textBlock();
+    }
     else {
+      // console.log("expr");
       node = this.expr();
     }
 

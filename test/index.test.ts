@@ -26,6 +26,7 @@ import CommentsTests from "./CommentsTests";
 import Quara from "../src";
 import IfTests from "./FlowControl/IfTests";
 import WhileTests from "./FlowControl/WhileTests";
+import TextProcessorTests from "./TextProcessor/TextProcessorTests";
 
 
 
@@ -68,6 +69,8 @@ describe("Parenthesis", ParenthesisTests.test);
 describe("Comments", CommentsTests.test);
 describe("If", IfTests.test);
 describe("While", WhileTests.test);
+
+describe("TextProcessor", TextProcessorTests.test);
 
 describe("Multiine scripts", () => {
   it("should process multiline scripts", () => {

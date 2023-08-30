@@ -2,28 +2,46 @@
 > Query as Sara
 
 ## About
-
 - Supported comments:
   - Line comments: // ...
   - Block comments: /* ... */
 - Supported operators:
-  +, -, *, /, %, ^, ¬/
-  =, +=, -=, *=, /=, %=, ^=
-  !, ==, !=, ~=, !~=, <>, <, >, <=, >=, &&, ||
-  $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or
-  (, )
-  ++, -- (as pre-increment and pre-decrement)
+  - +, -, *, /, %, ^, ¬/
+  - =, +=, -=, *=, /=, %=, ^=
+  - !, ==, !=, ~=, !~=, <, >, <=, >=, &&, ||
+  - $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or
+  - (, )
+  - ++, -- (as pre-increment and pre-decrement)
+  - ., [, ]
+  - {, }
+  - , (Comma)
+  - ;, :
+  - ->
+  - "
+  - <<<, >>>
 - Supported types:
   - Booleans.
   - Integer and decimal numbers.
   - Strings.
-- Variables and reserved keywords.
-- Reserved valid names:
-  $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or
-  true, false
+- Variables.
+- Reserved keywords:
+  - true, false
+  - const, var
+  - any, char, int, integer, float, double, string, bool, boolean
+  - if, else, endif
+  - while, endwhile
+  - for, endfor
+  - each, in, endeach
+  - function, return, endfunction
+  - null, undefined
+  - class, extends, endclass
+  - get, set
+  - static, abstract
+  - private, public, protected
+  - interface, implements, endinterface
+
 
 ### If/else
-
 ```
 if (condition) {
   // ...
@@ -64,6 +82,54 @@ while c -> r
 while c: r endwhile;
 ```
 
+## Text processor/templates (WIP, don't use it yet)
+```
+<<<Hola>>> // Hola
+```
+
+Assign the output to a variable:
+```
+var name = "Sara";
+var text = <<<Hola, {name}>>>; // Hola Sara
+```
+
+Coding:
+```
+var name = "Sara";
+var text = <<<Hola, {name += " V."; name}>>>; // Hola Sara V.
+```
+
+### variables:
+```
+var name = "Sara";
+<<<Hola, {name}>>> // Hola Sara
+```
+
+### if/else statements:
+```
+var name = "Sara";
+var useName = true;
+<<<
+  Hola
+  {if useName:}
+    , {name}
+  {else:}
+    !
+  {endif}
+>>>
+```
+
+### While loops:
+```
+var i = 0;
+<<<
+  {while i < 5:}
+    {i}
+    {i = i + 1}
+  {endwhile}
+>>>
+```
+
 ## Standard functions
 ```
 fixed
@@ -75,6 +141,13 @@ print
 ```
 
 ## Pending
+- Array declaration
+- Object declaration
+- Scopes
+- Function declaration
+- Loops
+  - For
+  - Each
 
 ### Arrays
 ```
@@ -93,7 +166,7 @@ var obj = {
   {"key3"}: "value 3"
 };
 print(obj.key1);
-print(obj{key});
+print(obj.{key});
 ```
 
 ### Loops
@@ -103,45 +176,19 @@ print(obj{key});
 for (item, key in list) {
   // ...
 }
+for (item in list) r
+for item in list {r}
+for (item, key) in list {r}
+for (item, key) in list: r; endfor;
+for (item, key) in list: r; endfor;
 ```
 
-## Syntax
-
+#### Each
 ```
-script      : (statement [OpSemicolon])* EoF
-
-statement   : declaration | assign | expr | empty
-
-empty       :
-
-declaration : [constDecl | varDecl]
-
-varDecl           : (ModVar | typeSpec) commaDecl
-commaDecl         : declAssign (OpComma declAssign)*
-declAssign        : member [opAssignValue]
-
-constDecl         : ModConst [typeSpec] declEqualAssign [(OpComma declEqualAssign)*]
-declEqualAssign   : member opAssignValue
-
-opAssignValue     : OpAssign assign
-
-equalAssign       : member OpAssign assignValue
-assign            : member anyAssignOperator assignValue
-assignValue       : (assign* | expr)
-
-anyAssignOperator : OpAssign
-                    | OpPlusAssign
-                    | OpMinusAssign
-                    | OpMultiplicationAssign
-                    | OpDivisionAssign
-                    | OpModulusAssign
-                    | OpPowAssign
-
-member    : variable (
-              OpDot variable
-              | OpArrayAccessorOpen expr OpArrayAccessorClose
-            )*
-
-variable  : Letter (Letter | Digit)*    // Identifier
-
+each (item in list) {
+  // ...
+}
 ```
+
+## License
+[ISC](./LICENSE)

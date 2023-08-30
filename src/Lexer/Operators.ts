@@ -15,7 +15,7 @@ Operators.set("$and", new Token(TokenTypes.OpAnd, "&&"));
 Operators.set("==", new Token(TokenTypes.OpEqual, "==")); // ==)=
 Operators.set("$eq", new Token(TokenTypes.OpEqual, "==")); // ==)=
 Operators.set("!=", new Token(TokenTypes.OpNotEqual, "!=")); // !=)=
-Operators.set("<>", new Token(TokenTypes.OpNotEqual, "!=")); // !=)=
+// Operators.set("<>", new Token(TokenTypes.OpNotEqual, "!=")); // !=)=
 Operators.set("$ne", new Token(TokenTypes.OpNotEqual, "!=")); // !=)=
 Operators.set("~=", new Token(TokenTypes.OpLaxEqual, "~=")); // Lax equality: == without type checking).
 Operators.set("$leq", new Token(TokenTypes.OpLaxEqual, "~=")); // Lax equality: == without type checking).
@@ -46,7 +46,7 @@ Operators.set("*=", new Token(TokenTypes.OpMultiplicationAssign, "*="));
 Operators.set("/=", new Token(TokenTypes.OpDivisionAssign, "/="));
 Operators.set("%=", new Token(TokenTypes.OpModulusAssign, "%="));
 Operators.set("^=", new Token(TokenTypes.OpPowAssign, "^="));
-Operators.set("**=", new Token(TokenTypes.OpPowAssign, "^="));
+// Operators.set("**=", new Token(TokenTypes.OpPowAssign, "^="));
 Operators.set("(", new Token(TokenTypes.OpParenthesisOpen, "("));
 Operators.set(")", new Token(TokenTypes.OpParenthesisClose, ")"));
 Operators.set(".", new Token(TokenTypes.OpDot, "."));
@@ -59,4 +59,6 @@ Operators.set(":", new Token(TokenTypes.OpColon, ":"));
 Operators.set(",", new Token(TokenTypes.OpComma, ","));
 Operators.set("->", new Token(TokenTypes.OpArrow, "->"));
 // Operators.set("=>", new Token(TokenTypes.OpArrow, "->"));
+Operators.set("<<<", new Token(TokenTypes.OpTextProcessorStart, "<<<"));
+Operators.set(">>>", new Token(TokenTypes.OpTextProcessorEnd, ">>>"));
 Operators.set("\"", new Token(TokenTypes.OpQuote, "\""));

@@ -55,6 +55,8 @@ export default class Lexer {
   currentToken?: Token = null;
 
   currentChar?: string = null;
+  private inTextBlock = false;
+  private inTextSection = false;
 
   showDebug = false;
 
@@ -266,6 +268,48 @@ export default class Lexer {
       return new Token(TokenTypes.EoF, null);
     }
 
+    if (this.currentChar == "<" && this.peek() == "<" && this.peek(2) == "<") {
+      this.inTextBlock = true;
+      this.inTextSection = true;
+      let operator = this.getOperator();
+      return operator;
+      // this.advance();
+      // return new Token(TokenTypes.OpTextProcessorStart, "<<<");
+    }
+
+    if (this.inTextBlock) {
+      if (this.currentChar == ">" && this.peek() == ">" && this.peek(2) == ">") {
+        this.inTextBlock = false;
+        let operator = this.getOperator();
+        return operator;
+        // this.advance();
+        // return new Token(TokenTypes.OpTextProcessorEnd, ">>>");
+      }
+
+      if (this.currentChar == "}") {
+        this.inTextSection = true;
+        this.advance();
+      }
+
+      if (this.inTextSection) {
+        let text = "";
+        while (
+          this.currentChar !== null
+          && "{" != this.currentChar
+          && !(this.currentChar == ">" && this.peek() == ">" && this.peek(2) == ">")
+        ) {
+          text += this.currentChar;
+          this.advance();
+        }
+
+        if (this.currentChar == "{") {
+          this.inTextSection = false;
+          this.advance();
+        }
+
+        return new Token(TokenTypes.TextBlock, text);
+      }
+    }
 
     // Skip spaces:
     if ([" ", "\n", "\r", "\t"].includes(this.currentChar)) {
