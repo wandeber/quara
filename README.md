@@ -81,7 +81,7 @@ while c -> r
 while c: r endwhile;
 ```
 
-## Text processor/templates (WIP, don't use it yet)
+## Text processor/templates
 ```
 `Hola` // Hola
 ```

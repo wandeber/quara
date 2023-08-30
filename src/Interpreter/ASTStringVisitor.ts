@@ -4,7 +4,11 @@ import ASTVisitor from "./ASTVisitor";
 
 
 export default class ASTStringVisitor extends ASTVisitor {
-  // visit(node: ASTString) {
-  //   return node.value;
-  // }
+  /*
+  visit(node: ASTString): VisitorResult<string> {
+    return {
+      value: node.value,
+    };
+  }
+  */
 }

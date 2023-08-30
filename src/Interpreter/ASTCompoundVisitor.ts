@@ -1,21 +1,33 @@
 import ASTCompound from "../ASTNodes/ASTCompound";
 import ASTVisitor from "./ASTVisitor";
+import {IVisitorResult} from "./VisitorResult";
 
 
 
 export default class ASTCompoundVisitor extends ASTVisitor {
-  visit(node: ASTCompound) {
+  visit(node: ASTCompound): IVisitorResult {
     let result: any = [];
+    let output = "";
+
     for (let child of node.children) {
       // result.push(child.accept(this.interpreter));
-      result.push(this.interpreter.visit(child));
+      let childResult = this.interpreter.visit(child);
+      result.push(childResult);
+      if (childResult.output) {
+        output += childResult.output;
+      }
     }
+
     if (result.length > 0) {
-      result = result[result.length - 1];
+      result = result[result.length - 1].value;
     }
     else {
       result = undefined;
     }
-    return result;
+
+    return {
+      value: result,
+      output: output,
+    };
   }
 }

@@ -1,6 +1,7 @@
 import ASTVisitor, {IASTVisitor} from "./ASTVisitor";
 import AST from "../ASTNodes/AST";
 import Interpreter from "./Interpreter";
+import {IVisitorResult} from "./VisitorResult";
 
 
 export interface IASTInterpreter extends IASTVisitor {
@@ -35,6 +36,6 @@ export default abstract class ASTInterpreter implements IASTInterpreter {
     console.log("-- Interpreter: "+ message);
   }
 
-  abstract visit(node: AST): any;
+  abstract visit(node: AST): IVisitorResult;
   abstract interpret(): any;
 }

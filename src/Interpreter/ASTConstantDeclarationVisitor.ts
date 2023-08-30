@@ -2,11 +2,12 @@ import ASTConstantDeclaration from "../ASTNodes/ASTConstantDeclaration";
 import ASTVisitor from "./ASTVisitor";
 import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
 import {IASTWithName} from "../ASTNodes/AST";
+import {IVisitorResult} from "./VisitorResult";
 
 
 
 export default class ASTConstantDeclarationVisitor extends ASTVisitor {
-  visit(node: ASTConstantDeclaration) {
+  visit(node: ASTConstantDeclaration): IVisitorResult {
     // this.interpreter.debug("visitASTConstantDeclaration");
     // let type = "any"; // Const puede ser any? Que sea como no ponerlo?
     // if (node.nodeType) {
@@ -32,6 +33,9 @@ export default class ASTConstantDeclarationVisitor extends ASTVisitor {
       this.interpreter.visit(child);
     }
 
-    return this.interpreter.globalScope[name];
+    return {
+      value: this.interpreter.globalScope[name],
+      output: this.interpreter.globalScope[name],
+    };
   }
 }

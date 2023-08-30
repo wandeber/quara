@@ -35,6 +35,7 @@ import ASTTextBlock from "../ASTNodes/ASTTextBlock";
 import ASTTextProcessor from "../ASTNodes/ASTTextProcessor";
 import ASTTextBlockVisitor from "./ASTTextBlockVisitor";
 import ASTTextProcessorVisitor from "./ASTTextProcessorVisitor";
+import {IVisitorResult} from "./VisitorResult";
 
 
 
@@ -73,7 +74,7 @@ export default class Interpreter extends ASTInterpreter {
    * @param {AST} node
    * @return {any}
    */
-  visit: (node: AST) => any;
+  visit: (node: AST) => IVisitorResult;
 
   /**
    * AST Interpreter.
@@ -136,7 +137,7 @@ export default class Interpreter extends ASTInterpreter {
    * @param {AST} node
    * @return {any}
    */
-  private visitWithoutDebug(node: AST) {
+  private visitWithoutDebug(node: AST): IVisitorResult {
     let visitorName = node.constructor.name;
     if (!this.visitors.has(visitorName)) {
       throw new Error(`Visitor ${visitorName} not found.`);
@@ -150,7 +151,7 @@ export default class Interpreter extends ASTInterpreter {
    * @param {AST} node
    * @return {any}
    */
-  private visitWithDebug(node: AST) {
+  private visitWithDebug(node: AST): IVisitorResult {
     let prevSpace = this.space;
     if (this.showDebug) {
       this.space += "  ";
@@ -174,6 +175,7 @@ export default class Interpreter extends ASTInterpreter {
     let tree = this.parser.parse();
     // console.log(tree);
     // return tree.accept(this);
-    return this.visit(tree);
+    let result = this.visit(tree);
+    return result.value;
   }
 }

@@ -1,6 +1,7 @@
 // import ASTWithValue from "../ASTNodes/ASTWithValue";
 import ASTTextProcessor from "../ASTNodes/ASTTextProcessor";
 import ASTVisitor from "./ASTVisitor";
+import {IVisitorResult} from "./VisitorResult";
 // import ASTVariable from "../ASTNodes/ASTVariable";
 // import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
 // import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
@@ -12,8 +13,9 @@ import ASTVisitor from "./ASTVisitor";
 
 
 export default class ASTTextProcessorVisitor extends ASTVisitor {
-  visit(node: ASTTextProcessor) {
-    let result: string = "";
+  visit(node: ASTTextProcessor): IVisitorResult {
+    // let result: any;
+    let output = "";
     // this.interpreter.textProcessorMode = true;
     for (let child of node.children) {
       // result.push(child.accept(this.interpreter));
@@ -33,10 +35,16 @@ export default class ASTTextProcessorVisitor extends ASTVisitor {
         && typeof childResult != "undefined"
       ) {
       */
-      result += childResult;
+      // result = childResult.value;
+      if (childResult.output) {
+        output += childResult.output;
+      }
       // }
     }
     // this.interpreter.textProcessorMode = false;
-    return result;
+    return {
+      value: output,
+      output,
+    };
   }
 }

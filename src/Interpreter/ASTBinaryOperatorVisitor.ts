@@ -2,17 +2,23 @@ import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
 import ASTVisitor from "./ASTVisitor";
 import TokenTypes from "../TokenTypes";
 import {IASTWithName} from "../ASTNodes/AST";
+import {IVisitorResult} from "./VisitorResult";
 
 
 
 export default class ASTBinaryOperatorVisitor extends ASTVisitor {
-  visit(node: ASTBinaryOperator) {
-    let result;
+  visit(node: ASTBinaryOperator): IVisitorResult {
+    let result, rightValue;
 
     // let leftValue = node.left?.accept(this.interpreter);
     // let rightValue = node.right?.accept(this.interpreter);
-    let leftValue = this.interpreter.visit(node.left);
-    let rightValue = this.interpreter.visit(node.right);
+    let leftResult = this.interpreter.visit(node.left);
+    let rightResult = this.interpreter.visit(node.right);
+
+    let leftValue = leftResult.value;
+    if (typeof rightResult !== "undefined") {
+      rightValue = rightResult.value;
+    }
 
     switch (node.operator.type) {
     case TokenTypes.OpPlus:
@@ -88,6 +94,9 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
       break;
     }
 
-    return result;
+    return {
+      value: result,
+      output: result,
+    };
   }
 }

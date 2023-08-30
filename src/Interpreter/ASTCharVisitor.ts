@@ -3,7 +3,11 @@ import ASTVisitor from "./ASTVisitor";
 
 
 export default class ASTCharVisitor extends ASTVisitor {
-  // visit(node: ASTChar) {
-  //   return node.value;
-  // }
+  /*
+  visit(node: ASTChar): VisitorResult {
+    return {
+      value: node.value,
+    };
+  }
+  */
 }

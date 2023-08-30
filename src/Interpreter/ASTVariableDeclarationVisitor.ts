@@ -34,6 +34,9 @@ export default class ASTVariableDeclarationVisitor extends ASTVisitor {
       this.interpreter.visit(child);
     }
 
-    return this.interpreter.globalScope[name];
+    return {
+      value: this.interpreter.globalScope[name],
+      // output: undefined,
+    };
   }
 }

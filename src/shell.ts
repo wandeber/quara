@@ -24,7 +24,7 @@ import ReadLine from "readline";
       +" | |_| | | |_| | | (_| | | |    | (_| |\n"
       +"  \\__\\_\\  \\__,_|  \\__,_| |_|     \\__,_|\n"
       +"\n"
-      +"  Query as Sara...               v0.8.0\n"
+      +"  Query as Sara...               v0.9.0\n"
       +"\n",
     );
   };
