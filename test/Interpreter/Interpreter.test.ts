@@ -88,7 +88,7 @@ describe("Interpreter", () => {
     test("should log", () => {
       lexer.setText("1");
       interpreter.interpret();
-      expect(consoleLogSpy).toHaveBeenNthCalledWith(1, "   ASTCompound", "1");
+      expect(consoleLogSpy).toHaveBeenNthCalledWith(1, "   ASTCompound", "ASTCompound");
       expect(consoleLogSpy).toHaveBeenNthCalledWith(2, "     ASTNumber", "1");
     });
 

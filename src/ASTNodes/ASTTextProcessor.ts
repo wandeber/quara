@@ -11,8 +11,4 @@ export default class ASTtextProcessor extends ASTCompound {
   ) {
     super();
   }
-
-  toString() {
-    return String("ASTTextProcessor");
-  }
 }

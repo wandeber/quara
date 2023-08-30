@@ -14,8 +14,4 @@ export default class ASTWhile extends AST implements IASTWithToken {
   ) {
     super();
   }
-
-  toString() {
-    return String("while");
-  }
 }

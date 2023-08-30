@@ -15,8 +15,4 @@ export default class ASTIf extends AST implements IASTWithToken {
   ) {
     super();
   }
-
-  toString() {
-    return String("if");
-  }
 }

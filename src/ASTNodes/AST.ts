@@ -14,7 +14,7 @@ export default class AST implements IAST {
   }
 
   toString() {
-    return "";
+    return this.constructor.name;
   }
 }
 

@@ -40,13 +40,10 @@ describe("AST class", () => {
     // Verifica que accept devuelve lo que visit devuelve
     expect(result).toBe("visited");
   });
-
-  test("toString method should return an empty string", () => {
-    expect(ast.toString()).toBe("");
-  });
 });
 
 describe("AST toString methods", () => {
+  let ast = new AST();
   let tokenName = new Token(TokenTypes.Id, "a");
   let tokenInt = new Token(TokenTypes.TypeInteger, "int");
   let tokenPlus = new Token("+", "+");
@@ -65,11 +62,12 @@ describe("AST toString methods", () => {
 
   let astChar = new ASTChar(tokenName);
 
+  test("AST", () => expect(ast.toString()).toBe("AST"));
   test("ASTBinaryOperator", () => expect(binaryOp.toString()).toBe("a + a"));
   test("ASTFunctionCall", () => expect(funcCall.toString()).toBe("a(a, a)"));
   test("ASTString", () => expect(astValue.toString()).toBe("a"));
   test("ASTUnaryOperator", () => expect(unaryOp.toString()).toBe("+a"));
   test("ASTVariableDeclaration", () => expect(declaration.toString()).toBe("var int a"));
-  test("ASTCompound", () => expect(compound.toString()).toBe("int, a"));
+  test("ASTCompound", () => expect(compound.toString()).toBe("ASTCompound"));
   test("ASTChar", () => expect(astChar.toString()).toBe("a"));
 });
