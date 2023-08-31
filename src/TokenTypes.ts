@@ -107,6 +107,8 @@ export default class TokenTypes {
   static readonly EndClass = "EndClass";
   static readonly Static = "Static";
   static readonly Abstract = "Abstract";
+  static readonly Final = "Final";
+  static readonly Virtual = "Virtual";
   static readonly Private = "Private";
   static readonly Public = "Public";
   static readonly Protected = "Protected";

@@ -15,8 +15,8 @@ export default class IfTests {
       new TestConfiguration("var i = 0; while (i < 5) -> ++i; 9 + i", 14),
       new TestConfiguration("var i = 0; while i < 5 -> ++i; 9 + i", 14),
       new TestConfiguration("var i = 0; while i < 5 {++i;} 9 + i", 14),
-      new TestConfiguration("var i = 0; while i < 5: ++i; endwhile; 9 + i", 14),
-      new TestConfiguration("var i = 0; while (i < 5): ++i; endwhile; 9 + i", 14),
+      new TestConfiguration("var i = 0; while i < 5: ++i; /while; 9 + i", 14),
+      new TestConfiguration("var i = 0; while (i < 5): ++i; /while; 9 + i", 14),
     ];
 
     TestHelper.runTests(tests);

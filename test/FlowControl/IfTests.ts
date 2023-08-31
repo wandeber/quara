@@ -21,10 +21,10 @@ export default class IfTests {
       new TestConfiguration("if (0) 1", undefined),
 
       // Colon block:
-      new TestConfiguration("if 1: 1; endif", 1),
-      new TestConfiguration("if 0: 1; endif", undefined),
-      new TestConfiguration("if (1): 1 endif", 1),
-      new TestConfiguration("if (0): 1 endif", undefined),
+      new TestConfiguration("if 1: 1; /if", 1),
+      new TestConfiguration("if 0: 1; /if", undefined),
+      new TestConfiguration("if (1): 1 /if", 1),
+      new TestConfiguration("if (0): 1 /if", undefined),
 
       new TestConfiguration("if (1) {1} else 2", 1),
       new TestConfiguration("if (0) {1} else 2", 2),
@@ -38,8 +38,8 @@ export default class IfTests {
       new TestConfiguration("var n = 1; if (n == 1) 10 + 4; else 1 + 1", 14),
 
       // Else with colon block:
-      new TestConfiguration("if 0: 1 else: 2 endif;", 2),
-      new TestConfiguration("if 0: 1 else if 2: 2 endif;", 2),
+      new TestConfiguration("if 0: 1 else: 2 /if;", 2),
+      new TestConfiguration("if 0: 1 else if 2: 2 /if;", 2),
     ];
 
     TestHelper.runTests(tests);

@@ -63,3 +63,10 @@ Operators.set("->", new Token(TokenTypes.OpArrow, "->"));
 // Operators.set(">>>", new Token(TokenTypes.OpTextProcessorEnd, ">>>"));
 Operators.set("`", new Token(TokenTypes.Backtip, "`"));
 Operators.set("\"", new Token(TokenTypes.OpQuote, "\""));
+
+Operators.set("/if", new Token(TokenTypes.EndIf, "/if"));
+Operators.set("/while", new Token(TokenTypes.EndWhile, "/while"));
+Operators.set("/for", new Token(TokenTypes.EndFor, "/for"));
+Operators.set("/each", new Token(TokenTypes.EndEach, "/each"));
+Operators.set("/class", new Token(TokenTypes.EndClass, "/class"));
+Operators.set("/interface", new Token(TokenTypes.EndInterface, "/interface"));

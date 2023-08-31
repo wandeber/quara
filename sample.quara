@@ -52,11 +52,11 @@ if (c) {r}
 if (c) {r;}
 if c {r}
 if c -> r;
-if c: r endif;
+if c: r /if;
 if (c) r else r2;
 if (c) r; else r2;
 if (c) {r} else r2;
-if (c) r else: r2; endif;
+if (c) r else: r2; /if;
 
 
 
@@ -69,7 +69,7 @@ while (c) {1}
 while (c) {1;}
 while c {1}
 while c -> 1
-while c: 1 endwhile;
+while c: 1 /while;
 
 
 
@@ -89,13 +89,14 @@ var useName = true;
     , {name}
   {else:}
     !
-  {endif}
+  {/if}
 `
 
 var i = 0;
 `
+  <p name="asd">Contando hasta 5:</p>
   {while i < 5:}
     {i}
     {i = i + 1}
-  {endwhile}
+  {/while}
 `

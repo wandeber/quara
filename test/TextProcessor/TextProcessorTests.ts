@@ -16,12 +16,12 @@ export default class TextProcessorTests {
       new TestConfiguration("var a = 14; a = `{a}`; a", "14"),
 
       // If:
-      new TestConfiguration("var name = true; `Hola{if name:}, Sara{endif}!`", "Hola, Sara!"),
-      new TestConfiguration("var name = false; `Hola{if name:}, Sara{endif}!`", "Hola!"),
-      new TestConfiguration("`Hola{if nonDefined:}, Sara{endif}!`", "Hola!"),
+      new TestConfiguration("var name = true; `Hola{if name:}, Sara{/if}!`", "Hola, Sara!"),
+      new TestConfiguration("var name = false; `Hola{if name:}, Sara{/if}!`", "Hola!"),
+      new TestConfiguration("`Hola{if nonDefined:}, Sara{/if}!`", "Hola!"),
 
       // While:
-      new TestConfiguration("var i = 1; `0{while i < 5:}, {i}{i += 1}{endwhile}.`", "0, 1, 2, 3, 4."),
+      new TestConfiguration("var i = 1; `0{while i < 5:}, {i}{i += 1}{/while}.`", "0, 1, 2, 3, 4."),
     ];
 
     TestHelper.runTests(tests);

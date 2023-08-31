@@ -16,3 +16,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Two channel results for AST node visitors: value and output.
 - Quara code file extension decided: .quara, .qr
 - Sample code file added.
+- "endif" and "endwhile" replaced by "/if" and "/while".
+- "virtual" and "final" are now reserved keywords.

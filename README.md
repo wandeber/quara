@@ -27,17 +27,17 @@
   - true, false
   - const, var
   - any, char, int, integer, float, double, string, bool, boolean
-  - if, else, endif
-  - while, endwhile
-  - for, endfor
+  - if, else, /if
+  - while, /while
+  - for, /for
   - each, in, endeach
-  - function, return, endfunction
+  - function, return, /function
   - null, undefined
-  - class, extends, endclass
+  - class, extends, /class
   - get, set
-  - static, abstract
+  - static, abstract, final, virtual
   - private, public, protected
-  - interface, implements, endinterface
+  - interface, implements, /interface
 
 
 ### If/else
@@ -58,11 +58,11 @@ if (c) {r}
 if (c) {r;}
 if c {r}
 if c -> r
-if c: r endif;
+if c: r /if;
 ... else r2
 ...; else r2
 ...} else r2
-... else: r2 endif;
+... else: r2 /if;
 ```
 
 ### Loops
@@ -78,7 +78,7 @@ while (c) {r}
 while (c) {r;}
 while c {r}
 while c -> r
-while c: r endwhile;
+while c: r /while;
 ```
 
 ## Text processor/templates
@@ -114,7 +114,7 @@ var useName = true;
     , {name}
   {else:}
     !
-  {endif}
+  {/if}
 `
 ```
 
@@ -125,7 +125,7 @@ var i = 0;
   {while i < 5:}
     {i}
     {i = i + 1}
-  {endwhile}
+  {/while}
 `
 ```
 
@@ -178,8 +178,8 @@ for (item, key in list) {
 for (item in list) r
 for item in list {r}
 for (item, key) in list {r}
-for (item, key) in list: r; endfor;
-for (item, key) in list: r; endfor;
+for (item, key) in list: r; /for;
+for (item, key) in list: r; /for;
 ```
 
 #### Each
