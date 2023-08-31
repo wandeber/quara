@@ -1,0 +1,101 @@
+// Esto es un comentario de una línea.
+/*
+Esto es un comentario de bloque.
+*/
+
+
+
+var name = "hola";
+const age = 20;
+string name = "hola";
+int age = 20;
+double price = 20.5;
+boolean isTrue = true;
+char letter = 1;
+
+
+
+var n;
+n = 1 + 1 - 1 * 1 / 1 % 1 ^ 1;
+n = ¬/9;
+n += 1;
+n -= 1;
+n *= 1;
+n /= 1;
+n %= 1;
+n ^= 1;
+++n;
+--n;
+
+1 == 1;
+1 ~= 1;
+1 != 1;
+1 !~= 1;
+
+arr[0];
+obj.prop1;
+
+
+if (1) {
+  // ...
+}
+else if (condition) {
+  // ...
+}
+else {
+  // ...
+}
+
+if (c) r
+if (c) r;
+if (c) {r}
+if (c) {r;}
+if c {r}
+if c -> r;
+if c: r endif;
+if (c) r else r2;
+if (c) r; else r2;
+if (c) {r} else r2;
+if (c) r else: r2; endif;
+
+
+
+while (condition) {
+  // ...
+}
+while (c) 1;
+while (c) 1;
+while (c) {1}
+while (c) {1;}
+while c {1}
+while c -> 1
+while c: 1 endwhile;
+
+
+
+`Hola` // Hola
+
+var name = "Sara";
+var text = `Hola, {name}`; // Hola Sara
+
+text = `Hola, {name += " V."; name}`; // Hola Sara V.
+
+`Hola, {name}` // Hola Sara
+
+var useName = true;
+`
+  Hola
+  {if useName:}
+    , {name}
+  {else:}
+    !
+  {endif}
+`
+
+var i = 0;
+`
+  {while i < 5:}
+    {i}
+    {i = i + 1}
+  {endwhile}
+`
