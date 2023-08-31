@@ -100,6 +100,8 @@ export default class Interpreter extends ASTInterpreter {
       this.setVariables(variables);
     }
 
+    this.setVariables({obj: {prop1: "prop1 value"}});
+
     // TODO: Una opción para sacar esto de aquí es que se registren las clases Visitors después de
     //   ser definidas. Este constructor podría usar esos datos para registrar todos los visitors en
     //   bucle.

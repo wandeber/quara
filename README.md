@@ -65,6 +65,22 @@ if c: r /if;
 ... else: r2 /if;
 ```
 
+### Objects
+```
+print(obj.key1);
+
+var key = "key1";
+print(obj.{key});
+print(obj[key]); // Deprecated
+```
+
+### Arrays
+```
+print(list[0]);
+var num = 2;
+print(list[num]);
+```
+
 ### Loops
 
 #### While
@@ -148,14 +164,6 @@ print
   - For
   - Each
 
-### Arrays
-```
-var list = [1, 2, 3, 4, 5];
-print(list[0]);
-var num = 2;
-print(list[num]);
-```
-
 ### Objects
 ```
 var key = "key2";
@@ -166,6 +174,14 @@ var obj = {
 };
 print(obj.key1);
 print(obj.{key});
+```
+
+### Arrays
+```
+var list = [1, 2, 3, 4, 5];
+print(list[0]);
+var num = 2;
+print(list[num]);
 ```
 
 ### Loops

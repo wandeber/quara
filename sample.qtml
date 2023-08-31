@@ -16,4 +16,7 @@ Hola
   {i = i + 1}
 {/while}
 
-<p name="asd">Contando hasta 5:</p>
+<p name="value">
+  Escape... \{this is a plain text\}
+  \\
+</p>

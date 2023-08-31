@@ -263,6 +263,11 @@ export default class Parser {
       if (arrayAccessor) {
         right = this.expr();
       }
+      else if (this.currentToken.type == TokenTypes.OpCurlyBraceOpen) {
+        operator = this.operator([TokenTypes.OpCurlyBraceOpen]);
+        right = this.expr();
+        this.eat(TokenTypes.OpCurlyBraceClose);
+      }
       else {
         right = this.variable();
       }
