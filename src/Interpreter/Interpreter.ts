@@ -36,6 +36,8 @@ import ASTTextProcessor from "../ASTNodes/ASTTextProcessor";
 import ASTTextBlockVisitor from "./ASTTextBlockVisitor";
 import ASTTextProcessorVisitor from "./ASTTextProcessorVisitor";
 import {IVisitorResult} from "./VisitorResult";
+import ASTArray from "../ASTNodes/ASTArray";
+import ASTArrayVisitor from "./ASTArrayVisitor";
 
 
 
@@ -124,6 +126,7 @@ export default class Interpreter extends ASTInterpreter {
     this.registerVisitor(ASTWhile.name, new ASTWhileVisitor(this));
     this.registerVisitor(ASTTextProcessor.name, new ASTTextProcessorVisitor(this));
     this.registerVisitor(ASTTextBlock.name, new ASTTextBlockVisitor(this));
+    this.registerVisitor(ASTArray.name, new ASTArrayVisitor(this));
   }
 
   /**

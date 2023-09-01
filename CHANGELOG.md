@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - Object dynamic accesor: obj.{"key"}. I keep obj["key"] for compatibility reasons.
+- Array constants: [1, 2, 3]. They can be assigned to a variable and accessed with the [] operator.
 
 ## [0.9.0] - 2023-08-31
 

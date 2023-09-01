@@ -19,6 +19,7 @@ import ASTIf from "./ASTNodes/ASTIf";
 import ASTWhile from "./ASTNodes/ASTWhile";
 import ASTTextBlock from "./ASTNodes/ASTTextBlock";
 import ASTTextProcessor from "./ASTNodes/ASTTextProcessor";
+import ASTArray from "./ASTNodes/ASTArray";
 
 
 class ParserError extends Error {
@@ -212,10 +213,27 @@ export default class Parser {
       node = new ASTString(this.currentToken);
       this.eat(TokenTypes.StringConstant);
     }
+    // Template
     else if (this.currentToken.type == TokenTypes.Backtip) {
       node = this.textProcessor();
     }
+    else if (this.currentToken.type == TokenTypes.OpArrayAccessorOpen) {
+      node = this.array();
+    }
     return node;
+  }
+
+  array() {
+    let root = new ASTArray();
+    this.eat(TokenTypes.OpArrayAccessorOpen);
+    while (![TokenTypes.OpArrayAccessorClose].includes(this.currentToken.type)) {
+      root.children.push(this.expr());
+      if (this.currentToken.type == TokenTypes.OpComma) {
+        this.eat(TokenTypes.OpComma);
+      }
+    }
+    this.eat(TokenTypes.OpArrayAccessorClose);
+    return root;
   }
 
   /**
@@ -340,7 +358,12 @@ export default class Parser {
       // We eat the parenthesis closure (we can just ignore it).
       this.operator([TokenTypes.OpParenthesisClose]); // Close.
     }
-    else if (availableConstants.includes(this.currentToken.type)) {
+    else if (
+      [
+        ...availableConstants,
+        TokenTypes.OpArrayAccessorOpen,
+      ].includes(this.currentToken.type)
+    ) {
       node = this.constant();
     }
     else if ([TokenTypes.OpIncrement, TokenTypes.OpDecrement].includes(this.currentToken.type)) {
