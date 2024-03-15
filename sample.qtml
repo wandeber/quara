@@ -1,0 +1,22 @@
+{var useName = true;}
+
+Hola
+{if useName:}
+  , {name}
+{else:}
+  !
+{/if}
+
+{var i = 0}
+
+<p name="asd">Contando hasta 5:</p>
+
+{while i < 5:}
+  {i}
+  {i = i + 1}
+{/while}
+
+<p name="value">
+  Escape... \{this is a plain text\}
+  \\
+</p>

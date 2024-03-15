@@ -1,0 +1,11 @@
+# SO files:
+.DS_Store
+
+# Built .ts files:
+dist/
+
+# Dependency directory:
+node_modules/
+
+# Coverage reports:
+coverage

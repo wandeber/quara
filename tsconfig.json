@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    // old
+    "removeComments": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "allowArbitraryExtensions": true,
+
+    // add Bun type definitions
+    "types": ["bun-types"],
+    
+    // enable latest features
+    "module": "ESNext",
+    "lib": ["esnext"],
+    "target": "ESNext",
+    //"useDefineForClassFields": true,
+    //"strictNullChecks": true,
+
+    // if TS 5.x+
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+
+    "allowJs": true, // allow importing `.js` from `.ts`
+    "esModuleInterop": true, // allow default imports for CommonJS modules
+    
+    // best practices
+    "strict": true,
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]
+    },
+  },
+}

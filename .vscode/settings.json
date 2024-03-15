@@ -1,0 +1,41 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  /*"editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },*/
+  "eslint.validate": [
+    "typescript"
+  ],
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "[typescript]": {
+    "editor.formatOnSave": false
+  },
+  "[markdown]": {
+    "editor.formatOnSave": false
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/dist": true,
+    "**/coverage": true
+  },
+  "typescript.referencesCodeLens.enabled": true,
+  "appService.zipIgnorePattern": [
+    ".vscode{,/**}"
+  ],
+  "appService.deploySubpath": "",
+  
+  // The path to the `bun` executable.
+  "bun.runtime": "/home/wandeber/.bun/bin/bun",
+
+  "bun.debugTerminal": {
+    // If support for Bun should be added to the default "JavaScript Debug Terminal".
+    "enabled": true,
+
+    // If the debugger should stop on the first line of the program.
+    "stopOnEntry": false,
+  }
+}
