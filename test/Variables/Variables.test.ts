@@ -2,7 +2,6 @@ import Quara from "../../src/Quara";
 import VariableDeclarationTests from "../Variables/VariableDeclarationTests";
 import VariableAccessTests from "./VariableAccessTests";
 import VariableAssignTests from "./VariableAssignTests";
-import { expect, describe, it } from "bun:test";
 
 describe("Variables", () => {
   describe("Variable declaration", VariableDeclarationTests.test);

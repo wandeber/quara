@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Visitors management optimized. Now they are stored in a literal object instead of in a Map.
+- Back to Node.
+- Back to Jest.
 
 ### Removed
 

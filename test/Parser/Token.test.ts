@@ -1,6 +1,5 @@
 import Token from "../../src/Token";
 import TokenTypes from "../../src/TokenTypes";
-import { expect, describe, it } from "bun:test";
 
 describe("Token", () => {
   it("toString", () => {

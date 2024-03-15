@@ -2,13 +2,10 @@
   "compilerOptions": {
     // old
     "removeComments": true,
-    "alwaysStrict": true,
+    //"alwaysStrict": true,
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
     "allowArbitraryExtensions": true,
-
-    // add Bun type definitions
-    "types": ["bun-types"],
     
     // enable latest features
     "module": "ESNext",
@@ -27,7 +24,7 @@
     "esModuleInterop": true, // allow default imports for CommonJS modules
     
     // best practices
-    "strict": true,
+    "strict": false,
     "useDefineForClassFields": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,

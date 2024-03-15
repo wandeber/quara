@@ -13,7 +13,7 @@ export default class ASTFunctionCallVisitor extends ASTVisitor {
       this.interpreter.visit(nodeItem).value,
     );
     // let func = node.left.accept(this.interpreter);
-    let func = this.interpreter.visit(node.left).value;
+    let func = this.interpreter.visit(node.left).value as any;
     result = func(...args);
     console.log("result", result);
     return {

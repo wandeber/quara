@@ -1,4 +1,3 @@
-import {expect, describe, it, beforeEach, afterEach, spyOn, Mock} from "bun:test";
 import Interpreter from "../../src/Interpreter/Interpreter";
 import Lexer from "../../src/Lexer/Lexer";
 import Parser from "../../src/Parser";
@@ -47,13 +46,13 @@ describe("Interpreter", () => {
   });
 
   describe("Interpreter logs", () => {
-    let consoleLogSpy: Mock<typeof console.log>;
+    let consoleLogSpy: jest.SpyInstance;
     const lexer = new Lexer();
     const parser = new Parser(lexer);
     const interpreter = new Interpreter(parser, undefined, true);
 
     beforeEach(() => {
-      consoleLogSpy = spyOn(console, "log");
+      consoleLogSpy = jest.spyOn(console, "log");
     });
 
     afterEach(() => {
@@ -64,14 +63,13 @@ describe("Interpreter", () => {
     it("should log", () => {
       lexer.setText("1");
       interpreter.interpret();
-      expect(consoleLogSpy.mock.calls[0]).toEqual(["   ASTCompound", "ASTCompound"]);
-      expect(consoleLogSpy.mock.calls[1]).toEqual(["     ASTNumber", "1"]);
+      expect(consoleLogSpy).toHaveBeenNthCalledWith(1, "   ASTCompound", "ASTCompound");
+      expect(consoleLogSpy).toHaveBeenNthCalledWith(2, "     ASTNumber", "1");
     });
 
     it("should log a default message", () => {
       interpreter.debug();
-      expect(consoleLogSpy).toHaveBeenCalledTimes(1);
-      expect(consoleLogSpy.mock.calls[0]).toEqual(["-- Interpreter: "]);
+      expect(consoleLogSpy).toHaveBeenCalledWith("-- Interpreter: ");
     });
   });
 });

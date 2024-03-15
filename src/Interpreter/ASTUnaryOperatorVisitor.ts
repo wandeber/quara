@@ -11,7 +11,7 @@ export default class ASTUnaryOperatorVisitor extends ASTVisitor {
     let result, exprValue;
 
     // let exprValue = node.expr.accept(this.interpreter);
-    let exprResult = this.interpreter.visit(node.expr);
+    let exprResult = this.interpreter.visit(node.expr) as any;
 
     if (exprResult) {
       exprValue = exprResult.value;

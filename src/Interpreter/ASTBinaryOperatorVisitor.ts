@@ -12,8 +12,8 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
 
     // let leftValue = node.left?.accept(this.interpreter);
     // let rightValue = node.right?.accept(this.interpreter);
-    let leftResult = this.interpreter.visit(node.left);
-    let rightResult = this.interpreter.visit(node.right);
+    let leftResult = this.interpreter.visit(node.left) as any;
+    let rightResult = this.interpreter.visit(node.right) as any;
 
     let leftValue = leftResult.value;
     if (typeof rightResult !== "undefined") {

@@ -22,20 +22,5 @@
     "**/dist": true,
     "**/coverage": true
   },
-  "typescript.referencesCodeLens.enabled": true,
-  "appService.zipIgnorePattern": [
-    ".vscode{,/**}"
-  ],
-  "appService.deploySubpath": "",
-  
-  // The path to the `bun` executable.
-  "bun.runtime": "/home/wandeber/.bun/bin/bun",
-
-  "bun.debugTerminal": {
-    // If support for Bun should be added to the default "JavaScript Debug Terminal".
-    "enabled": true,
-
-    // If the debugger should stop on the first line of the program.
-    "stopOnEntry": false,
-  }
+  "typescript.referencesCodeLens.enabled": true
 }
