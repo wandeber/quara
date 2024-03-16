@@ -1,6 +1,6 @@
 {
   "name": "@wandeber/quara",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Query as Sara.",
   "license": "CC BY-ND 4.0",
   "keywords": [
@@ -47,7 +47,8 @@
     "test-verbose": "npm run test -- --verbose",
     "lint": "npx eslint ./**/*.ts",
     "format": "npx prettier --write .",
-    "check-format": "npx prettier --check ."
+    "check-format": "npx prettier --check .",
+    "gen-dist-npm": "./scripts/generate-dist-npm.sh"
   },
   "husky": {
     "hooks": {
