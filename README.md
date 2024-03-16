@@ -1,4 +1,6 @@
-# Quara
+# [Quara](https://www.npmjs.com/package/quara) - [![GitHub license](https://img.shields.io/badge/license-CC_BY--ND_4.0-blue.svg)](https://github.com/wandeber/quara?tab=License-1-ov-file#readme) [![Version](https://img.shields.io/github/package-json/v/wandeber/quara)](https://www.npmjs.com/package/quara) [![size](https://img.shields.io/bundlephobia/min/quara)](https://www.npmjs.com/package/quara)
+
+
 > Query as Sara
 
 **Don't use this in production**: I may introduce breaking changes until version 1.0.0.
@@ -218,4 +220,4 @@ each (item in list) {
 
 ## License
 
-Quara © 2024 by [Bernardo Alemán Siverio (wandeber)](https://github.com/wandeber) is licensed under [CC BY-ND 4.0](./LICENSE)
+Quara © 2024 by [Bernardo A. Siverio (wandeber)](https://github.com/wandeber) is licensed under [CC BY-ND 4.0](https://github.com/wandeber/quara?tab=License-1-ov-file#readme)
