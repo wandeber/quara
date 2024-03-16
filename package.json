@@ -1,5 +1,5 @@
 {
-  "name": "quara",
+  "name": "@wandeber/quara",
   "version": "0.10.2",
   "description": "Query as Sara.",
   "license": "CC BY-ND 4.0",
@@ -12,11 +12,18 @@
     "email": "berthewanderer@gmail.com",
     "url": "https://github.com/wandeber"
   },
+  "homepage": "https://github.com/wandeber/quara",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wandeber/quara"
+  },
+  "bugs": {
+    "url": "https://github.com/wandeber/quara/issues"
+  },
   "files": [
     "dist",
     "LICENSE",
-    "README.md",
-    "CHANGELOG.md"
+    "README.md"
   ],
   "type": "module",
   "main": "./dist/Quara.cjs.js",
