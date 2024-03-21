@@ -27,7 +27,7 @@
   ],
   "type": "module",
   "main": "./dist/Quara.cjs.js",
-  "module": "./dist/Quara.esm.js",
+  "module": "./dist/Quara.js",
   "exports": {
     "import": "./dist/Quara.js",
     "require": "./dist/Quara.cjs.js"
