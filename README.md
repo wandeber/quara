@@ -48,27 +48,30 @@ Programming language interpreted by JavaScript to preprocess text files like ema
 
 ### If/else
 ```
-if (condition) {
+if condition {
   // ...
 }
-else if (condition) {
+else if condition {
   // ...
 }
 else {
   // ...
 }
 
+// Recommended syntaxes:
+if c {r}
+else if c2 {r2}
+else {r3}
+
+// Other syntaxes:
 if (c) r
 if (c) r;
 if (c) {r}
 if (c) {r;}
-if c {r}
 if c -> r
-if c: r /if;
 ... else r2
 ...; else r2
 ...} else r2
-... else: r2 /if;
 ```
 
 ### Objects
@@ -91,16 +94,20 @@ print(list[num]);
 
 #### While
 ```
-while (condition) {
+while condition {
   // ...
 }
+
+// Recommended syntaxes:
+while c {r}
+while c: r /while;
+
+// Other syntaxes:
 while (c) r
 while (c) r;
 while (c) {r}
 while (c) {r;}
-while c {r}
 while c -> r
-while c: r /while;
 ```
 
 ## Text processor/templates
@@ -196,14 +203,19 @@ print(list[num]);
 
 #### For (maybe unnecessary)
 ```
-for (item, key in list) {
+for (item, key) in list {
   // ...
 }
-for (item in list) r
+
+// Recommended syntaxes:
 for item in list {r}
 for (item, key) in list {r}
+
+for item in list: r; /for;
 for (item, key) in list: r; /for;
-for (item, key) in list: r; /for;
+
+// Other syntaxes:
+for (item in list) r
 ```
 
 #### Each
