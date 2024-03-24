@@ -47,7 +47,7 @@ Programming language interpreted by JavaScript to preprocess text files like ema
 
 
 ### If/else
-```
+```js
 if condition {
   // ...
 }
@@ -75,7 +75,7 @@ if c -> r
 ```
 
 ### Objects
-```
+```js
 print(obj.key1);
 
 var key = "key1";
@@ -84,7 +84,7 @@ print(obj[key]); // Deprecated
 ```
 
 ### Arrays
-```
+```js
 print(list[0]);
 var num = 2;
 print(list[num]);
@@ -93,7 +93,7 @@ print(list[num]);
 ### Loops
 
 #### While
-```
+```js
 while condition {
   // ...
 }
@@ -111,30 +111,30 @@ while c -> r
 ```
 
 ## Text processor/templates
-```
+```js
 `Hola` // Hola
 ```
 
 Assign the output to a variable:
-```
+```js
 var name = "Sara";
 var text = `Hola, {name}`; // Hola Sara
 ```
 
 Coding:
-```
+```js
 var name = "Sara";
 var text = `Hola, {name += " V."; name}`; // Hola Sara V.
 ```
 
 ### variables:
-```
+```js
 var name = "Sara";
 `Hola, {name}` // Hola Sara
 ```
 
 ### if/else statements:
-```
+```js
 var name = "Sara";
 var useName = true;
 `
@@ -148,7 +148,7 @@ var useName = true;
 ```
 
 ### While loops:
-```
+```js
 var i = 0;
 `
   {while i < 5:}
@@ -159,7 +159,7 @@ var i = 0;
 ```
 
 ## Standard functions
-```
+```js
 fixed
 upperCase
 lowerCase
@@ -180,7 +180,7 @@ print
   - Each
 
 ### Objects
-```
+```js
 var key = "key2";
 var obj = {
   key1: "value 1",
@@ -192,7 +192,7 @@ print(obj.{key});
 ```
 
 ### Arrays
-```
+```js
 var list = [1, 2, 3, 4, 5];
 print(list[0]);
 var num = 2;
@@ -202,7 +202,7 @@ print(list[num]);
 ### Loops
 
 #### For (maybe unnecessary)
-```
+```js
 for (item, key) in list {
   // ...
 }
@@ -219,7 +219,7 @@ for (item in list) r
 ```
 
 #### Each
-```
+```js
 each (item in list) {
   // ...
 }
