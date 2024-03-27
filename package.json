@@ -5,7 +5,8 @@
   "license": "CC BY-ND 4.0",
   "keywords": [
     "quara",
-    "language"
+    "language",
+    "interpreter"
   ],
   "author": {
     "name": "Bernardo A. Siverio",
