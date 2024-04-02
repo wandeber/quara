@@ -27,11 +27,11 @@
     "README.md"
   ],
   "type": "module",
-  "main": "./dist/Quara.cjs.js",
+  "main": "./dist/Quara.cjs",
   "module": "./dist/Quara.js",
   "exports": {
     "import": "./dist/Quara.js",
-    "require": "./dist/Quara.cjs.js"
+    "require": "./dist/Quara.cjs"
   },
   "scripts": {
     "start": "npm run rebuild && npm run shell",

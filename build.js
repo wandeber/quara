@@ -12,7 +12,7 @@ const buildBase = {
   banner: {
     js: "/*!\n"
       +" * Quara: Query as Sara.\n"
-      +" * @licence ISC\n"
+      +" * @licence CC BY-ND 4.0\n"
       +" * @author Bernardo A. Siverio (wandeber) <berthewanderer@gmail.com>\n"
       +" */",
   },
@@ -27,7 +27,7 @@ const quaraBuildBase = {
 // Para CommonJS
 esbuild.build({
   ...quaraBuildBase,
-  outfile: "./dist/Quara.cjs.js",
+  outfile: "./dist/Quara.cjs",
   format: "cjs", // Formato CommonJS
 }).catch(() => process.exit(1));
 
