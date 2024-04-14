@@ -111,3 +111,15 @@ describe("Quara strings", () => {
   });
 });
 
+describe("Quara class", () => {
+  it("should create a new instance with global variables", () => {
+    const quara = new Quara("var1 + 5", {var1: 10});
+    expect(quara.run()).toBe(15);
+  });
+
+  it("should create a new instance without global variables", () => {
+    const quara = new Quara("var1");
+    expect(quara.run()).toBe(undefined);
+  });
+});
+
