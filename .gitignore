@@ -3,6 +3,7 @@
 
 # Built .ts files:
 dist/
+dist-npm/
 
 # Dependency directory:
 node_modules/
