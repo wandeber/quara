@@ -121,5 +121,26 @@ describe("Quara class", () => {
     const quara = new Quara("var1");
     expect(quara.run()).toBe(undefined);
   });
+
+  it("should work with text static method", async () => {
+    expect(await Quara.text("{var num1 = 1; var num2 = 2; num1 + num2}")).toBe("3");
+  });
+
+  it("should work with file static method and a script", async () => {
+    expect(await Quara.file("./test/test1.quara")).toBe(3);
+  });
+
+  it("should work with file static method and qtml format", async () => {
+    expect(await Quara.file("./test/test2.qtml")).toBe("3");
+  });
+
+  it("should throw an error with file static method and unsupported extension", async () => {
+    try {
+      await Quara.file("./test/test3.txt");
+    }
+    catch (error) {
+      expect(error.message).toBe("File extension not supported.");
+    }
+  });
 });
 

@@ -59,7 +59,7 @@ export default class Quara {
     let content = fs.readFileSync(path, {encoding: "utf-8"});
 
     if (extension === "qtml" || extension === "qstr") {
-      content = "`" + content + "`";
+      // content = "`" + content + "`";
       return Quara.textSync(content, globalVariables, debug);
     }
 
