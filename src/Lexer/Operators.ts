@@ -63,6 +63,7 @@ Operators.set("->", new Token(TokenTypes.OpArrow, "->"));
 // Operators.set(">>>", new Token(TokenTypes.OpTextProcessorEnd, ">>>"));
 Operators.set("`", new Token(TokenTypes.Backtip, "`"));
 Operators.set("\"", new Token(TokenTypes.OpQuote, "\""));
+Operators.set("\\", new Token(TokenTypes.OpEscapeSequence, "\\"));
 
 Operators.set("/if", new Token(TokenTypes.EndIf, "/if"));
 Operators.set("/while", new Token(TokenTypes.EndWhile, "/while"));

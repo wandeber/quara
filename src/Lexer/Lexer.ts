@@ -154,7 +154,12 @@ export default class Lexer {
     let str = "";
     this.advance(); // Skip " opening.
     while (this.currentChar != "\"") {
-      str += this.currentChar;
+      if (this.currentChar == "\\") {
+        str += this.getEscapedChar();
+      }
+      else {
+        str += this.currentChar;
+      }
       this.advance();
     }
     this.advance(); // Skip " closure.
@@ -239,6 +244,25 @@ export default class Lexer {
     return Operators.get(currentOperatorKey);
   }
 
+  getEscapedChar() {
+    let char = "";
+    this.advance();
+    // ignore all lint rules in this line
+    if (this.currentChar == "n") {
+      char += "\n";
+    }
+    else if (this.currentChar == "r") {
+      char += "\r";
+    }
+    else if (this.currentChar == "t") {
+      char += "\t";
+    }
+    else {
+      char += this.currentChar;
+    }
+    return char;
+  }
+
   /**
    * Lexical analyzer (also known as scanner or tokenizer)
    *
@@ -282,7 +306,12 @@ export default class Lexer {
           && "{" != this.currentChar
           && this.currentChar != "`"
         ) {
-          text += this.currentChar;
+          if (this.currentChar == "\\") {
+            text += this.getEscapedChar();
+          }
+          else {
+            text += this.currentChar;
+          }
           this.advance();
         }
 

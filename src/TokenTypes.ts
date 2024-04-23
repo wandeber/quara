@@ -78,6 +78,7 @@ export default class TokenTypes {
   static readonly OpQuote = "OpQuote";
   static readonly OpComma = "OpComma";
   static readonly OpArrow = "OpArrow";
+  static readonly OpEscapeSequence = "OpEscapeSequence";
 
   static readonly OpParenthesisOpen = "OpParenthesisOpen";
   static readonly OpParenthesisClose = "OpParenthesisClose";
