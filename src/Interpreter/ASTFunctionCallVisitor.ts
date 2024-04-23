@@ -15,7 +15,7 @@ export default class ASTFunctionCallVisitor extends ASTVisitor {
     // let func = node.left.accept(this.interpreter);
     let func = this.interpreter.visit(node.left).value as any;
     result = func(...args);
-    console.log("result", result);
+    // console.log("result", result);
     return {
       value: result,
       output: String(result),
