@@ -23,11 +23,12 @@ Programming language interpreted by JavaScript to preprocess text files like ema
   - , (Comma)
   - ;, :
   - ->
-  - ", `
+  - ", `, \
 - Supported types:
   - Booleans.
   - Integer and decimal numbers.
   - Strings.
+  - Objects, arrays.
 - Variables.
 - Reserved keywords:
   - true, false
@@ -38,7 +39,7 @@ Programming language interpreted by JavaScript to preprocess text files like ema
   - for, /for
   - each, in, endeach
   - function, return, /function
-  - null, undefined
+  - null
   - class, extends, /class
   - get, set
   - static, abstract, final, virtual
@@ -101,10 +102,10 @@ while condition {
 // Recommended syntaxes:
 while c {r}
 while c: r /while;
+while (c) r;
 
 // Other syntaxes:
 while (c) r
-while (c) r;
 while (c) {r}
 while (c) {r;}
 while c -> r
@@ -160,12 +161,38 @@ var i = 0;
 
 ## Standard functions
 ```js
-fixed
-upperCase
-lowerCase
 contains
 isNaN
+
+// String:
+length
+split
+join
+upperCase
+lowerCase
+
+// Math:
+abs
+ceil
+floor
+round
+trunc
+max
+min
+fixed
+
+// Types:
+isNumber
+isDecimal
+isInteger
+isString
+isBoolean
+isObject
+isArray
+help
+log
 print
+hi
 ```
 
 ## Other
