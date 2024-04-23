@@ -327,9 +327,14 @@ export default class Parser {
    * @return {AST[]}
    */
   funcCall(): AST[] {
+    let nodes: AST[] = [];
+
     // We eat the parenthesis opening (we can just ignore it).
     this.operator([TokenTypes.OpParenthesisOpen]); // Open.
-    let nodes = this.paramList();
+    if (this.currentToken.type != TokenTypes.OpParenthesisClose) {
+      nodes = this.paramList();
+    }
+
     // We eat the parenthesis closure (we can just ignore it).
     this.operator([TokenTypes.OpParenthesisClose]); // Close.
     return nodes;
