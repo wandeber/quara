@@ -44,8 +44,22 @@ import ASTArrayVisitor from "./ASTArrayVisitor";
 
 
 const DefaultVariables = {
-  fixed(num: number, ...args: any[]) {
-    return num.toFixed(...args);
+  contains(arr: string|any[], ...args: [any, any]) {
+    return arr.includes(...args);
+  },
+  isNaN(num: number) {
+    return Number.isNaN(num);
+  },
+
+  // String:
+  length(str: string) {
+    return str.length;
+  },
+  split(str: string, separator: string) {
+    return str.split(separator);
+  },
+  join(arr: (string|number)[], separator: string = "") {
+    return arr.join(separator);
   },
   upperCase(str: string) {
     return str.toUpperCase();
@@ -53,12 +67,61 @@ const DefaultVariables = {
   lowerCase(str: string) {
     return str.toLowerCase();
   },
-  contains(arr: string|any[], ...args: [any, any]) {
-    return arr.includes(...args);
+
+  // Math:
+  abs(num: number) {
+    return Math.abs(num);
   },
-  isNaN(num: number) {
-    return Number.isNaN(num);
+  ceil(num: number, decimals = 0) {
+    return Math.ceil(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
   },
+  floor(num: number, decimals = 0) {
+    return Math.floor(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  },
+  round(num: number, decimals = 0) {
+    return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  },
+  trunc(num: number, decimals = 0) {
+    return Math.trunc(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  },
+  max(...args: number[]) {
+    return Math.max(...args);
+  },
+  min(...args: number[]) {
+    return Math.min(...args);
+  },
+  fixed(num: number, ...args: any[]) {
+    return num.toFixed(...args);
+  },
+
+  // Types:
+  isNumber(num: any) {
+    return typeof num === "number";
+  },
+  isDecimal(num: any) {
+    return !Number.isInteger(num) && !Number.isNaN(num);
+  },
+  isInteger(num: any) {
+    return Number.isInteger(num);
+  },
+  isString(str: any) {
+    return typeof str === "string";
+  },
+  isBoolean(bool: any) {
+    return typeof bool === "boolean";
+  },
+  isObject(obj: any) {
+    return typeof obj === "object" && !Array.isArray(obj);
+  },
+  isArray(arr: any) {
+    return Array.isArray(arr);
+  },
+
+  /*
+  help(ptr: any) {
+    console.log(ptr);
+  },
+  */
   print(arg: any) {
     console.log(arg);
   },
