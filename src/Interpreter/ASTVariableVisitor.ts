@@ -6,13 +6,14 @@ import {IVisitorResult} from "./VisitorResult";
 
 export default class ASTVariableVisitor extends ASTVisitor {
   visit(node: ASTVariable): IVisitorResult {
-    let value;
+    let value, output;
     if (this.interpreter.globalScope.hasOwnProperty(node.name)) {
       value = this.interpreter.globalScope[node.name];
+      output = String(value);
     }
     return {
       value,
-      output: value,
+      output,
     };
   }
 }

@@ -117,7 +117,8 @@ const DefaultVariables = {
   },
 
   help(ptr: any) {
-    console.log(Documentation.get(ptr));
+    let text = ptr ? Documentation.get(ptr) : Documentation.get(DefaultVariables.help);
+    console.log(text);
   },
 
   log(arg: any) {
@@ -312,7 +313,22 @@ export default class Interpreter extends ASTInterpreter {
    * @return {any}
    */
   private visitWithoutDebug(node: AST): IVisitorResult {
-    return this.visitors[node.constructor.name].visit(node);
+    let result = this.visitors[node.constructor.name].visit(node);
+    // TODO: Throw an error if the visitor is undefined, null or NaN?
+    if (typeof result.value === "undefined" || result.value == null) {
+      result.value = undefined;
+      result.output = "";
+    }
+    else if (Number.isNaN(result.value)) {
+      result.output = "";
+    }
+    else if (result.value === Infinity) {
+      result.output = "∞";
+    }
+    else if (result.value === -Infinity) {
+      result.output = "-∞";
+    }
+    return result;
   }
 
   /**

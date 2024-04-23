@@ -80,8 +80,21 @@ import ReadLine from "readline";
             case "object":
               console.log(JSON.stringify(result, null, JSONIndentationSpaces));
               break;
+            case "undefined":
+              // console.log("null");
+              break;
             default:
-              console.log(result);
+              if (result == Infinity) {
+                console.log("∞");
+              }
+              else if (result == -Infinity) {
+                console.log("-∞");
+              }
+              else if (result == null || Number.isNaN(result)) {
+              }
+              else {
+                console.log(result);
+              }
             }
           }
         }
