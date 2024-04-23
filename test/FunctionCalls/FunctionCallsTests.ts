@@ -14,6 +14,9 @@ export default class FunctionCallsTests {
     let strUpper = "UN STRING";
 
     const tests: TestConfiguration[] = [
+      // hi function. Call with no arguments.
+      new TestConfiguration("hi()", "Hello, world!"),
+
       new TestConfiguration(`fixed(${num1}, 2)`, num1.toFixed(2)),
       new TestConfiguration(`fixed(${dec1}, 2)`, dec1.toFixed(2)),
       new TestConfiguration(`fixed(${num1}, 0)`, num1.toFixed(0)),

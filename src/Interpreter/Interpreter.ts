@@ -129,8 +129,8 @@ const DefaultVariables = {
   },
 
   hi() {
-    console.log("Hello, World!");
-    return "Hello, World!";
+    console.log("Hello, world!");
+    return "Hello, world!";
   },
 };
 
