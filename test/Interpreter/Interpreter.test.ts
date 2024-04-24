@@ -5,24 +5,15 @@ import Quara from "../../src/Quara";
 
 describe("Interpreter", () => {
   it("Should throw a syntax error", () => {
-    try {
-      expect(Quara.scriptSync("1 + 2 +")).toThrow();
-    }
-    catch (e) {}
+    expect(() => Quara.scriptSync("1 + 2 +")).toThrow();
   });
 
   it("should throw lexer error for invalid characters", () => {
-    try {
-      expect(Quara.scriptSync("¿")).toThrow();
-    }
-    catch (e) {}
+    expect(() => Quara.scriptSync("¿")).toThrow();
   });
 
   it("should throw lexer error for invalid characters", () => {
-    try {
-      expect(Quara.scriptSync("var a =")).toThrow();
-    }
-    catch (e) {}
+    expect(() => Quara.scriptSync("var a =")).toThrow();
   });
 
   it("should ignore several semicolons", () => {

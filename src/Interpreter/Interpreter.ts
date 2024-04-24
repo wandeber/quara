@@ -42,9 +42,9 @@ import ASTObject from "../ASTNodes/ASTObject";
 import ASTObjectVisitor from "./ASTObjectVisitor";
 
 
-const Documentation = new Map();
+export const Documentation = new Map();
 
-const DefaultVariables = {
+export const DefaultVariables = {
   contains(arr: string|any[], ...args: [any, any]) {
     return arr.includes(...args);
   },
@@ -67,6 +67,9 @@ const DefaultVariables = {
   },
   lowerCase(str: string) {
     return str.toLowerCase();
+  },
+  trim(str: string) {
+    return str.trim();
   },
 
   // Math:

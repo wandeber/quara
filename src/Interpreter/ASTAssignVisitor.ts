@@ -14,12 +14,12 @@ export default class ASTAssignVisitor extends ASTVisitor {
     let {name} = node.left as IASTWithName;
     let leftResult, rightValue, value;
     if (name) {
-      if (typeof this.interpreter.globalScope[name] == "undefined") {
-        this.interpreter.error("La variable "+ name +" no ha sido declarada.");
-      }
+      // if (typeof this.interpreter.globalScope[name] == "undefined") {
+      //   this.interpreter.error("La variable "+ name +" no ha sido declarada.");
+      // }
       leftResult = this.interpreter.visit(node.left) as any;
     }
-    else if (TokenTypes.OpDot == (node.left as unknown as any).token.type) {
+    else if (TokenTypes.OpDot == (node.left as any).token.type) {
       let left = (node.left as any).left;
       name = (node?.left as any)?.right?.name;
       leftResult = this.interpreter.visit(left) as any;
@@ -29,14 +29,25 @@ export default class ASTAssignVisitor extends ASTVisitor {
       [
         TokenTypes.OpArrayAccessorOpen,
         TokenTypes.OpCurlyBraceOpen,
-      ].includes((node.left as unknown as any).token.type)
+      ].includes((node.left as any).token.type)
     ) {
+      let tokenType = (node.left as any).token.type;
       let left = (node.left as any).left;
       let right = (node.left as any).right;
       leftResult = this.interpreter.visit(left) as any;
       let index = this.interpreter.visit(right) as any;
       parent = leftResult.value;
       name = index.value;
+      if (tokenType == TokenTypes.OpArrayAccessorOpen) {
+        if (!Array.isArray(parent)) {
+          this.interpreter.error("Variable "+ name +" is not an array.");
+        }
+      }
+      else if (tokenType == TokenTypes.OpCurlyBraceOpen) {
+        if (typeof parent !== "object"/* || Array.isArray(parent)*/) {
+          this.interpreter.error("Variable "+ name +" is not an objet.");
+        }
+      }
     }
     else {
       // console.log("--");

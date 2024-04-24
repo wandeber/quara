@@ -50,6 +50,8 @@ Operators.set("^=", new Token(TokenTypes.OpPowAssign, "^="));
 Operators.set("(", new Token(TokenTypes.OpParenthesisOpen, "("));
 Operators.set(")", new Token(TokenTypes.OpParenthesisClose, ")"));
 Operators.set(".", new Token(TokenTypes.OpDot, "."));
+Operators.set("..", new Token(TokenTypes.OpExclusiveRange, ".."));
+Operators.set("..=", new Token(TokenTypes.OpInclusiveRange, "..="));
 Operators.set("[", new Token(TokenTypes.OpArrayAccessorOpen, "["));
 Operators.set("]", new Token(TokenTypes.OpArrayAccessorClose, "]"));
 Operators.set("{", new Token(TokenTypes.OpCurlyBraceOpen, "{"));

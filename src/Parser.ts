@@ -526,11 +526,22 @@ export default class Parser {
   }
 
   /**
-   * assignOperand  -> orOperand (OpOr orOperand)*
+   * rangeOperand  -> orOperand (OpOr orOperand)*
+   * @return {AST}
+   */
+  rangeOperand() {
+    return this.binaryOperand(this.orOperand, [TokenTypes.OpOr]);
+  }
+
+  /**
+   * assignOperand  -> rangeOperand (OpOr rangeOperand)*
    * @return {AST}
    */
   assignOperand(): AST {
-    return this.binaryOperand(this.orOperand, [TokenTypes.OpOr]);
+    return this.binaryOperand(this.rangeOperand, [
+      TokenTypes.OpExclusiveRange,
+      TokenTypes.OpInclusiveRange,
+    ]);
   }
 
   binaryOperand(

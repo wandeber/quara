@@ -58,6 +58,8 @@ export default class TokenTypes {
   static readonly OpGreaterThan = "OpGreaterThan";
   static readonly OpLowerThanEqual = "OpLowerThanEqual";
   static readonly OpGreaterThanEqual = "OpGreaterThanEqual";
+  static readonly OpExclusiveRange = "OpExclusiveRange";
+  static readonly OpInclusiveRange = "OpInclusiveRange";
 
   static readonly OpAnd = "OpAnd";
   static readonly OpOr = "OpOr";

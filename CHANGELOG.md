@@ -18,7 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add elements to arrays.
-- Define objects.
+- Define, access and modify objects.
+- Exclusive and inclusive range operators.
+- Add a new standard function: `trim`.
+
+### Changed
+- Access object members with ["key"] is not allowed anymore.
 
 ## [0.10.6]
 

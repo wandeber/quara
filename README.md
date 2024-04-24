@@ -19,6 +19,7 @@ Programming language interpreted by JavaScript to preprocess text files like ema
   - (, )
   - ++, -- (as pre-increment and pre-decrement)
   - ., [, ]
+  - .. (as exclusive range operator)
   - {, }
   - , (Comma)
   - ;, :
@@ -84,18 +85,21 @@ var obj = {
 var key = "key3";
 print(obj.{key});
 obj.{key} = 4;
-print(obj[key]); // Deprecated, use: print(obj.{key})
-obj[key] = 3; // Deprecated, it will be: obj.{key} = 3
 ```
 
 ### Arrays
 ```js
 var list = [1, 2, 3, 4, 5];
+list.length; // 5
 print(list[0]);
 var num = 2;
 print(list[num]);
 list[4] = 6;
 list[num] = 7;
+list.{4} = 6;
+
+// TODO: Add support for this?
+list.2 = 5;
 ```
 
 ### Loops
@@ -210,10 +214,10 @@ hi
 
 ### Objects
 ```js
-var key = "key2";
+var k = "key1";
 var obj = {
-  {key}: 2,
-  {"key3"}: "value 3"
+  {k}: 1,
+  {"key2"}: 2
 };
 ```
 
@@ -234,6 +238,11 @@ for (item, key) in list: r; /for;
 
 // Other syntaxes:
 for (item in list) r
+
+// ?
+for 1..5 {}
+for item in 1..5 {}
+for (item, key) in 1..5 {}
 ```
 
 ## References and special thanks

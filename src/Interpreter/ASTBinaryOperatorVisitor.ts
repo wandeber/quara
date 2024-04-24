@@ -72,6 +72,15 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
       result = leftValue || rightValue;
       break;
 
+    case TokenTypes.OpInclusiveRange:
+    case TokenTypes.OpExclusiveRange:
+      let right = node.operator.type === TokenTypes.OpInclusiveRange ? rightValue + 1 : rightValue;
+      result = [];
+      for (let i = leftValue; i < right; i++) {
+        result.push(i);
+      }
+      break;
+
     case TokenTypes.OpDot:
       let {name} = node.right as IASTWithName;
       if (
@@ -84,19 +93,25 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
       }
       break;
     case TokenTypes.OpCurlyBraceOpen:
+      if (typeof leftValue !== "object"/* || Array.isArray(leftValue)*/) {
+        this.interpreter.error(leftValue +" is not an object.");
+      }
       if (
         typeof leftValue !== "undefined"
         && leftValue.hasOwnProperty(rightValue)
         && typeof leftValue[rightValue] !== "function"
+        // && !Array.isArray(leftValue)
       ) {
         result = leftValue[rightValue];
       }
       break;
     case TokenTypes.OpArrayAccessorOpen:
+      if (!Array.isArray(leftValue)) {
+        this.interpreter.error(leftValue +" is not an array.");
+      }
       if (
         typeof leftValue !== "undefined"
         && leftValue.hasOwnProperty(rightValue)
-        // && Array.isArray(leftValue)
         && typeof leftValue[rightValue] !== "function"
       ) {
         result = leftValue[rightValue];

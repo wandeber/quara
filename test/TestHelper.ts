@@ -7,9 +7,14 @@ import TestConfiguration from "./TestConfiguration";
 
 
 export default class TestHelper {
-  static test(expression: string, expectedResult: any, variables: object = {}) {
+  static test(expression: string, expectedResult: any, variables: object = {}, shouldThrow = false) {
     it(`Should return ${expectedResult} when it executes: '${expression}'`, () => {
-      expect(Quara.scriptSync(expression, variables)).toBe(expectedResult);
+      if (shouldThrow) {
+        expect(() => Quara.scriptSync(expression, variables)).toThrow();
+      }
+      else {
+        expect(Quara.scriptSync(expression, variables)).toEqual(expectedResult);
+      }
     });
   }
 
@@ -17,11 +22,11 @@ export default class TestHelper {
     for (const test of tests) {
       if (Array.isArray(test.expression)) {
         for (const expr of test.expression) {
-          TestHelper.test(expr, test.result, test.variables);
+          TestHelper.test(expr, test.result, test.variables, test.shouldThrow);
         }
       }
       else {
-        TestHelper.test(test.expression, test.result, test.variables);
+        TestHelper.test(test.expression, test.result, test.variables, test.shouldThrow);
       }
     }
   }

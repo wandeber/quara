@@ -171,7 +171,11 @@ export default class Lexer {
     let number = "";
     // let dots = 0;
     while (
-      this.currentChar == "."
+      // Ignores two points in a row (..) because that is a range operator.
+      (
+        this.currentChar == "."
+        && this.peek() != "."
+      )
       || Types.isInteger(this.currentChar)
     ) {
       // if (this.currentChar == '.') {
@@ -365,7 +369,8 @@ export default class Lexer {
     }
 
     // If point or digit, gets a number, integer or float:
-    if (this.currentChar == "." || Types.isInteger(this.currentChar)) {
+    // Ignores two points in a row (..) because that is a range operator.
+    if ((this.currentChar == "." && this.peek() != ".") || Types.isInteger(this.currentChar)) {
       let number = this.getNumber();
       if (number) {
         if (Types.isInteger(number)) {
