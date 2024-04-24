@@ -1,6 +1,6 @@
 {
   "name": "@wandeber/quara",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "Query as Sara.",
   "license": "CC BY-ND 4.0",
   "keywords": [
@@ -9,7 +9,7 @@
     "interpreter"
   ],
   "author": {
-    "name": "Bernardo A. Siverio",
+    "name": "Bernardo Alemán Siverio",
     "email": "berthewanderer@gmail.com",
     "url": "https://github.com/wandeber"
   },

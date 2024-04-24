@@ -20,13 +20,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.6]
+
+## Added
+
+- Add documentation for the standard functions.
+- Add log function to print to the console.
+- Add a test for function calls with no arguments.
+
 ### Changed
 
-- ...
+- Fix function calls with no arguments.
+- print function now only prints the value of the first argument to the output channel.
+- NaN now outputs "" instead of "NaN".
+- undefined and null are now the same (null in Quara, undefined internally in JavaScript) and output "".
 
-### Removed
+## [0.10.5]
 
-- ...
+### Added
+
+- Add escape sequence handling to strings and text templates with the new "\\" operator.
+- Add several standard functions:
+  - General:
+    - join
+    - split
+  - Maths:
+    - max
+    - min
+    - abs
+    - round
+    - ceil
+    - floor
+    - trunc
+  - Types:
+    - isNumber
+    - isDecimal
+    - isInteger
+    - isString
+    - isBoolean
+    - isObject
+    - isArray
 
 ## [0.10.2]
 
