@@ -48,7 +48,7 @@ Programming language interpreted by JavaScript to preprocess text files like ema
 
 
 ### If/else
-```js
+```rust
 if condition {
   // ...
 }
@@ -204,7 +204,6 @@ hi
 - Function declaration
 - Loops
   - For
-  - Each
 
 ### Objects
 ```js
@@ -229,7 +228,7 @@ print(list[num]);
 ### Loops
 
 #### For (maybe unnecessary)
-```js
+```rust
 for (item, key) in list {
   // ...
 }
@@ -243,13 +242,6 @@ for (item, key) in list: r; /for;
 
 // Other syntaxes:
 for (item in list) r
-```
-
-#### Each
-```js
-each (item in list) {
-  // ...
-}
 ```
 
 ## References and special thanks
