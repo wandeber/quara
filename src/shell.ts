@@ -22,7 +22,7 @@ import ReadLine from "readline";
       +" | |_| | | |_| | | (_| | | |    | (_| |\n"
       +"  \\__\\_\\  \\__,_|  \\__,_| |_|     \\__,_|\n"
       +"\n"
-      +"  Query as Sara...              v0.10.1\n"
+      +"  Query as Sara...              v0.10.6\n"
       +"\n",
     );
   };
