@@ -25,7 +25,12 @@ export default class ASTAssignVisitor extends ASTVisitor {
       leftResult = this.interpreter.visit(left) as any;
       parent = leftResult.value;
     }
-    else if (TokenTypes.OpArrayAccessorOpen == (node.left as unknown as any).token.type) {
+    else if (
+      [
+        TokenTypes.OpArrayAccessorOpen,
+        TokenTypes.OpCurlyBraceOpen,
+      ].includes((node.left as unknown as any).token.type)
+    ) {
       let left = (node.left as any).left;
       let right = (node.left as any).right;
       leftResult = this.interpreter.visit(left) as any;
@@ -36,7 +41,7 @@ export default class ASTAssignVisitor extends ASTVisitor {
     else {
       // console.log("--");
       // console.log("node", node);
-      this.interpreter.error("You can't assign to this.", node.token);
+      this.interpreter.error("You can't assign to this.", node.left);
     }
 
     // let leftValue = node.left?.accept(this.interpreter);

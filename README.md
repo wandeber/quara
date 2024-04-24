@@ -82,8 +82,10 @@ var obj = {
   key2: 2
 };
 var key = "key3";
+print(obj.{key});
+obj.{key} = 4;
+print(obj[key]); // Deprecated, use: print(obj.{key})
 obj[key] = 3; // Deprecated, it will be: obj.{key} = 3
-print(obj[key]); // Deprecated, it will be: print(obj.{key})
 ```
 
 ### Arrays
@@ -213,8 +215,6 @@ var obj = {
   {key}: 2,
   {"key3"}: "value 3"
 };
-obj.{"key5"} = "value 5";
-print(obj.{key});
 ```
 
 ### Loops

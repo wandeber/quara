@@ -8,15 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [TODO]
 
 - Scopes.
-- Add elementes to arrays.
 - Remove elements from arrays.
-- Define objects.
 - Custom functions.
 - Import. Its behaviour should be overridable from the outside.
 - Shell inside Quara main class.
 - Optimize Interpreter creation.
 
 ## [Unreleased]
+
+### Added
+- Add elements to arrays.
+- Define objects.
 
 ## [0.10.6]
 

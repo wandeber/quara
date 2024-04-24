@@ -35,7 +35,7 @@
   },
   "scripts": {
     "start": "npm run rebuild && npm run shell",
-    "start-dev": "ts-node-dev --respawn ./src/shell.ts",
+    "dev": "npx ts-node-dev --respawn ./src/shell.ts",
     "shell": "node ./dist/Quara.shell.js",
     "rebuild": "npm run clean; npm run build",
     "build": "npm run build-esbuild",
