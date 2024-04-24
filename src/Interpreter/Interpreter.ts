@@ -38,6 +38,8 @@ import ASTTextProcessorVisitor from "./ASTTextProcessorVisitor";
 import {IVisitorResult} from "./VisitorResult";
 import ASTArray from "../ASTNodes/ASTArray";
 import ASTArrayVisitor from "./ASTArrayVisitor";
+import ASTObject from "../ASTNodes/ASTObject";
+import ASTObjectVisitor from "./ASTObjectVisitor";
 
 
 const Documentation = new Map();
@@ -272,8 +274,6 @@ export default class Interpreter extends ASTInterpreter {
       this.setVariables(variables);
     }
 
-    this.setVariables({obj: {prop1: "prop1 value"}});
-
     // TODO: Una opción para sacar esto de aquí es que se registren las clases Visitors después de
     //   ser definidas. Este constructor podría usar esos datos para registrar todos los visitors en
     //   bucle.
@@ -297,6 +297,7 @@ export default class Interpreter extends ASTInterpreter {
     this.visitors[ASTTextProcessor.name] = new ASTTextProcessorVisitor(this);
     this.visitors[ASTTextBlock.name] = new ASTTextBlockVisitor(this);
     this.visitors[ASTArray.name] = new ASTArrayVisitor(this);
+    this.visitors[ASTObject.name] = new ASTObjectVisitor(this);
   }
 
   /**

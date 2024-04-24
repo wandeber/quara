@@ -1,10 +1,12 @@
 import Quara from "../../src/Quara";
 import VariableDeclarationTests from "../Variables/VariableDeclarationTests";
+import ObjectDeclarationTests from "./ObjectDeclarationTests";
 import VariableAccessTests from "./VariableAccessTests";
 import VariableAssignTests from "./VariableAssignTests";
 
 describe("Variables", () => {
   describe("Variable declaration", VariableDeclarationTests.test);
+  describe("Object declaration", ObjectDeclarationTests.test);
   describe("Variable assign", VariableAssignTests.test);
   describe("Variable access", VariableAccessTests.test);
 

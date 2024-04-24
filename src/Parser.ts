@@ -20,6 +20,7 @@ import ASTWhile from "./ASTNodes/ASTWhile";
 import ASTTextBlock from "./ASTNodes/ASTTextBlock";
 import ASTTextProcessor from "./ASTNodes/ASTTextProcessor";
 import ASTArray from "./ASTNodes/ASTArray";
+import ASTObject from "./ASTNodes/ASTObject";
 
 
 class ParserError extends Error {
@@ -182,7 +183,8 @@ export default class Parser {
       this.currentToken = this.lexer.getNextToken(skipSpaces);
     }
     else {
-      this.error(this.currentToken.type +" not in ", tokenTypes);
+      // this.error(this.currentToken.type +" not in ", tokenTypes);
+      this.error("Unexpected token: ", this.currentToken.value);
     }
   }
 
@@ -197,6 +199,35 @@ export default class Parser {
     let node = new ASTType(this.currentToken);
     this.eat(variableTypes);
     return node;
+  }
+
+  array() {
+    let root = new ASTArray();
+    this.eat(TokenTypes.OpArrayAccessorOpen);
+    while (![TokenTypes.OpArrayAccessorClose].includes(this.currentToken.type)) {
+      root.children.push(this.expr());
+      if (this.currentToken.type == TokenTypes.OpComma) {
+        this.eat(TokenTypes.OpComma);
+      }
+    }
+    this.eat(TokenTypes.OpArrayAccessorClose);
+    return root;
+  }
+
+  object() {
+    let root = new ASTObject();
+    this.eat(TokenTypes.OpCurlyBraceOpen);
+    while (![TokenTypes.OpCurlyBraceClose].includes(this.currentToken.type)) {
+      let key = this.expr();
+      this.eat(TokenTypes.OpColon);
+      let value = this.expr();
+      root.members.set(key, value);
+      if (this.currentToken.type == TokenTypes.OpComma) {
+        this.eat(TokenTypes.OpComma);
+      }
+    }
+    this.eat(TokenTypes.OpCurlyBraceClose);
+    return root;
   }
 
   constant() {
@@ -224,23 +255,13 @@ export default class Parser {
     else if (this.currentToken.type == TokenTypes.OpArrayAccessorOpen) {
       node = this.array();
     }
+    else if (this.currentToken.type == TokenTypes.OpCurlyBraceOpen) {
+      node = this.object();
+    }
     else {
       throw this.createError();
     }
     return node;
-  }
-
-  array() {
-    let root = new ASTArray();
-    this.eat(TokenTypes.OpArrayAccessorOpen);
-    while (![TokenTypes.OpArrayAccessorClose].includes(this.currentToken.type)) {
-      root.children.push(this.expr());
-      if (this.currentToken.type == TokenTypes.OpComma) {
-        this.eat(TokenTypes.OpComma);
-      }
-    }
-    this.eat(TokenTypes.OpArrayAccessorClose);
-    return root;
   }
 
   /**
@@ -374,6 +395,7 @@ export default class Parser {
       [
         ...availableConstants,
         TokenTypes.OpArrayAccessorOpen,
+        TokenTypes.OpCurlyBraceOpen,
       ].includes(this.currentToken.type)
     ) {
       node = this.constant();

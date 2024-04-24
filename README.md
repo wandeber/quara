@@ -63,10 +63,10 @@ else {
 if c {r}
 else if c2 {r2}
 else {r3}
+if (c) r;
 
 // Other syntaxes:
 if (c) r
-if (c) r;
 if (c) {r}
 if (c) {r;}
 if c -> r
@@ -77,18 +77,23 @@ if c -> r
 
 ### Objects
 ```js
-print(obj.key1);
-
-var key = "key1";
-print(obj.{key});
-print(obj[key]); // Deprecated
+var obj = {
+  key1: 1,
+  key2: 2
+};
+var key = "key3";
+obj[key] = 3; // Deprecated, it will be: obj.{key} = 3
+print(obj[key]); // Deprecated, it will be: print(obj.{key})
 ```
 
 ### Arrays
 ```js
+var list = [1, 2, 3, 4, 5];
 print(list[0]);
 var num = 2;
 print(list[num]);
+list[4] = 6;
+list[num] = 7;
 ```
 
 ### Loops
@@ -195,11 +200,7 @@ print
 hi
 ```
 
-## Other
-- Array declaration
-
 ## Pending
-- Object declaration
 - Scopes
 - Function declaration
 - Loops
@@ -209,20 +210,11 @@ hi
 ```js
 var key = "key2";
 var obj = {
-  key1: "value 1",
   {key}: 2,
   {"key3"}: "value 3"
 };
-print(obj.key1);
+obj.{"key5"} = "value 5";
 print(obj.{key});
-```
-
-### Arrays
-```js
-var list = [1, 2, 3, 4, 5];
-print(list[0]);
-var num = 2;
-print(list[num]);
 ```
 
 ### Loops
