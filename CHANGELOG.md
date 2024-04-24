@@ -13,9 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Define objects.
 - Custom functions.
 - Import. Its behaviour should be overridable from the outside.
-- Migrate from Jest to Bun testing.
 - Shell inside Quara main class.
-- Charachter escaping in strings.
 - Optimize Interpreter creation.
 
 ## [Unreleased]
