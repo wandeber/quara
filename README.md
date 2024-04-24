@@ -181,6 +181,7 @@ split
 join
 upperCase
 lowerCase
+trim
 
 // Math:
 abs
