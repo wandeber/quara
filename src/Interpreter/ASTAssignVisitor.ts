@@ -1,6 +1,6 @@
 import ASTAssign from "../ASTNodes/ASTAssign";
 import ASTVisitor from "./ASTVisitor";
-import TokenTypes from "../TokenTypes";
+import {TT} from "../TokenTypes";
 import {IASTWithName} from "../ASTNodes/AST";
 import {IVisitorResult} from "./VisitorResult";
 
@@ -19,7 +19,7 @@ export default class ASTAssignVisitor extends ASTVisitor {
       // }
       leftResult = this.interpreter.visit(node.left) as any;
     }
-    else if (TokenTypes.Dot == (node.left as any).token.type) {
+    else if (TT.Dot == (node.left as any).token.type) {
       let left = (node.left as any).left;
       name = (node?.left as any)?.right?.name;
       leftResult = this.interpreter.visit(left) as any;
@@ -27,8 +27,8 @@ export default class ASTAssignVisitor extends ASTVisitor {
     }
     else if (
       [
-        TokenTypes.BracketOpen,
-        TokenTypes.CurlyOpen,
+        TT.BracketOpen,
+        TT.CurlyOpen,
       ].includes((node.left as any).token.type)
     ) {
       let tokenType = (node.left as any).token.type;
@@ -38,12 +38,12 @@ export default class ASTAssignVisitor extends ASTVisitor {
       let index = this.interpreter.visit(right) as any;
       parent = leftResult.value;
       name = index.value;
-      if (tokenType == TokenTypes.BracketOpen) {
+      if (tokenType == TT.BracketOpen) {
         if (!Array.isArray(parent)) {
           this.interpreter.error("Variable "+ name +" is not an array.");
         }
       }
-      else if (tokenType == TokenTypes.CurlyOpen) {
+      else if (tokenType == TT.CurlyOpen) {
         if (typeof parent !== "object"/* || Array.isArray(parent)*/) {
           this.interpreter.error("Variable "+ name +" is not an objet.");
         }
@@ -65,25 +65,25 @@ export default class ASTAssignVisitor extends ASTVisitor {
     }
 
     switch (node.operator.type) {
-    case TokenTypes.OpAssign:
+    case TT.OpAssign:
       value = rightValue;
       break;
-    case TokenTypes.OpPlusAssign:
+    case TT.OpPlusAssign:
       value = leftValue + rightValue;
       break;
-    case TokenTypes.OpMinusAssign:
+    case TT.OpMinusAssign:
       value = leftValue - rightValue;
       break;
-    case TokenTypes.OpTimesAssign:
+    case TT.OpTimesAssign:
       value = leftValue * rightValue;
       break;
-    case TokenTypes.OpDivAssign:
+    case TT.OpDivAssign:
       value = leftValue / rightValue;
       break;
-    case TokenTypes.OpModAssign:
+    case TT.OpModAssign:
       value = leftValue % rightValue;
       break;
-    case TokenTypes.OpPowAssign:
+    case TT.OpPowAssign:
       value = leftValue ** rightValue;
       break;
     }

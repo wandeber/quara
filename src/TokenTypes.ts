@@ -36,8 +36,8 @@ export default class TokenTypes {
   static readonly OpNot = "Not";
   static readonly OpEq = "OpEq";
   static readonly OpLaxEq = "OpLaxEq";
-  static readonly OpNEQ = "OpNEQ";
-  static readonly OpLaxNEQ = "OpLaxNEQ";
+  static readonly OpNEq = "OpNEQ";
+  static readonly OpLaxNEq = "OpLaxNEQ";
   static readonly OpLT = "OpLT";
   static readonly OpGT = "OpGT";
   static readonly OpLTE = "OpLTE";

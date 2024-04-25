@@ -1,9 +1,9 @@
 
 
-import {Operators} from "./Operators";
-import {ReservedKeywords} from "./ReservedKeywords";
+import {OP} from "./Operators";
+import {RK} from "./ReservedKeywords";
 import Token from "../Token";
-import TokenTypes from "../TokenTypes";
+import {TT} from "../TokenTypes";
 import {Types} from "../helpers/BLib/BLib";
 import Validation from "./Validation";
 
@@ -239,15 +239,15 @@ export default class Lexer {
       result += this.currentChar;
       this.advance();
     }
-    return ReservedKeywords.get(result)
-    || Operators.get(result)
-    || new Token(TokenTypes.Id, result);
+    return RK.get(result)
+    || OP.get(result)
+    || new Token(TT.Id, result);
   }
 
   getOperator() {
-    let operatorKeys = Array.from(Operators.keys());
+    let operatorKeys = Array.from(OP.keys());
     let currentOperatorKey = this.getCoincidence(operatorKeys);
-    return Operators.get(currentOperatorKey);
+    return OP.get(currentOperatorKey);
   }
 
   getEscapedChar() {
@@ -284,7 +284,7 @@ export default class Lexer {
     if so, then return EoF token because there is no more
     input left to convert into tokens */
     if (!this.currentChar) {
-      return new Token(TokenTypes.EoF, "");
+      return new Token(TT.EoF, "");
     }
 
     if (!this.inTextBlock) {
@@ -326,7 +326,7 @@ export default class Lexer {
           this.advance();
         }
 
-        return new Token(TokenTypes.TextBlock, text);
+        return new Token(TT.TextBlock, text);
       }
     }
 
@@ -346,7 +346,7 @@ export default class Lexer {
         return this.getNextToken(skipSpaces);
       }
 
-      token = new Token(TokenTypes.Space, " ");
+      token = new Token(TT.Space, " ");
       this.advance();
       return token;
     }
@@ -366,7 +366,7 @@ export default class Lexer {
     if (this.currentChar == "\"") {
       let str = this.getString();
       if (typeof str !== "undefined") {
-        return new Token(TokenTypes.StrConst, str);
+        return new Token(TT.StrConst, str);
       }
     }
 
@@ -376,9 +376,9 @@ export default class Lexer {
       let number = this.getNumber();
       if (number) {
         if (Types.isInteger(number)) {
-          return new Token(TokenTypes.IntConst, parseInt(number));
+          return new Token(TT.IntConst, parseInt(number));
         }
-        return new Token(TokenTypes.DecConst, parseFloat(number));
+        return new Token(TT.DecConst, parseFloat(number));
       }
     }
 

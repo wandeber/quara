@@ -1,6 +1,6 @@
 import ASTUnaryOperator from "../ASTNodes/ASTUnaryOperator";
 import ASTVisitor from "./ASTVisitor";
-import TokenTypes from "../TokenTypes";
+import {TT} from "../TokenTypes";
 import {IASTWithName} from "../ASTNodes/AST";
 import {IVisitorResult} from "./VisitorResult";
 
@@ -17,24 +17,24 @@ export default class ASTUnaryOperatorVisitor extends ASTVisitor {
       exprValue = exprResult.value;
     }
 
-    if (node.operator.type == TokenTypes.OpPlus) {
+    if (node.operator.type == TT.OpPlus) {
       result = exprValue;
     }
-    else if (node.operator.type == TokenTypes.OpMinus) {
+    else if (node.operator.type == TT.OpMinus) {
       result = -exprValue;
     }
-    else if (node.operator.type == TokenTypes.OpNot) {
+    else if (node.operator.type == TT.OpNot) {
       result = !exprValue;
     }
-    else if (node.operator.type == TokenTypes.OpSqrt) {
+    else if (node.operator.type == TT.OpSqrt) {
       result = Math.sqrt(exprValue);
     }
-    else if (node.operator.type == TokenTypes.OpIncr) {
+    else if (node.operator.type == TT.OpIncr) {
       let name = (node.expr as IASTWithName).name;
       result = exprValue + 1;
       this.interpreter.globalScope[name] = result;
     }
-    else if (node.operator.type == TokenTypes.OpDecr) {
+    else if (node.operator.type == TT.OpDecr) {
       let name = (node.expr as IASTWithName).name;
       result = exprValue - 1;
       this.interpreter.globalScope[name] = result;

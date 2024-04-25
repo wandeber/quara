@@ -1,11 +1,11 @@
-import TokenTypes from "./TokenTypes";
+import {TT} from "./TokenTypes";
 
 
 
 
 
 export default class Token {
-  static readonly Types = TokenTypes;
+  static readonly Types = TT;
 
   constructor(public type: any, public value: string|boolean|number) {
     // token type: IntegerConstant, OpPlus, or EoF
