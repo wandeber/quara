@@ -67,8 +67,8 @@ export default class TokenTypes {
   static readonly OpArrow = "OpArrow";
   static readonly EscSeq = "EscSeq";
 
-  static readonly ParenOpen = "ParenthesisOpen";
-  static readonly ParenClose = "ParenthesisClose";
+  static readonly ParenOpen = "ParenOpen";
+  static readonly ParenClose = "ParenClose";
   static readonly CurlyOpen = "CurlyOpen";
   static readonly CurlyClose = "CurlyClose";
 
