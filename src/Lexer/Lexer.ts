@@ -239,7 +239,9 @@ export default class Lexer {
       result += this.currentChar;
       this.advance();
     }
-    return ReservedKeywords.get(result) || new Token(TokenTypes.Id, result);
+    return ReservedKeywords.get(result)
+    || Operators.get(result)
+    || new Token(TokenTypes.Id, result);
   }
 
   getOperator() {
@@ -364,7 +366,7 @@ export default class Lexer {
     if (this.currentChar == "\"") {
       let str = this.getString();
       if (typeof str !== "undefined") {
-        return new Token(TokenTypes.StringConstant, str);
+        return new Token(TokenTypes.StrConst, str);
       }
     }
 
@@ -374,21 +376,21 @@ export default class Lexer {
       let number = this.getNumber();
       if (number) {
         if (Types.isInteger(number)) {
-          return new Token(TokenTypes.IntegerConstant, parseInt(number));
+          return new Token(TokenTypes.IntConst, parseInt(number));
         }
-        return new Token(TokenTypes.DecimalConstant, parseFloat(number));
+        return new Token(TokenTypes.DecConst, parseFloat(number));
       }
+    }
+
+    // Variable names:
+    if (Validation.isValidStartVariableName(this.currentChar)) {
+      return this.id();
     }
 
     // Operators:
     let operator = this.getOperator();
     if (operator) {
       return operator;
-    }
-
-    // Reserved keywords and variable names:
-    if (Validation.isValidStartVariableName(this.currentChar)) {
-      return this.id();
     }
 
     throw this.createError();

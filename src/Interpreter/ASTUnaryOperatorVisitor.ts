@@ -29,12 +29,12 @@ export default class ASTUnaryOperatorVisitor extends ASTVisitor {
     else if (node.operator.type == TokenTypes.OpSqrt) {
       result = Math.sqrt(exprValue);
     }
-    else if (node.operator.type == TokenTypes.OpIncrement) {
+    else if (node.operator.type == TokenTypes.OpIncr) {
       let name = (node.expr as IASTWithName).name;
       result = exprValue + 1;
       this.interpreter.globalScope[name] = result;
     }
-    else if (node.operator.type == TokenTypes.OpDecrement) {
+    else if (node.operator.type == TokenTypes.OpDecr) {
       let name = (node.expr as IASTWithName).name;
       result = exprValue - 1;
       this.interpreter.globalScope[name] = result;

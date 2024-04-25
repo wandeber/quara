@@ -1,75 +1,62 @@
 import Token from "../Token";
-import TokenTypes from "../TokenTypes";
-
-
-
+import {TT} from "../TokenTypes";
 
 
 export const Operators = new Map<string, Token>();
-Operators.set("!", new Token(TokenTypes.OpNot, "!"));
-Operators.set("$not", new Token(TokenTypes.OpNot, "!"));
-Operators.set("||", new Token(TokenTypes.OpOr, "||"));
-Operators.set("$or", new Token(TokenTypes.OpOr, "||"));
-Operators.set("&&", new Token(TokenTypes.OpAnd, "&&"));
-Operators.set("$and", new Token(TokenTypes.OpAnd, "&&"));
-Operators.set("==", new Token(TokenTypes.OpEqual, "==")); // ==)=
-Operators.set("$eq", new Token(TokenTypes.OpEqual, "==")); // ==)=
-Operators.set("!=", new Token(TokenTypes.OpNotEqual, "!=")); // !=)=
-// Operators.set("<>", new Token(TokenTypes.OpNotEqual, "!=")); // !=)=
-Operators.set("$ne", new Token(TokenTypes.OpNotEqual, "!=")); // !=)=
-Operators.set("~=", new Token(TokenTypes.OpLaxEqual, "~=")); // Lax equality: == without type checking).
-Operators.set("$leq", new Token(TokenTypes.OpLaxEqual, "~=")); // Lax equality: == without type checking).
-Operators.set("!~=", new Token(TokenTypes.OpLaxNotEqual, "!~=")); // Lax: != without type checking).
-Operators.set("$lne", new Token(TokenTypes.OpLaxNotEqual, "!~=")); // Lax: != without type checking).
-Operators.set("<", new Token(TokenTypes.OpLowerThan, "<"));
-Operators.set("$lt", new Token(TokenTypes.OpLowerThan, "<"));
-Operators.set(">", new Token(TokenTypes.OpGreaterThan, ">"));
-Operators.set("$gt", new Token(TokenTypes.OpGreaterThan, ">"));
-Operators.set("<=", new Token(TokenTypes.OpLowerThanEqual, "<="));
-Operators.set("$lte", new Token(TokenTypes.OpLowerThanEqual, "<="));
-Operators.set(">=", new Token(TokenTypes.OpGreaterThanEqual, ">="));
-Operators.set("$gte", new Token(TokenTypes.OpGreaterThanEqual, ">="));
-Operators.set("+", new Token(TokenTypes.OpPlus, "+"));
-Operators.set("-", new Token(TokenTypes.OpMinus, "-"));
-Operators.set("*", new Token(TokenTypes.OpMultiplication, "*"));
-Operators.set("/", new Token(TokenTypes.OpDivision, "/"));
-Operators.set("%", new Token(TokenTypes.OpModulus, "%"));
-Operators.set("^", new Token(TokenTypes.OpPow, "^"));
-Operators.set("**", new Token(TokenTypes.OpPow, "^"));
-Operators.set("¬/", new Token(TokenTypes.OpSqrt, "¬/"));
-Operators.set("++", new Token(TokenTypes.OpIncrement, "++"));
-Operators.set("--", new Token(TokenTypes.OpDecrement, "--"));
-Operators.set("=", new Token(TokenTypes.OpAssign, "="));
-Operators.set("+=", new Token(TokenTypes.OpPlusAssign, "+="));
-Operators.set("-=", new Token(TokenTypes.OpMinusAssign, "-="));
-Operators.set("*=", new Token(TokenTypes.OpMultiplicationAssign, "*="));
-Operators.set("/=", new Token(TokenTypes.OpDivisionAssign, "/="));
-Operators.set("%=", new Token(TokenTypes.OpModulusAssign, "%="));
-Operators.set("^=", new Token(TokenTypes.OpPowAssign, "^="));
-// Operators.set("**=", new Token(TokenTypes.OpPowAssign, "^="));
-Operators.set("(", new Token(TokenTypes.OpParenthesisOpen, "("));
-Operators.set(")", new Token(TokenTypes.OpParenthesisClose, ")"));
-Operators.set(".", new Token(TokenTypes.OpDot, "."));
-Operators.set("..", new Token(TokenTypes.OpExclusiveRange, ".."));
-Operators.set("..=", new Token(TokenTypes.OpInclusiveRange, "..="));
-Operators.set("[", new Token(TokenTypes.OpArrayAccessorOpen, "["));
-Operators.set("]", new Token(TokenTypes.OpArrayAccessorClose, "]"));
-Operators.set("{", new Token(TokenTypes.OpCurlyBraceOpen, "{"));
-Operators.set("}", new Token(TokenTypes.OpCurlyBraceClose, "}"));
-Operators.set(";", new Token(TokenTypes.OpSemicolon, ";"));
-Operators.set(":", new Token(TokenTypes.OpColon, ":"));
-Operators.set(",", new Token(TokenTypes.OpComma, ","));
-Operators.set("->", new Token(TokenTypes.OpArrow, "->"));
-// Operators.set("=>", new Token(TokenTypes.OpArrow, "->"));
-// Operators.set("<<<", new Token(TokenTypes.OpTextProcessorStart, "<<<"));
-// Operators.set(">>>", new Token(TokenTypes.OpTextProcessorEnd, ">>>"));
-Operators.set("`", new Token(TokenTypes.Backtip, "`"));
-Operators.set("\"", new Token(TokenTypes.OpQuote, "\""));
-Operators.set("\\", new Token(TokenTypes.OpEscapeSequence, "\\"));
 
-Operators.set("/if", new Token(TokenTypes.EndIf, "/if"));
-Operators.set("/while", new Token(TokenTypes.EndWhile, "/while"));
-Operators.set("/for", new Token(TokenTypes.EndFor, "/for"));
-Operators.set("/each", new Token(TokenTypes.EndEach, "/each"));
-Operators.set("/class", new Token(TokenTypes.EndClass, "/class"));
-Operators.set("/interface", new Token(TokenTypes.EndInterface, "/interface"));
+Object.entries({
+  [TT.OpIn]: ["in", "$in"],
+  [TT.OpNot]: ["!", "not", "$not"],
+  [TT.OpOr]: ["||", "or", "$or"],
+  [TT.OpAnd]: ["&&", "and", "$and"],
+  [TT.OpEq]: ["==", "eq", "$eq"],
+  [TT.OpNEQ]: ["!=", "ne", "$ne"],
+  [TT.OpLaxEq]: ["~=", "leq", "$leq"],
+  [TT.OpLaxNEQ]: ["!~=", "lne", "$lne"],
+  [TT.OpLT]: ["<", "lt", "$lt"],
+  [TT.OpGT]: [">", "gt", "$gt"],
+  [TT.OpLTE]: ["<=", "lte", "$lte"],
+  [TT.OpGTE]: [">=", "gte", "$gte"],
+  [TT.OpPow]: ["^", "**"],
+  [TT.OpPowAssign]: ["^=", "**="],
+  [TT.OpPlus]: ["+"],
+  [TT.OpMinus]: ["-"],
+  [TT.OpTimes]: ["*"],
+  [TT.OpDiv]: ["/"],
+  [TT.OpMod]: ["%"],
+  [TT.OpSqrt]: ["¬/"],
+  [TT.OpIncr]: ["++"],
+  [TT.OpDecr]: ["--"],
+  [TT.OpAssign]: ["="],
+  [TT.OpPlusAssign]: ["+="],
+  [TT.OpMinusAssign]: ["-="],
+  [TT.OpTimesAssign]: ["*="],
+  [TT.OpDivAssign]: ["/="],
+  [TT.OpModAssign]: ["%="],
+  [TT.ParenthesisOpen]: ["("],
+  [TT.ParenthesisClose]: [")"],
+  [TT.OpDot]: ["."],
+  [TT.OpInclRange]: [".."],
+  [TT.OpExclRange]: ["..<"],
+  [TT.ArrAccessOpen]: ["["],
+  [TT.ArrAccessClose]: ["]"],
+  [TT.CurlyOpen]: ["{"],
+  [TT.CurlyClose]: ["}"],
+  [TT.OpSemi]: [";"],
+  [TT.OpColon]: [":"],
+  [TT.OpComma]: [","],
+  [TT.OpArrow]: ["->"],
+  [TT.Backtip]: ["`"],
+  [TT.OpQuote]: ['"'],
+  [TT.OpEscSeq]: ["\\"],
+  [TT.EndIf]: ["/if"],
+  [TT.EndWhile]: ["/while"],
+  [TT.EndFor]: ["/for"],
+  [TT.EndFn]: ["/fn"],
+  [TT.EndClass]: ["/class"],
+  [TT.EndInterface]: ["/interface"],
+}).forEach(([type, operators]) => {
+  operators.forEach(o => Operators.set(o, new Token(type as TT, operators[0])));
+});
+
+export {Operators as OP};

@@ -4,7 +4,9 @@ import TokenTypes from "../TokenTypes";
 import {IASTWithName} from "../ASTNodes/AST";
 import {IVisitorResult} from "./VisitorResult";
 
-
+function repeatString(str: string, num: number): string {
+  return new Array(num + 1).join(str);
+}
 
 export default class ASTBinaryOperatorVisitor extends ASTVisitor {
   visit(node: ASTBinaryOperator): IVisitorResult {
@@ -27,41 +29,49 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
     case TokenTypes.OpMinus:
       result = leftValue - rightValue;
       break;
-    case TokenTypes.OpMultiplication:
-      result = leftValue * rightValue;
+    case TokenTypes.OpTimes:
+      if (typeof leftValue === "string" && typeof rightValue === "number") {
+        result = repeatString(leftValue, rightValue);
+      }
+      else if (typeof rightValue === "string" && typeof leftValue === "number") {
+        result = repeatString(rightValue, leftValue);
+      }
+      else {
+        result = leftValue * rightValue;
+      }
       break;
-    case TokenTypes.OpDivision:
+    case TokenTypes.OpDiv:
       result = leftValue / rightValue;
       break;
-    case TokenTypes.OpModulus:
+    case TokenTypes.OpMod:
       result = leftValue % rightValue;
       break;
     case TokenTypes.OpPow:
       result = leftValue ** rightValue;
       break;
 
-    case TokenTypes.OpEqual:
+    case TokenTypes.OpEq:
       result = leftValue === rightValue;
       break;
-    case TokenTypes.OpLaxEqual:
+    case TokenTypes.OpLaxEq:
       result = leftValue == rightValue;
       break;
-    case TokenTypes.OpNotEqual:
+    case TokenTypes.OpNEQ:
       result = leftValue !== rightValue;
       break;
-    case TokenTypes.OpLaxNotEqual:
+    case TokenTypes.OpLaxNEQ:
       result = leftValue != rightValue;
       break;
-    case TokenTypes.OpLowerThan:
+    case TokenTypes.OpLT:
       result = leftValue < rightValue;
       break;
-    case TokenTypes.OpGreaterThan:
+    case TokenTypes.OpGT:
       result = leftValue > rightValue;
       break;
-    case TokenTypes.OpLowerThanEqual:
+    case TokenTypes.OpLTE:
       result = leftValue <= rightValue;
       break;
-    case TokenTypes.OpGreaterThanEqual:
+    case TokenTypes.OpGTE:
       result = leftValue >= rightValue;
       break;
 
@@ -72,9 +82,21 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
       result = leftValue || rightValue;
       break;
 
-    case TokenTypes.OpInclusiveRange:
-    case TokenTypes.OpExclusiveRange:
-      let right = node.operator.type === TokenTypes.OpInclusiveRange ? rightValue + 1 : rightValue;
+    case TokenTypes.OpIn:
+      if (typeof rightValue === "string" || Array.isArray(rightValue)) {
+        result = rightValue.includes(leftValue);
+      }
+      else if (typeof rightValue === "object") {
+        result = rightValue.hasOwnProperty(leftValue);
+      }
+      else {
+        this.interpreter.error(rightValue +" is not an array, string, or object.");
+      }
+      break;
+
+    case TokenTypes.OpInclRange:
+    case TokenTypes.OpExclRange:
+      let right = node.operator.type === TokenTypes.OpInclRange ? rightValue + 1 : rightValue;
       result = [];
       for (let i = leftValue; i < right; i++) {
         result.push(i);
@@ -92,7 +114,7 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
         result = leftValue[name];
       }
       break;
-    case TokenTypes.OpCurlyBraceOpen:
+    case TokenTypes.CurlyOpen:
       if (typeof leftValue !== "object"/* || Array.isArray(leftValue)*/) {
         this.interpreter.error(leftValue +" is not an object.");
       }
@@ -105,7 +127,7 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
         result = leftValue[rightValue];
       }
       break;
-    case TokenTypes.OpArrayAccessorOpen:
+    case TokenTypes.ArrAccessOpen:
       if (!Array.isArray(leftValue)) {
         this.interpreter.error(leftValue +" is not an array.");
       }

@@ -27,8 +27,8 @@ export default class ASTAssignVisitor extends ASTVisitor {
     }
     else if (
       [
-        TokenTypes.OpArrayAccessorOpen,
-        TokenTypes.OpCurlyBraceOpen,
+        TokenTypes.ArrAccessOpen,
+        TokenTypes.CurlyOpen,
       ].includes((node.left as any).token.type)
     ) {
       let tokenType = (node.left as any).token.type;
@@ -38,12 +38,12 @@ export default class ASTAssignVisitor extends ASTVisitor {
       let index = this.interpreter.visit(right) as any;
       parent = leftResult.value;
       name = index.value;
-      if (tokenType == TokenTypes.OpArrayAccessorOpen) {
+      if (tokenType == TokenTypes.ArrAccessOpen) {
         if (!Array.isArray(parent)) {
           this.interpreter.error("Variable "+ name +" is not an array.");
         }
       }
-      else if (tokenType == TokenTypes.OpCurlyBraceOpen) {
+      else if (tokenType == TokenTypes.CurlyOpen) {
         if (typeof parent !== "object"/* || Array.isArray(parent)*/) {
           this.interpreter.error("Variable "+ name +" is not an objet.");
         }
@@ -74,13 +74,13 @@ export default class ASTAssignVisitor extends ASTVisitor {
     case TokenTypes.OpMinusAssign:
       value = leftValue - rightValue;
       break;
-    case TokenTypes.OpMultiplicationAssign:
+    case TokenTypes.OpTimesAssign:
       value = leftValue * rightValue;
       break;
-    case TokenTypes.OpDivisionAssign:
+    case TokenTypes.OpDivAssign:
       value = leftValue / rightValue;
       break;
-    case TokenTypes.OpModulusAssign:
+    case TokenTypes.OpModAssign:
       value = leftValue % rightValue;
       break;
     case TokenTypes.OpPowAssign:

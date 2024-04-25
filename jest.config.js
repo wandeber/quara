@@ -16,5 +16,7 @@ export default {
   collectCoverageFrom: [
     "src/**/*.{js,ts}",
     "!**/node_modules/**",
+    "!src/Symbol/**",
+    "!src/shell.ts",
   ],
 };

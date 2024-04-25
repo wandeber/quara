@@ -16,6 +16,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Reserve word `fn`.
+- Operator `in` (or `$in`) for arrays, objects and strings.
+- Operators without $ prefix: `and`, `or`, `not`...
+- Reduced file size.
+
+### Changed
+
+- `..` is now the inclusive range operator.
+- `..<` is now the exclusive range operator.
+
+### Removed
+
+- Some reserved words removed: `each`, `integer`, `boolean`, `function`.
+- Removed the old inclusive range operator: `..=`.
+
 ## [0.10.7]
 
 ### Added

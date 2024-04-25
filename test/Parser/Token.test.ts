@@ -3,7 +3,7 @@ import TokenTypes from "../../src/TokenTypes";
 
 describe("Token", () => {
   it("toString", () => {
-    let token = new Token(TokenTypes.IntegerConstant, "123");
-    expect(token.toString()).toBe("Token(IntegerConstant, 123)");
+    let token = new Token(TokenTypes.IntConst, "123");
+    expect(token.toString()).toBe("Token(IntConst, 123)");
   });
 });

@@ -21,11 +21,9 @@ export default class VariableDeclarationTests {
       new TestConfiguration("const num1 = 2, num2 = num1; num1 + num2;", 4),
 
       new TestConfiguration("int num = 1; num;", 1),
-      new TestConfiguration("integer num = 1; num;", 1),
       new TestConfiguration("float num = 1.4; num = 3.4; num;", 3.4),
       new TestConfiguration('string str = "asd"; str;', "asd"),
       new TestConfiguration("bool a = false; a;", false),
-      new TestConfiguration("boolean a = true; a;", true),
       new TestConfiguration("var int num = 1; num;", 1),
       new TestConfiguration("const int num = 1; num;", 1),
       // new TestConfiguration("const num = 1; num = 3; num;", 3),

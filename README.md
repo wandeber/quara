@@ -15,16 +15,20 @@ Programming language interpreted by JavaScript to preprocess text files like ema
   - +, -, *, /, %, ^, ¬/
   - =, +=, -=, *=, /=, %=, ^=
   - !, ==, !=, ~=, !~=, <, >, <=, >=, &&, ||
+  - not, eq, ne, leq, lne, lt, gt, lte, gte, and, or
   - $not, $eq, $ne, $leq, $lne, $lt, $gt, $lte, $gte, $and, $or
   - (, )
   - ++, -- (as pre-increment and pre-decrement)
   - ., [, ]
-  - .. (as exclusive range operator)
+  - .. (inclusive range operator)
+  - ..< (exclusive range operator)
   - {, }
   - , (Comma)
   - ;, :
   - ->
   - ", `, \
+  - in, $in
+  - /if, /while, /for, /fn, /class, /interface, /enum
 - Supported types:
   - Booleans.
   - Integer and decimal numbers.
@@ -34,22 +38,23 @@ Programming language interpreted by JavaScript to preprocess text files like ema
 - Reserved keywords:
   - true, false
   - const, var
-  - any, char, int, integer, float, double, string, bool, boolean
-  - if, else, /if
-  - while, /while
-  - for, /for
-  - each, in, endeach
-  - function, return, /function
+  - any, char, int, float, double, string, bool
+  - if, else
+  - while,
+  - for,
+  - fn, return,
   - null
-  - class, extends, /class
+  - enum
+  - struct,
+  - class, extends
   - get, set
   - static, abstract, final, virtual
   - private, public, protected
-  - interface, implements, /interface
+  - interface, implements
 
 
 ### If/else
-```rust
+```js
 if condition {
   // ...
 }
@@ -71,9 +76,6 @@ if (c) r
 if (c) {r}
 if (c) {r;}
 if c -> r
-... else r2
-...; else r2
-...} else r2
 ```
 
 ### Objects
@@ -210,8 +212,8 @@ hi
 ## Pending
 - Scopes
 - Function declaration
-- Loops
-  - For
+- Regular expressions
+- For loops
 
 ### Objects
 ```js

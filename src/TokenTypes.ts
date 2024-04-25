@@ -19,47 +19,48 @@ export default class TokenTypes {
   static readonly Space = "Space"; // " "
   static readonly Dot = "Dot"; // .
 
-  static readonly ModVar = "TypeVar";
-  static readonly ModConst = "TypeConst";
+  static readonly ModVar = "ModVar";
+  static readonly ModConst = "ModConst";
 
-  static readonly TypeAny = "TypeAny";
-  static readonly TypeBoolean = "TypeBoolean";
-  static readonly TypeChar = "TypeChar";
-  static readonly TypeInteger = "TypeInteger";
-  static readonly TypeFloat = "TypeFloat";
-  static readonly TypeDouble = "TypeDouble";
-  static readonly TypeString = "TypeString";
+  static readonly TAny = "TAny";
+  static readonly TBool = "TBool";
+  static readonly TChar = "TChar";
+  static readonly TInt = "TInt";
+  static readonly TFloat = "TFloat";
+  static readonly TDouble = "TDouble";
+  static readonly TStr = "TStr";
 
-  static readonly BooleanConstant = "BooleanConstant"; // true, false
-  static readonly CharConstant = "CharConstant";
-  static readonly IntegerConstant = "IntegerConstant"; // 1
-  static readonly DecimalConstant = "DecimalConstant"; // 1.1
-  static readonly StringConstant = "StringConstant";
+  static readonly BoolConst = "BoolConst"; // true, false
+  static readonly CharConst = "CharConst";
+  static readonly IntConst = "IntConst"; // 1
+  static readonly DecConst = "DecConst"; // 1.1
+  static readonly StrConst = "StrConst";
 
-  static readonly TextBlock = "TextBlock";
+  static readonly TextBlock = "TxtBlock";
 
   static readonly OpPlus = "OpPlus"; // "+"
   static readonly OpMinus = "OpMinus"; // "-"
-  static readonly OpMultiplication = "OpMultiplication"; // "*"
-  static readonly OpDivision = "OpDivision"; // "/"
-  static readonly OpModulus = "OpModulus"; // %
+  static readonly OpTimes = "OpTimes"; // "*"
+  static readonly OpDiv = "OpDiv"; // "/"
+  static readonly OpMod = "OpMod"; // %
   static readonly OpPow = "OpPow"; // ^, **
   static readonly OpSqrt = "OpSqrt"; // ¬/
 
-  static readonly OpIncrement = "OpIncrement"; // ++
-  static readonly OpDecrement = "OpDecrement"; // --
+  static readonly OpIncr = "OpIncr"; // ++
+  static readonly OpDecr = "OpDecr"; // --
 
   static readonly OpNot = "Not";
-  static readonly OpEqual = "OpEqual";
-  static readonly OpLaxEqual = "OpLaxEqual";
-  static readonly OpNotEqual = "OpNotEqual";
-  static readonly OpLaxNotEqual = "OpLaxNotEqual";
-  static readonly OpLowerThan = "OpLowerThan";
-  static readonly OpGreaterThan = "OpGreaterThan";
-  static readonly OpLowerThanEqual = "OpLowerThanEqual";
-  static readonly OpGreaterThanEqual = "OpGreaterThanEqual";
-  static readonly OpExclusiveRange = "OpExclusiveRange";
-  static readonly OpInclusiveRange = "OpInclusiveRange";
+  static readonly OpEq = "OpEq";
+  static readonly OpLaxEq = "OpLaxEq";
+  static readonly OpNEQ = "OpNEQ";
+  static readonly OpLaxNEQ = "OpLaxNEQ";
+  static readonly OpLT = "OpLT";
+  static readonly OpGT = "OpGT";
+  static readonly OpLTE = "OpLTE";
+  static readonly OpGTE = "OpGTE";
+  static readonly OpIn = "OpIn";
+  static readonly OpExclRange = "OpExclRange";
+  static readonly OpInclRange = "OpInclRange";
 
   static readonly OpAnd = "OpAnd";
   static readonly OpOr = "OpOr";
@@ -67,25 +68,25 @@ export default class TokenTypes {
   static readonly OpAssign = "OpAssign";
   static readonly OpPlusAssign = "OpPlusAssign";
   static readonly OpMinusAssign = "OpMinusAssign";
-  static readonly OpMultiplicationAssign = "OpMultiplicationAssign";
-  static readonly OpDivisionAssign = "OpDivisionAssign";
-  static readonly OpModulusAssign = "OpModulusAssign";
+  static readonly OpTimesAssign = "OpTimesAssign";
+  static readonly OpDivAssign = "OpDivAssign";
+  static readonly OpModAssign = "OpModAssign";
   static readonly OpPowAssign = "OpPowAssign";
 
   static readonly OpDot = "OpDot";
-  static readonly OpArrayAccessorOpen = "OpArrayAccessorOpen";
-  static readonly OpArrayAccessorClose = "OpArrayAccessorClose";
-  static readonly OpSemicolon = "OpSemicolon";
+  static readonly ArrAccessOpen = "ArrAccessOpen";
+  static readonly ArrAccessClose = "ArrAccessClose";
+  static readonly OpSemi = "OpSemi"; // Semicolon
   static readonly OpColon = "OpColon";
   static readonly OpQuote = "OpQuote";
   static readonly OpComma = "OpComma";
   static readonly OpArrow = "OpArrow";
-  static readonly OpEscapeSequence = "OpEscapeSequence";
+  static readonly OpEscSeq = "OpEscSeq";
 
-  static readonly OpParenthesisOpen = "OpParenthesisOpen";
-  static readonly OpParenthesisClose = "OpParenthesisClose";
-  static readonly OpCurlyBraceOpen = "OpCurlyBraceOpen";
-  static readonly OpCurlyBraceClose = "OpCurlyBraceClose";
+  static readonly ParenthesisOpen = "ParenthesisOpen";
+  static readonly ParenthesisClose = "ParenthesisClose";
+  static readonly CurlyOpen = "CurlyOpen";
+  static readonly CurlyClose = "CurlyClose";
 
   static readonly If = "If";
   static readonly Else = "Else";
@@ -98,15 +99,18 @@ export default class TokenTypes {
   // Pending:
   static readonly For = "For";
   static readonly EndFor = "EndFor";
-  static readonly Each = "Each";
+  // static readonly Each = "Each";
   static readonly In = "In";
   static readonly EndEach = "EndEach";
 
-  static readonly Function = "Function";
+  static readonly Fn = "Fn";
   static readonly Return = "Return";
-  static readonly EndFunction = "EndFunction";
+  static readonly EndFn = "EndFn";
 
+  static readonly Enum = "Enum";
+  static readonly EndEnum = "EndEnum";
   static readonly Class = "Class";
+  static readonly Struct = "Struct";
   static readonly EndClass = "EndClass";
   static readonly Static = "Static";
   static readonly Abstract = "Abstract";
@@ -120,5 +124,7 @@ export default class TokenTypes {
   static readonly Extends = "Extends";
   static readonly Interface = "Interface";
   static readonly EndInterface = "EndInterface";
-  static readonly Implements = "Implements";
+  static readonly Impl = "Impl";
 }
+
+export {TokenTypes as TT};

@@ -16,7 +16,7 @@ import ASTCompound from "./ASTCompound";
 describe("AST toString methods", () => {
   let ast = new AST();
   let tokenName = new Token(TokenTypes.Id, "a");
-  let tokenInt = new Token(TokenTypes.TypeInteger, "int");
+  let tokenInt = new Token(TokenTypes.TInt, "int");
   let tokenPlus = new Token("+", "+");
   let astTypeInt = new ASTType(tokenInt);
   let astVariable = new ASTVariable(tokenName);
