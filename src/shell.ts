@@ -1,7 +1,8 @@
 import {Lexer, Parser, Interpreter} from "./Quara.js";
 import ReadLine from "readline";
+import info from "../package.json" with {type: "json"};
 
-
+const version = info.version;
 
 
 
@@ -22,7 +23,7 @@ import ReadLine from "readline";
       +" | |_| | | |_| | | (_| | | |    | (_| |\n"
       +"  \\__\\_\\  \\__,_|  \\__,_| |_|     \\__,_|\n"
       +"\n"
-      +"  Query as Sara...              v0.10.6\n"
+      +`  Query as Sara...              v${version}\n`
       +"\n",
     );
   };

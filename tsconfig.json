@@ -6,6 +6,7 @@
     "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
     "allowArbitraryExtensions": true,
+    "resolveJsonModule": true,
     
     // enable latest features
     "module": "ESNext",
@@ -15,7 +16,7 @@
     //"strictNullChecks": true,
 
     // if TS 5.x+
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "moduleDetection": "force",
@@ -35,5 +36,5 @@
     "paths": {
       "*": ["node_modules/*", "src/types/*"]
     },
-  },
+  }
 }
