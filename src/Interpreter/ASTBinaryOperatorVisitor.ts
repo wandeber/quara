@@ -103,7 +103,7 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
       }
       break;
 
-    case TokenTypes.OpDot:
+    case TokenTypes.Dot:
       let {name} = node.right as IASTWithName;
       if (
         typeof leftValue !== "undefined"
@@ -127,7 +127,7 @@ export default class ASTBinaryOperatorVisitor extends ASTVisitor {
         result = leftValue[rightValue];
       }
       break;
-    case TokenTypes.ArrAccessOpen:
+    case TokenTypes.BracketOpen:
       if (!Array.isArray(leftValue)) {
         this.interpreter.error(leftValue +" is not an array.");
       }

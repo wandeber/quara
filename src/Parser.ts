@@ -203,14 +203,14 @@ export default class Parser {
 
   array() {
     let root = new ASTArray();
-    this.eat(TokenTypes.ArrAccessOpen);
-    while (![TokenTypes.ArrAccessClose].includes(this.currentToken.type)) {
+    this.eat(TokenTypes.BracketOpen);
+    while (![TokenTypes.BracketClose].includes(this.currentToken.type)) {
       root.children.push(this.expr());
-      if (this.currentToken.type == TokenTypes.OpComma) {
-        this.eat(TokenTypes.OpComma);
+      if (this.currentToken.type == TokenTypes.Comma) {
+        this.eat(TokenTypes.Comma);
       }
     }
-    this.eat(TokenTypes.ArrAccessClose);
+    this.eat(TokenTypes.BracketClose);
     return root;
   }
 
@@ -219,11 +219,11 @@ export default class Parser {
     this.eat(TokenTypes.CurlyOpen);
     while (![TokenTypes.CurlyClose].includes(this.currentToken.type)) {
       let key = this.expr();
-      this.eat(TokenTypes.OpColon);
+      this.eat(TokenTypes.Colon);
       let value = this.expr();
       root.members.set(key, value);
-      if (this.currentToken.type == TokenTypes.OpComma) {
-        this.eat(TokenTypes.OpComma);
+      if (this.currentToken.type == TokenTypes.Comma) {
+        this.eat(TokenTypes.Comma);
       }
     }
     this.eat(TokenTypes.CurlyClose);
@@ -252,7 +252,7 @@ export default class Parser {
     else if (this.currentToken.type == TokenTypes.Backtip) {
       node = this.textProcessor();
     }
-    else if (this.currentToken.type == TokenTypes.ArrAccessOpen) {
+    else if (this.currentToken.type == TokenTypes.BracketOpen) {
       node = this.array();
     }
     else if (this.currentToken.type == TokenTypes.CurlyOpen) {
@@ -285,13 +285,13 @@ export default class Parser {
     // Get variable (Id).
     let node: AST = this.variable();
     let accessorOperators = [
-      TokenTypes.OpDot,
-      TokenTypes.ArrAccessOpen,
+      TokenTypes.Dot,
+      TokenTypes.BracketOpen,
     ];
 
     while (accessorOperators.includes(this.currentToken.type)) {
       let arrayAccessor = false;
-      if (this.currentToken.type == TokenTypes.ArrAccessOpen) {
+      if (this.currentToken.type == TokenTypes.BracketOpen) {
         arrayAccessor = true;
       }
 
@@ -317,7 +317,7 @@ export default class Parser {
       );
 
       if (arrayAccessor) {
-        this.eat(TokenTypes.ArrAccessClose);
+        this.eat(TokenTypes.BracketClose);
       }
     }
 
@@ -334,8 +334,8 @@ export default class Parser {
     let currExpr = this.expr();
     if (currExpr !== null) {
       nodes.push(currExpr);
-      while (this.currentToken.type == TokenTypes.OpComma) {
-        this.eat(TokenTypes.OpComma);
+      while (this.currentToken.type == TokenTypes.Comma) {
+        this.eat(TokenTypes.Comma);
         nodes.push(this.expr());
       }
     }
@@ -351,13 +351,13 @@ export default class Parser {
     let nodes: AST[] = [];
 
     // We eat the parenthesis opening (we can just ignore it).
-    this.operator([TokenTypes.ParenthesisOpen]); // Open.
-    if (this.currentToken.type != TokenTypes.ParenthesisClose) {
+    this.operator([TokenTypes.ParenOpen]); // Open.
+    if (this.currentToken.type != TokenTypes.ParenClose) {
       nodes = this.paramList();
     }
 
     // We eat the parenthesis closure (we can just ignore it).
-    this.operator([TokenTypes.ParenthesisClose]); // Close.
+    this.operator([TokenTypes.ParenClose]); // Close.
     return nodes;
   }
 
@@ -382,19 +382,19 @@ export default class Parser {
       node = new ASTUnaryOperator(this.operator(allowedOperators), this.factor());
     }
     // If current token is a parenthesis aperture "(":
-    else if (this.currentToken.type == TokenTypes.ParenthesisOpen) {
+    else if (this.currentToken.type == TokenTypes.ParenOpen) {
       // We eat the parenthesis opening (we can just ignore it).
-      this.operator([TokenTypes.ParenthesisOpen]); // Open.
+      this.operator([TokenTypes.ParenOpen]); // Open.
       /* We support a full expression inside the parenthesis. This includes from a single numbber to
       complex expression like other ones with parenthesis. */
       node = this.expr();
       // We eat the parenthesis closure (we can just ignore it).
-      this.operator([TokenTypes.ParenthesisClose]); // Close.
+      this.operator([TokenTypes.ParenClose]); // Close.
     }
     else if (
       [
         ...availableConstants,
-        TokenTypes.ArrAccessOpen,
+        TokenTypes.BracketOpen,
         TokenTypes.CurlyOpen,
       ].includes(this.currentToken.type)
     ) {
@@ -410,7 +410,7 @@ export default class Parser {
     }
     else /* if (this.currentToken.type == TokenTypes.Id) */ {
       node = this.member();
-      if ([TokenTypes.ParenthesisOpen].includes(this.currentToken.type)) {
+      if ([TokenTypes.ParenOpen].includes(this.currentToken.type)) {
         node = new ASTFunctionCall(
           node,
           this.funcCall(),
@@ -620,8 +620,8 @@ export default class Parser {
     let declarationNodes = [
       this.declAssign(initializationRequired),
     ];
-    while (this.currentToken.type == TokenTypes.OpComma) {
-      this.eat(TokenTypes.OpComma);
+    while (this.currentToken.type == TokenTypes.Comma) {
+      this.eat(TokenTypes.Comma);
       declarationNodes.push(this.declAssign(initializationRequired));
     }
     return declarationNodes;
@@ -704,7 +704,7 @@ export default class Parser {
    */
   colonBlock(endCheck: string[], endEat?: string[]) {
     endEat = endEat || endCheck;
-    this.eat([TokenTypes.OpColon]);
+    this.eat([TokenTypes.Colon]);
     let root = this.statementList(endCheck);
     if (endEat.includes(this.currentToken.type)) {
       this.eat(endEat);
@@ -734,10 +734,10 @@ export default class Parser {
    */
   controlCondition() {
     let condition: AST;
-    if (this.currentToken.type === TokenTypes.ParenthesisOpen) {
-      this.eat([TokenTypes.ParenthesisOpen]);
+    if (this.currentToken.type === TokenTypes.ParenOpen) {
+      this.eat([TokenTypes.ParenOpen]);
       condition = this.expr();
-      this.eat([TokenTypes.ParenthesisClose]);
+      this.eat([TokenTypes.ParenClose]);
     }
     else {
       condition = this.expr();
@@ -755,7 +755,7 @@ export default class Parser {
     if (this.currentToken.type === TokenTypes.CurlyOpen) {
       body = this.block();
     }
-    else if (this.currentToken.type == TokenTypes.OpColon) {
+    else if (this.currentToken.type == TokenTypes.Colon) {
       body = colonBodyCb();
     }
     else {
@@ -846,7 +846,7 @@ export default class Parser {
     ) {
       node = this.declaration();
     }
-    else if (this.currentToken.type == TokenTypes.OpSemi) {
+    else if (this.currentToken.type == TokenTypes.Semi) {
       // TODO: Implement empty AST?
     }
     else if (this.currentToken.type == TokenTypes.Backtip) {
@@ -860,8 +860,8 @@ export default class Parser {
       node = this.expr();
     }
 
-    if (this.currentToken.type == TokenTypes.OpSemi) {
-      this.eat(TokenTypes.OpSemi);
+    if (this.currentToken.type == TokenTypes.Semi) {
+      this.eat(TokenTypes.Semi);
     }
 
     // You could prefer returns an ASTEmpty or something like that here if node is empty.

@@ -19,7 +19,7 @@ export default class ASTAssignVisitor extends ASTVisitor {
       // }
       leftResult = this.interpreter.visit(node.left) as any;
     }
-    else if (TokenTypes.OpDot == (node.left as any).token.type) {
+    else if (TokenTypes.Dot == (node.left as any).token.type) {
       let left = (node.left as any).left;
       name = (node?.left as any)?.right?.name;
       leftResult = this.interpreter.visit(left) as any;
@@ -27,7 +27,7 @@ export default class ASTAssignVisitor extends ASTVisitor {
     }
     else if (
       [
-        TokenTypes.ArrAccessOpen,
+        TokenTypes.BracketOpen,
         TokenTypes.CurlyOpen,
       ].includes((node.left as any).token.type)
     ) {
@@ -38,7 +38,7 @@ export default class ASTAssignVisitor extends ASTVisitor {
       let index = this.interpreter.visit(right) as any;
       parent = leftResult.value;
       name = index.value;
-      if (tokenType == TokenTypes.ArrAccessOpen) {
+      if (tokenType == TokenTypes.BracketOpen) {
         if (!Array.isArray(parent)) {
           this.interpreter.error("Variable "+ name +" is not an array.");
         }

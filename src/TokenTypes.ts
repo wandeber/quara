@@ -1,23 +1,7 @@
-/*
-Operators:
-Arithmetic operators:
-  +, -, *, /
-Logic operators:
-  $eq, $ne, $lt, $gt, $lte, $gte, $and, $or
-  ==, !=, <>, <, >, <=, >=, &&, ||
-Other:
-  (, )
-*/
-
-
-
 export default class TokenTypes {
-  // static readonly OpTextProcessorStart = "OpTextProcessorStart";
-  // static readonly OpTextProcessorEnd = "OpTextProcessorEnd";
   static readonly Backtip = "Backtip"; // `
   static readonly Id = "Id";
   static readonly Space = "Space"; // " "
-  static readonly Dot = "Dot"; // .
 
   static readonly ModVar = "ModVar";
   static readonly ModConst = "ModConst";
@@ -73,18 +57,18 @@ export default class TokenTypes {
   static readonly OpModAssign = "OpModAssign";
   static readonly OpPowAssign = "OpPowAssign";
 
-  static readonly OpDot = "OpDot";
-  static readonly ArrAccessOpen = "ArrAccessOpen";
-  static readonly ArrAccessClose = "ArrAccessClose";
-  static readonly OpSemi = "OpSemi"; // Semicolon
-  static readonly OpColon = "OpColon";
-  static readonly OpQuote = "OpQuote";
-  static readonly OpComma = "OpComma";
+  static readonly Dot = "Dot";
+  static readonly BracketOpen = "BracketOpen";
+  static readonly BracketClose = "BracketClose";
+  static readonly Semi = "Semi"; // Semicolon
+  static readonly Colon = "Colon";
+  static readonly Quote = "Quote";
+  static readonly Comma = "Comma";
   static readonly OpArrow = "OpArrow";
-  static readonly OpEscSeq = "OpEscSeq";
+  static readonly EscSeq = "EscSeq";
 
-  static readonly ParenthesisOpen = "ParenthesisOpen";
-  static readonly ParenthesisClose = "ParenthesisClose";
+  static readonly ParenOpen = "ParenthesisOpen";
+  static readonly ParenClose = "ParenthesisClose";
   static readonly CurlyOpen = "CurlyOpen";
   static readonly CurlyClose = "CurlyClose";
 
