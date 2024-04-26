@@ -1,11 +1,11 @@
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
 
 
-export default class VariableDeclarationTests {
+export class VariableAccessTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("obj.prop1", "prop1 value", {obj: {prop1: "prop1 value"}}),

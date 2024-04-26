@@ -1,11 +1,11 @@
-import TestConfiguration from "./TestConfiguration";
-import TestHelper from "./TestHelper";
+import {TestConfiguration} from "./TestConfiguration";
+import {TestHelper} from "./TestHelper";
 
 
 
 
 
-export default class ParenthesisTests {
+export class ParenthesisTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("2 * (3 + 3)", 12),

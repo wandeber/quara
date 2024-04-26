@@ -1,1 +1,1 @@
-export {default as Types} from "./Types";
+export {Types} from "./Types";

@@ -1,10 +1,10 @@
-import {DefaultVariables, Documentation} from "../../src/Interpreter/Interpreter";
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {DefaultVariables, Documentation} from "../../src/globalScope";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
-export default class FunctionHelpTests {
+export class FunctionHelpTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("help()", Documentation.get("help")),

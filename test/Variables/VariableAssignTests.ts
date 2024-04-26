@@ -1,11 +1,11 @@
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
 
 
-export default class VariableDeclarationTests {
+export class VariableAssignTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("var num1 = 1, num2 = 2; num1 = num2 = 4; num1 + num2", 8),

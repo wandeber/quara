@@ -1,7 +1,7 @@
 const StartVariableNameRegExp = /^[a-z_áéíóúñç]$/iu;
 const VariableNameRegExp = /^[a-z0-9_áéíóúñç]$/iu;
 
-export default class Validation {
+export class Validation {
   static isValidStartVariableName(str: string) {
     return str.match(StartVariableNameRegExp);
   }

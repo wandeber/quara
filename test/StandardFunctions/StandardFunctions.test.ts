@@ -1,8 +1,8 @@
-import FunctionHelpTests from "./FunctionHelpTests";
-import StringFunctionsTests from "./StringFunctionsTests";
-import MathFunctionsTests from "./MathFunctionsTests";
-import TypesFunctionsTests from "./TypesFunctionsTests";
-import OtherFunctionsTests from "./OtherFunctionsTests";
+import {FunctionHelpTests} from "./FunctionHelpTests";
+import {StringFunctionsTests} from "./StringFunctionsTests";
+import {MathFunctionsTests} from "./MathFunctionsTests";
+import {TypesFunctionsTests} from "./TypesFunctionsTests";
+import {OtherFunctionsTests} from "./OtherFunctionsTests";
 
 describe("Standard functions", () => {
   describe("Help", FunctionHelpTests.test);

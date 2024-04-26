@@ -1,11 +1,11 @@
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
 
 
-export default class EqualityTests {
+export class EqualityTests {
   static test() {
     const tests: TestConfiguration[] = [
       // Constants comparison:

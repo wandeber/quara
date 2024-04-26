@@ -1,9 +1,9 @@
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
-export default class MathFunctionsTests {
+export class MathFunctionsTests {
   static test() {
     const tests: TestConfiguration[] = [
       // abs

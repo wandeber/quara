@@ -1,11 +1,11 @@
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
 
 
-export default class ObjectTests {
+export class ObjectTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("obj = {prop1: 1, prop2: 2}; obj;", {prop1: 1, prop2: 2}),

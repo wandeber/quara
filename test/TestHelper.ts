@@ -1,12 +1,12 @@
 // const assert = require("assert");
-import Quara from "../src/Quara";
-import TestConfiguration from "./TestConfiguration";
+import {Quara} from "../src/Quara";
+import {TestConfiguration} from "./TestConfiguration";
 
 
 
 
 
-export default class TestHelper {
+export class TestHelper {
   static test(expression: string, expectedResult: any, variables: object = {}, shouldThrow = false) {
     it(`Should return ${expectedResult} when it executes: '${expression}'`, () => {
       if (shouldThrow) {

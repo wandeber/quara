@@ -1,11 +1,11 @@
-import TestConfiguration from "./TestConfiguration";
-import TestHelper from "./TestHelper";
+import {TestConfiguration} from "./TestConfiguration";
+import {TestHelper} from "./TestHelper";
 
 
 
 
 
-export default class CommentsTests {
+export class CommentsTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("2; // 2 + 2; 4", 2),

@@ -1,11 +1,11 @@
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
 
 
-export default class FunctionCallsTests {
+export class FunctionCallsTests {
   static test() {
     let num1 = 14;
     let dec1 = 14.14;

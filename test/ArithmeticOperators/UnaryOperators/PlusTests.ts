@@ -1,10 +1,10 @@
-import TestConfiguration from "../../TestConfiguration";
-import TestHelper from "../../TestHelper";
+import {TestConfiguration} from "../../TestConfiguration";
+import {TestHelper} from "../../TestHelper";
 
 
 
 
-export default class PlusTests {
+export class PlusTests {
   static test() {
     let num1 = 6;
     let num2 = -3;

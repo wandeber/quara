@@ -1,7 +1,7 @@
-import Interpreter from "../../src/Interpreter/Interpreter";
-import Lexer from "../../src/Lexer/Lexer";
-import Parser from "../../src/Parser";
-import Quara from "../../src/Quara";
+import {Interpreter} from "../../src/Interpreter/Interpreter";
+import {Lexer} from "../../src/Lexer/Lexer";
+import {Parser} from "../../src/Parser";
+import {Quara} from "../../src/Quara";
 
 describe("Interpreter", () => {
   it("Should throw a syntax error", () => {
@@ -54,8 +54,8 @@ describe("Interpreter", () => {
     it("should log", () => {
       lexer.setText("1");
       interpreter.interpret();
-      expect(consoleLogSpy).toHaveBeenNthCalledWith(1, "   ASTCompound", "ASTCompound");
-      expect(consoleLogSpy).toHaveBeenNthCalledWith(2, "     ASTNumber", "1");
+      expect(consoleLogSpy).toHaveBeenNthCalledWith(1, "   Compound", "Compound");
+      expect(consoleLogSpy).toHaveBeenNthCalledWith(2, "     Num", "1");
     });
 
     it("should log a default message", () => {

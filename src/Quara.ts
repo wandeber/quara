@@ -1,6 +1,6 @@
-import Lexer from "./Lexer/Lexer";
-import Parser from "./Parser";
-import Interpreter from "./Interpreter/Interpreter";
+import {Lexer} from "./Lexer/Lexer";
+import {Parser} from "./Parser";
+import {Interpreter} from "./Interpreter/Interpreter";
 import fs from "fs";
 
 

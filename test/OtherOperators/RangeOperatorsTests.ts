@@ -1,9 +1,9 @@
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
-export default class RangeOperatorsTests {
+export class RangeOperatorsTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("arr = 1..4; arr;", [1, 2, 3, 4]),

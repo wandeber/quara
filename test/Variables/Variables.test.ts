@@ -1,9 +1,9 @@
-import Quara from "../../src/Quara";
-import VariableDeclarationTests from "../Variables/VariableDeclarationTests";
-import ObjectTests from "./ObjectTests";
-import ArrayTests from "./ArrayTests";
-import VariableAccessTests from "./VariableAccessTests";
-import VariableAssignTests from "./VariableAssignTests";
+import {Quara} from "../../src/Quara";
+import {VariableDeclarationTests} from "../Variables/VariableDeclarationTests";
+import {ObjectTests} from "./ObjectTests";
+import {ArrayTests} from "./ArrayTests";
+import {VariableAccessTests} from "./VariableAccessTests";
+import {VariableAssignTests} from "./VariableAssignTests";
 
 describe("Variables", () => {
   describe("Variable declaration", VariableDeclarationTests.test);

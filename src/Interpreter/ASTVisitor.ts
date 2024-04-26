@@ -1,23 +1,23 @@
 import {IASTInterpreter} from "./ASTInterpreter";
-import AST, {IAST, IASTWithValue} from "../ASTNodes/AST";
+import {Node, INode, INodeWithValue} from "../ASTNodes/ASTNode";
 import {IVisitorResult} from "./VisitorResult";
 
 export interface IASTVisitor {
   interpreter: IASTInterpreter;
-  visit(node: AST): IVisitorResult;
+  visit(node: Node): IVisitorResult;
 }
 
-export default class ASTVisitor implements IASTVisitor {
+export class ASTVisitor implements IASTVisitor {
   public interpreter: IASTInterpreter;
 
   constructor(interpreter: IASTInterpreter) {
     this.interpreter = interpreter;
   }
 
-  visit(node: IAST|IASTWithValue): IVisitorResult {
+  visit(node: INode|INodeWithValue): IVisitorResult {
     return {
-      value: (node as IASTWithValue).value,
-      output: String((node as IASTWithValue).value),
+      value: (node as INodeWithValue).value,
+      output: String((node as INodeWithValue).value),
     };
   }
 }

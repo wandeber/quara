@@ -1,4 +1,4 @@
-export default class TestConfiguration {
+export class TestConfiguration {
   expression: string|string[];
 
   result: any;

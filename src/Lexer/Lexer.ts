@@ -1,11 +1,9 @@
-
-
 import {Operators} from "./Operators";
 import {ReservedKeywords} from "./ReservedKeywords";
-import Token from "../Token";
-import TokenTypes from "../TokenTypes";
-import {Types} from "../helpers/BLib/BLib";
-import Validation from "./Validation";
+import {Token} from "../Token";
+import {TT} from "../TokenTypes";
+import {Types} from "../helpers/BLib/Types";
+import {Validation} from "./Validation";
 
 
 class LexerError extends Error {
@@ -47,7 +45,7 @@ Permitir "2a b c" -> "a", "b" y "c" son nombres de variable. Se interpretará co
  *   analysis.
  * - Lexeme: A sequence of characters that form a token.
  */
-export default class Lexer {
+export class Lexer {
   pos = 0;
   line = 0;
   lineStartPos = 0;
@@ -241,7 +239,7 @@ export default class Lexer {
     }
     return ReservedKeywords.get(result)
     || Operators.get(result)
-    || new Token(TokenTypes.Id, result);
+    || new Token(TT.Id, result);
   }
 
   getOperator() {
@@ -284,7 +282,7 @@ export default class Lexer {
     if so, then return EoF token because there is no more
     input left to convert into tokens */
     if (!this.currentChar) {
-      return new Token(TokenTypes.EoF, "");
+      return new Token(TT.EoF, "");
     }
 
     if (!this.inTextBlock) {
@@ -326,7 +324,7 @@ export default class Lexer {
           this.advance();
         }
 
-        return new Token(TokenTypes.TextBlock, text);
+        return new Token(TT.TextBlock, text);
       }
     }
 
@@ -346,7 +344,7 @@ export default class Lexer {
         return this.getNextToken(skipSpaces);
       }
 
-      token = new Token(TokenTypes.Space, " ");
+      token = new Token(TT.Space, " ");
       this.advance();
       return token;
     }
@@ -366,7 +364,7 @@ export default class Lexer {
     if (this.currentChar == "\"") {
       let str = this.getString();
       if (typeof str !== "undefined") {
-        return new Token(TokenTypes.StrConst, str);
+        return new Token(TT.StrConst, str);
       }
     }
 
@@ -376,9 +374,9 @@ export default class Lexer {
       let number = this.getNumber();
       if (number) {
         if (Types.isInteger(number)) {
-          return new Token(TokenTypes.IntConst, parseInt(number));
+          return new Token(TT.IntConst, parseInt(number));
         }
-        return new Token(TokenTypes.DecConst, parseFloat(number));
+        return new Token(TT.DecConst, parseFloat(number));
       }
     }
 

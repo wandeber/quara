@@ -1,11 +1,11 @@
-import TestConfiguration from "../TestConfiguration";
-import TestHelper from "../TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 
 
 
-export default class ArrayTests {
+export class ArrayTests {
   static test() {
     const tests: TestConfiguration[] = [
       new TestConfiguration("a = [1, 2, 3]; a;", [1, 2, 3]),

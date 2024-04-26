@@ -5,7 +5,7 @@ const AlphanumericRegExp = /^[a-záéíóúñç0-9]+$/iu;
 
 
 
-export default class Types {
+export class Types {
   static isInteger(str: string|number): boolean {
     if (isNaN(str as number)) {
       return false;

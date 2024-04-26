@@ -21,12 +21,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reserve word `fn`.
 - Operator `in` (or `$in`) for arrays, objects and strings.
 - Operators without $ prefix: `and`, `or`, `not`...
-- Reduced file size.
+- Simple function definition implementation.
 
 ### Changed
 
 - `..` is now the inclusive range operator.
 - `..<` is now the exclusive range operator.
+- Optimize build size.
+- Refactor classes names of AST nodes and visitors.
+- Avoid default exports.
 
 ### Removed
 

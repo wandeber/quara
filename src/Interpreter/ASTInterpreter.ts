@@ -1,9 +1,9 @@
-import ASTVisitor from "./ASTVisitor";
-import AST from "../ASTNodes/AST";
+import {ASTVisitor} from "./ASTVisitor";
+import {Node} from "../ASTNodes/ASTNode";
 import {IVisitorResult} from "./VisitorResult";
 
 
-interface VisitorMap {
+export interface VisitorMap {
   [key: string]: ASTVisitor;
 }
 
@@ -11,10 +11,10 @@ export interface IASTInterpreter {
   globalScope: any;
   error(message: string, me?: any): void;
   debug(message?: string): void;
-  visit(node: AST): IVisitorResult;
+  visit(node: Node): IVisitorResult;
 }
 
-export default abstract class ASTInterpreter implements IASTInterpreter {
+export abstract class ASTInterpreter implements IASTInterpreter {
   globalScope: any = {};
   visitors: VisitorMap = {};
 
@@ -29,6 +29,6 @@ export default abstract class ASTInterpreter implements IASTInterpreter {
     console.log("-- Interpreter: "+ message);
   }
 
-  abstract visit(node: AST): IVisitorResult;
+  abstract visit(node: Node): IVisitorResult;
   abstract interpret(): any;
 }
