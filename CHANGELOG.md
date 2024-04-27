@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Sum operator now works with arrays.
 
+### Changed
+
+- Update dependencies: `husky`.
+
 ## [0.10.8]
 
 ### Added

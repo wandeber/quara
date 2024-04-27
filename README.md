@@ -54,21 +54,21 @@ Programming language interpreted by JavaScript to preprocess text files like ema
 
 ### Objects
 ```js
-var obj = {
+obj = {
   key1: 1,
   key2: 2
 };
-var key = "key3";
+key = "key3";
 print(obj.{key});
 obj.{key} = 4;
 ```
 
 ### Arrays
 ```js
-var list = [1, 2, 3, 4, 5];
+list = [1, 2, 3, 4, 5];
 list.length; // 5
 print(list[0]);
-var num = 2;
+num = 2;
 print(list[num]);
 list[4] = 6;
 list[num] = 7;
@@ -130,26 +130,26 @@ while c -> r
 
 Assign the output to a variable:
 ```js
-var name = "Sara";
-var text = `Hola, {name}`; // Hola Sara
+name = "Sara";
+text = `Hola, {name}`; // Hola Sara
 ```
 
 Coding:
 ```js
-var name = "Sara";
-var text = `Hola, {name += " V."; name}`; // Hola Sara V.
+name = "Sara";
+text = `Hola, {name += " V."; name}`; // Hola Sara V.
 ```
 
 ### variables:
 ```js
-var name = "Sara";
+name = "Sara";
 `Hola, {name}` // Hola Sara
 ```
 
 ### if/else statements:
 ```js
-var name = "Sara";
-var useName = true;
+name = "Sara";
+useName = true;
 `
   Hola
   {if useName:}
@@ -162,7 +162,7 @@ var useName = true;
 
 ### While loops:
 ```js
-var i = 0;
+i = 0;
 `
   {while i < 5:}
     {i}
@@ -216,8 +216,8 @@ hi
 
 ### Objects
 ```js
-var k = "key1";
-var obj = {
+k = "key1";
+obj = {
   {k}: 1,
   {"key2"}: 2
 };
