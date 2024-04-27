@@ -1,4 +1,4 @@
-import {DefaultVariables, Documentation} from "../../src/globalScope";
+import {DV, Documentation} from "../../src/globalScope";
 import {TestConfiguration} from "../TestConfiguration";
 import {TestHelper} from "../TestHelper";
 
@@ -10,7 +10,7 @@ export class FunctionHelpTests {
       new TestConfiguration("help()", Documentation.get("help")),
     ];
 
-    Object.keys(DefaultVariables).forEach((key: string) => {
+    Object.keys(DV).forEach((key: string) => {
       tests.push(new TestConfiguration(`help(${key})`, Documentation.get(key)));
     });
 

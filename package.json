@@ -34,11 +34,10 @@
     "require": "./dist/Quara.cjs"
   },
   "scripts": {
-    "start": "npm run rebuild && npm run shell",
+    "start": "npm run build && npm run shell",
     "dev": "tsx --watch ./src/shell.ts",
     "shell": "NODE_NO_WARNINGS=1 node ./dist/Quara.shell.js",
-    "rebuild": "npm run clean; npm run build",
-    "build": "npm run build-esbuild",
+    "build": "npm run clean; npm run build-esbuild",
     "build-prod": "npm run clean; npm run build-esbuild && npm run check",
     "preversion": "npm run check",
     "check": "npm test && npm run lint",

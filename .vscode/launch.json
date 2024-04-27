@@ -4,9 +4,10 @@
     {
       "name": "Launch Program",
       "type": "node",
-      "program": "${workspaceFolder}/dist/server.js",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
       "request": "launch",
-      "preLaunchTask": "npm: build",
-    },
+      "cwd": "${workspaceFolder}"
+    }
   ]
 }

@@ -47,7 +47,7 @@ import {TxtProcessorVisitor} from "./TxtProcessorVisitor";
 import {ArrVisitor} from "./ArrVisitor";
 import {ObjVisitor} from "./ObjVisitor";
 
-import {DefaultVariables} from "../globalScope";
+import {DV} from "../globalScope";
 
 
 
@@ -83,7 +83,7 @@ export class Interpreter extends ASTInterpreter {
       this.visit = this.visitWithoutDebug;
     }
 
-    this.setVariables(DefaultVariables);
+    this.setVariables(DV);
     if (variables) {
       this.setVariables(variables);
     }
