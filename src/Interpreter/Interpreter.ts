@@ -1,11 +1,36 @@
 import {Parser} from "../Parser";
 
+// AST nodes:
+import {Node} from "../ASTNodes/ASTNode";
+import {Assign} from "../ASTNodes/Assign";
+import {BinOperator} from "../ASTNodes/BinOperator";
+import {Bool} from "../ASTNodes/Bool";
+import {Char} from "../ASTNodes/Char";
+import {Compound} from "../ASTNodes/Compound";
+import {ConstDecl} from "../ASTNodes/ConstDecl";
+import {FnDecl} from "../ASTNodes/FnDecl";
+import {FnCall} from "../ASTNodes/FnCall";
+import {If} from "../ASTNodes/If";
+import {Num} from "../ASTNodes/Num";
+import {Str} from "../ASTNodes/Str";
+import {Type} from "../ASTNodes/Type";
+import {UnaryOperator} from "../ASTNodes/UnaryOperator";
+import {Variable} from "../ASTNodes/Variable";
+import {VarDecl} from "../ASTNodes/VarDecl";
+import {While} from "../ASTNodes/While";
+import {TxtBlock} from "../ASTNodes/TxtBlock";
+import {TxtProcessor} from "../ASTNodes/TxtProcessor";
+import {Arr} from "../ASTNodes/Arr";
+import {Obj} from "../ASTNodes/Obj";
+
+// Visitors:
 import {BoolVisitor} from "./BoolVisitor";
 import {NumVisitor} from "./NumVisitor";
 import {StrVisitor} from "./StrVisitor";
 import {IVisitorResult} from "./VisitorResult";
 import {UnaryOperatorVisitor} from "./UnaryOperatorVisitor";
 import {BinOperatorVisitor} from "./BinOperatorVisitor";
+import {FnDeclVisitor} from "./FnDeclVisitor";
 import {FnCallVisitor} from "./FnCallVisitor";
 import {AssignVisitor} from "./AssignVisitor";
 import {VariableVisitor} from "./VariableVisitor";
@@ -21,27 +46,6 @@ import {TxtBlockVisitor} from "./TxtBlockVisitor";
 import {TxtProcessorVisitor} from "./TxtProcessorVisitor";
 import {ArrVisitor} from "./ArrVisitor";
 import {ObjVisitor} from "./ObjVisitor";
-
-import {Node} from "../ASTNodes/ASTNode";
-import {Assign} from "../ASTNodes/Assign";
-import {BinOperator} from "../ASTNodes/BinOperator";
-import {Bool} from "../ASTNodes/Bool";
-import {Char} from "../ASTNodes/Char";
-import {Compound} from "../ASTNodes/Compound";
-import {ConstDecl} from "../ASTNodes/ConstDecl";
-import {FnCall} from "../ASTNodes/FnCall";
-import {If} from "../ASTNodes/If";
-import {Num} from "../ASTNodes/Num";
-import {Str} from "../ASTNodes/Str";
-import {Type} from "../ASTNodes/Type";
-import {UnaryOperator} from "../ASTNodes/UnaryOperator";
-import {Variable} from "../ASTNodes/Variable";
-import {VarDecl} from "../ASTNodes/VarDecl";
-import {While} from "../ASTNodes/While";
-import {TxtBlock} from "../ASTNodes/TxtBlock";
-import {TxtProcessor} from "../ASTNodes/TxtProcessor";
-import {Arr} from "../ASTNodes/Arr";
-import {Obj} from "../ASTNodes/Obj";
 
 import {DefaultVariables} from "../globalScope";
 
@@ -95,6 +99,7 @@ export class Interpreter extends ASTInterpreter {
     this.visitors[Char.name] = new CharVisitor(this);
     this.visitors[Compound.name] = new CompoundVisitor(this);
     this.visitors[ConstDecl.name] = new ConstDeclVisitor(this);
+    this.visitors[FnDecl.name] = new FnDeclVisitor(this);
     this.visitors[FnCall.name] = new FnCallVisitor(this);
     this.visitors[Num.name] = new NumVisitor(this);
     this.visitors[Str.name] = new StrVisitor(this);

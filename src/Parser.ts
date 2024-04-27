@@ -1,10 +1,11 @@
-import {Operators} from "./Lexer/Operators";
+import {OP} from "./Lexer/Operators";
 import {Node} from "./ASTNodes/ASTNode";
 import {Assign} from "./ASTNodes/Assign";
 import {BinOperator} from "./ASTNodes/BinOperator";
 import {Bool} from "./ASTNodes/Bool";
 import {Compound} from "./ASTNodes/Compound";
 import {ConstDecl} from "./ASTNodes/ConstDecl";
+import {FnDecl} from "./ASTNodes/FnDecl";
 import {FnCall} from "./ASTNodes/FnCall";
 import {Num} from "./ASTNodes/Num";
 import {Str} from "./ASTNodes/Str";
@@ -109,6 +110,8 @@ const availableConstants = [
  *
  * Precedence table (from higher to lower):
  * |  Precedence level  Associativity  Operators
+ * |  16                Left           in             In
+ * |  15                Left           .., ..<        Range
  * |  14                Left           ||             Logical or
  * |  13                Left           &&             Logical and
  * |  9                 Left           ==, !=         Equality
@@ -276,8 +279,9 @@ export class Parser {
 
   /**
    * member      -> variable (
-   *                  OpDot variable
-   *                  | OpArrayAccessorOpen expr OpArrayAccessorClose
+   *                  (Dot variable)
+   *                  | (Dot CurlyOpen expr CurlyClose)
+   *                  | (BracketOpen expr BracketClose)
    *                )*
    * @return {Node}
    */
@@ -363,7 +367,7 @@ export class Parser {
 
   /**
    * factor     -> (OpPlus | OpMinus | OpNot | OpSqrt) factor
-   *               | (OpParenthesisOpen expr OpParenthesisClose)
+   *               | (ParenOpen expr ParenClose)
    *               | constant
    *               | (OpIncrement | OpDecrement)? member funcCall?
    * @return {Node}
@@ -431,8 +435,8 @@ export class Parser {
 
   /**
    * term -> pow (
-   *           (Id | BooleanConstant | CharConstant | IntegerConstant | DecimalConstant)
-   *           | (OpMultiplication | OpDivision | OpModulus) pow
+   *           (Id | BoolConst | CharConst | IntConst | DecConst)
+   *           | (OpTimes | OpDiv | OpMod) pow
    *         )*
    * algo algo -> algo * algo
    * @return {Node}
@@ -448,7 +452,7 @@ export class Parser {
       TT.IntConst,
       TT.DecConst,
       TT.Backtip,
-      // TokenTypes.OpParenthesisOpen, // Collision with function calls.
+      // TokenTypes.ParenOpen, // Collision with function calls.
     ];
     let allowedOperators = [
       TT.OpTimes,
@@ -463,7 +467,7 @@ export class Parser {
     while (anyAllowed.includes(this.currentToken.type)) {
       let operator: Token;
       if (allowedMembers.includes(this.currentToken.type)) {
-        operator = Operators.get("*");
+        operator = OP.get("*");
       }
       else {
         operator = this.operator(allowedOperators);
@@ -491,7 +495,7 @@ export class Parser {
 
   /**
    * equality -> relational (
-   *               (OpGreaterThan | OpLowerThan | OpGreaterThanEqual | OpLowerThanEqual) relational
+   *               (OpGT | OpGTE | OpLT | OpLTE) relational
    *             )*
    * @return {Node}
    */
@@ -511,9 +515,9 @@ export class Parser {
   andOperand() {
     return this.binaryOperand(this.equality, [
       TT.OpEq,
-      TT.OpNEQ,
+      TT.OpNEq,
       TT.OpLaxEq,
-      TT.OpLaxNEQ,
+      TT.OpLaxNEq,
     ]);
   }
 
@@ -612,7 +616,7 @@ export class Parser {
   }
 
   /**
-   * commaDecl -> declAssign (OpComma declAssign)*
+   * commaDecl -> declAssign (Comma declAssign)*
    * @param {boolean} initializationRequired
    * @return {Node[]}
    */
@@ -686,8 +690,26 @@ export class Parser {
   }
 
   /**
-   * block    -> OpCurlyBraceOpen statementList OpCurlyBraceClose
-   * @return {Compound}
+   * fnDecl      -> Fn ID ParenOpen paramList? ParenClose block
+   * @return {AST}
+   */
+  fnDecl() {
+    let token = this.currentToken;
+    this.eat(TT.Fn);
+    let name = this.variable();
+    this.eat(TT.ParenOpen);
+    let params: Node[] = [];
+    if (this.currentToken.type != TT.ParenClose) {
+      params = this.paramList();
+    }
+    this.eat(TT.ParenClose);
+    let body = this.block();
+    return new FnDecl(token, name, params, body);
+  }
+
+  /**
+   * block    -> CurlyOpen statementList CurlyClose
+   * @return {ASTCompound}
    */
   block() {
     this.eat([TT.CurlyOpen]);
@@ -697,7 +719,7 @@ export class Parser {
   }
 
   /**
-   * colonBlock -> OpColon statementList endCheck
+   * colonBlock -> Colon statementList endCheck
    * @param {string[]} endCheck
    * @param {string[]} endEat
    * @return {Compound}
@@ -729,8 +751,8 @@ export class Parser {
   }
 
   /**
-   * controlCondition -> (OpParenthesisOpen expr OpParenthesisClose) | expr
-   * @return {Node}
+   * controlCondition -> (ParenOpen expr ParenClose) | expr
+   * @return {AST}
    */
   controlCondition() {
     let condition: Node;
@@ -827,8 +849,13 @@ export class Parser {
   }
 
   /**
-   * statement  -> ifStatement | whileStatement | declaration | expr | textProcessor | empty
-   * @return {Node}
+   * statement  -> ifStatement | whileStatement
+   *               | fnDecl
+   *               | declaration
+   *               | textProcessor | textBlock
+   *               | empty
+   *               | expr
+   * @return {AST}
    */
   statement() {
     let node: Node = null;
@@ -838,6 +865,9 @@ export class Parser {
     else if (this.currentToken.type == TT.While) {
       node = this.whileStatement();
     }
+    else if (this.currentToken.type == TT.Fn) {
+      node = this.fnDecl();
+    }
     else if (
       [
         TT.ModConst, TT.ModVar,
@@ -846,14 +876,14 @@ export class Parser {
     ) {
       node = this.declaration();
     }
-    else if (this.currentToken.type == TT.Semi) {
-      // TODO: Implement empty AST?
-    }
     else if (this.currentToken.type == TT.Backtip) {
       node = this.textProcessor();
     }
     else if (this.currentToken.type == TT.TextBlock) {
       node = this.textBlock();
+    }
+    else if (this.currentToken.type == TT.Semi) {
+      // TODO: Implement empty AST?
     }
     else {
       // console.log("expr");

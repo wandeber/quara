@@ -1,5 +1,5 @@
-import {Operators} from "./Operators";
-import {ReservedKeywords} from "./ReservedKeywords";
+import {OP} from "./Operators";
+import {RK} from "./ReservedKeywords";
 import {Token} from "../Token";
 import {TT} from "../TokenTypes";
 import {Types} from "../helpers/BLib/Types";
@@ -237,15 +237,15 @@ export class Lexer {
       result += this.currentChar;
       this.advance();
     }
-    return ReservedKeywords.get(result)
-    || Operators.get(result)
+    return RK.get(result)
+    || OP.get(result)
     || new Token(TT.Id, result);
   }
 
   getOperator() {
-    let operatorKeys = Array.from(Operators.keys());
+    let operatorKeys = Array.from(OP.keys());
     let currentOperatorKey = this.getCoincidence(operatorKeys);
-    return Operators.get(currentOperatorKey);
+    return OP.get(currentOperatorKey);
   }
 
   getEscapedChar() {

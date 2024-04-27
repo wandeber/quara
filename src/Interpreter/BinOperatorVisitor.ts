@@ -56,10 +56,10 @@ export class BinOperatorVisitor extends ASTVisitor {
     case TT.OpLaxEq:
       result = leftValue == rightValue;
       break;
-    case TT.OpNEQ:
+    case TT.OpNEq:
       result = leftValue !== rightValue;
       break;
-    case TT.OpLaxNEQ:
+    case TT.OpLaxNEq:
       result = leftValue != rightValue;
       break;
     case TT.OpLT:
