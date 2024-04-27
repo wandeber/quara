@@ -52,32 +52,6 @@ Programming language interpreted by JavaScript to preprocess text files like ema
   - private, public, protected
   - interface, implements
 
-
-### If/else
-```js
-if condition {
-  // ...
-}
-else if condition {
-  // ...
-}
-else {
-  // ...
-}
-
-// Recommended syntaxes:
-if c {r}
-else if c2 {r2}
-else {r3}
-if (c) r;
-
-// Other syntaxes:
-if (c) r
-if (c) {r}
-if (c) {r;}
-if c -> r
-```
-
 ### Objects
 ```js
 var obj = {
@@ -104,7 +78,32 @@ list.{4} = 6;
 list.2 = 5;
 ```
 
-### Loops
+### Control
+
+#### If/else
+```js
+if condition {
+  // ...
+}
+else if condition {
+  // ...
+}
+else {
+  // ...
+}
+
+// Recommended syntaxes:
+if c {r}
+else if c2 {r2}
+else {r3}
+if (c) r;
+
+// Other syntaxes:
+if (c) r
+if (c) {r}
+if (c) {r;}
+if c -> r
+```
 
 #### While
 ```js
