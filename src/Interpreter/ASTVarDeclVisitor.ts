@@ -1,15 +1,13 @@
-import ASTConstantDeclaration from "../ASTNodes/ASTConstantDeclaration";
-import ASTVisitor from "./ASTVisitor";
 import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
+import ASTVarDecl from "../ASTNodes/ASTVarDecl";
+import ASTVisitor from "./ASTVisitor";
 import {IASTWithName} from "../ASTNodes/AST";
-import {IVisitorResult} from "./VisitorResult";
 
 
 
-export default class ASTConstantDeclarationVisitor extends ASTVisitor {
-  visit(node: ASTConstantDeclaration): IVisitorResult {
-    // this.interpreter.debug("visitASTConstantDeclaration");
-    // let type = "any"; // Const puede ser any? Que sea como no ponerlo?
+export default class ASTVarDeclVisitor extends ASTVisitor {
+  visit(node: ASTVarDecl) {
+    // let type = "any"; // Default any or deduce from value?
     // if (node.nodeType) {
     //   type = this.interpreter.visit(node.nodeType);
     // }
@@ -19,10 +17,13 @@ export default class ASTConstantDeclarationVisitor extends ASTVisitor {
     for (let child of node.children) {
       // console.log("child", child);
       let childBinaryOperator: ASTBinaryOperator = child as ASTBinaryOperator;
-      name = (childBinaryOperator.left as IASTWithName).name;
+      name = (childBinaryOperator.left as IASTWithName)?.name;
+      if (!name) {
+        ({name} = child as IASTWithName); // TODO: ¿Esto es necesario?
+      }
 
       if (typeof this.interpreter.globalScope[name] != "undefined") {
-        throw new Error(`Constant ${name} already declared.`);
+        throw new Error(`Variable ${name} already declared.`);
       }
 
       // Declaration...
@@ -33,10 +34,9 @@ export default class ASTConstantDeclarationVisitor extends ASTVisitor {
       this.interpreter.visit(child);
     }
 
-    let value = name ? this.interpreter.globalScope[name] : undefined;
     return {
-      value,
-      output: value,
+      value: name ? this.interpreter.globalScope[name] : undefined,
+      // output: undefined,
     };
   }
 }

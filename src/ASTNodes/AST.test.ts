@@ -6,7 +6,7 @@ import ASTFunctionCall from "./ASTFunctionCall";
 import ASTString from "./ASTString";
 import ASTChar from "./ASTChar";
 import ASTUnaryOperator from "./ASTUnaryOperator";
-import ASTVariableDeclaration from "./ASTVariableDeclaration";
+import ASTVarDecl from "./ASTVarDecl";
 import TokenTypes from "../TokenTypes";
 import ASTType from "./ASTType";
 import ASTCompound from "./ASTCompound";
@@ -24,7 +24,7 @@ describe("AST toString methods", () => {
   let funcCall = new ASTFunctionCall(astVariable, [astVariable, astVariable]);
   let astValue = new ASTString(tokenName);
   let unaryOp = new ASTUnaryOperator(tokenPlus, astVariable);
-  let declaration = new ASTVariableDeclaration(astTypeInt);
+  let declaration = new ASTVarDecl(astTypeInt);
   declaration.children.push(astVariable);
 
   let compound = new ASTCompound();

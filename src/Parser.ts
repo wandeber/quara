@@ -6,14 +6,14 @@ import ASTAssign from "./ASTNodes/ASTAssign";
 import ASTBinaryOperator from "./ASTNodes/ASTBinaryOperator";
 import ASTBoolean from "./ASTNodes/ASTBoolean";
 import ASTCompound from "./ASTNodes/ASTCompound";
-import ASTConstantDeclaration from "./ASTNodes/ASTConstantDeclaration";
+import ASTConstDecl from "./ASTNodes/ASTConstDecl";
 import ASTFunctionCall from "./ASTNodes/ASTFunctionCall";
 import ASTNumber from "./ASTNodes/ASTNumber";
 import ASTString from "./ASTNodes/ASTString";
 import ASTType from "./ASTNodes/ASTType";
 import ASTUnaryOperator from "./ASTNodes/ASTUnaryOperator";
 import ASTVariable from "./ASTNodes/ASTVariable";
-import ASTVariableDeclaration from "./ASTNodes/ASTVariableDeclaration";
+import ASTVarDecl from "./ASTNodes/ASTVarDecl";
 import Lexer from "./Lexer/Lexer";
 import ASTIf from "./ASTNodes/ASTIf";
 import ASTWhile from "./ASTNodes/ASTWhile";
@@ -21,6 +21,7 @@ import ASTTextBlock from "./ASTNodes/ASTTextBlock";
 import ASTTextProcessor from "./ASTNodes/ASTTextProcessor";
 import ASTArray from "./ASTNodes/ASTArray";
 import ASTObject from "./ASTNodes/ASTObject";
+import ASTFnDecl from "./ASTNodes/ASTFnDecl";
 
 
 class ParserError extends Error {
@@ -109,6 +110,8 @@ const availableConstants = [
  *
  * Precedence table (from higher to lower):
  * |  Precedence level  Associativity  Operators
+ * |  16                Left           in             In
+ * |  15                Left           .., ..<        Range
  * |  14                Left           ||             Logical or
  * |  13                Left           &&             Logical and
  * |  9                 Left           ==, !=         Equality
@@ -634,7 +637,7 @@ export default class Parser {
    * @return {AST}
    */
   varDecl() {
-    let root = new ASTVariableDeclaration();
+    let root = new ASTVarDecl();
 
     // If ModVar is present, typeSpec is optional.
     if (this.currentToken.type == TT.ModVar) {
@@ -657,7 +660,7 @@ export default class Parser {
    * @return {AST}
    */
   constDecl() {
-    let root = new ASTConstantDeclaration();
+    let root = new ASTConstDecl();
     this.eat(TT.ModConst); // Required.
 
     if (constantTypes.includes(this.currentToken.type)) { // Optional.
@@ -684,6 +687,24 @@ export default class Parser {
     //   node = this.expr();
     // }
     return node;
+  }
+
+  /**
+   * fnDecl      -> Fn ID ParenOpen paramList? ParenClose block
+   * @return {AST}
+   */
+  fnDecl() {
+    let token = this.currentToken;
+    this.eat(TT.Fn);
+    let name = this.variable();
+    this.eat(TT.ParenOpen);
+    let params: AST[] = [];
+    if (this.currentToken.type != TT.ParenClose) {
+      params = this.paramList();
+    }
+    this.eat(TT.ParenClose);
+    let body = this.block();
+    return new ASTFnDecl(token, name, params, body);
   }
 
   /**
@@ -828,7 +849,12 @@ export default class Parser {
   }
 
   /**
-   * statement  -> ifStatement | whileStatement | declaration | expr | textProcessor | empty
+   * statement  -> ifStatement | whileStatement
+   *               | fnDecl
+   *               | declaration
+   *               | textProcessor | textBlock
+   *               | empty
+   *               | expr
    * @return {AST}
    */
   statement() {
@@ -839,6 +865,9 @@ export default class Parser {
     else if (this.currentToken.type == TT.While) {
       node = this.whileStatement();
     }
+    else if (this.currentToken.type == TT.Fn) {
+      node = this.fnDecl();
+    }
     else if (
       [
         TT.ModConst, TT.ModVar,
@@ -847,14 +876,14 @@ export default class Parser {
     ) {
       node = this.declaration();
     }
-    else if (this.currentToken.type == TT.Semi) {
-      // TODO: Implement empty AST?
-    }
     else if (this.currentToken.type == TT.Backtip) {
       node = this.textProcessor();
     }
     else if (this.currentToken.type == TT.TextBlock) {
       node = this.textBlock();
+    }
+    else if (this.currentToken.type == TT.Semi) {
+      // TODO: Implement empty AST?
     }
     else {
       // console.log("expr");

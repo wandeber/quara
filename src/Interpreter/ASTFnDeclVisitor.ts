@@ -1,12 +1,18 @@
-import ASTBinaryOperator from "../ASTNodes/ASTBinaryOperator";
-import ASTVariableDeclaration from "../ASTNodes/ASTVariableDeclaration";
+import ASTFnDecl from "../ASTNodes/ASTFnDecl";
 import ASTVisitor from "./ASTVisitor";
-import {IASTWithName} from "../ASTNodes/AST";
 
 
 
-export default class ASTVariableDeclarationVisitor extends ASTVisitor {
-  visit(node: ASTVariableDeclaration) {
+export default class ASTFnDeclVisitor extends ASTVisitor {
+  visit(node: ASTFnDecl) {
+    this.interpreter.globalScope[node.name.name] = () => {
+      // console.log("Calling function", node.name.name);
+      let result;
+      for (let child of node.body.children) {
+        result = this.interpreter.visit(child);
+      }
+      return result.value;
+    };
     // let type = "any"; // Default any or deduce from value?
     // if (node.nodeType) {
     //   type = this.interpreter.visit(node.nodeType);
@@ -14,7 +20,8 @@ export default class ASTVariableDeclarationVisitor extends ASTVisitor {
     // console.log("Type: ", type);
 
     let name;
-    for (let child of node.children) {
+    /*
+    for (let child of node.body.children) {
       // console.log("child", child);
       let childBinaryOperator: ASTBinaryOperator = child as ASTBinaryOperator;
       name = (childBinaryOperator.left as IASTWithName)?.name;
@@ -33,6 +40,7 @@ export default class ASTVariableDeclarationVisitor extends ASTVisitor {
       // child.accept(this.interpreter);
       this.interpreter.visit(child);
     }
+    */
 
     return {
       value: name ? this.interpreter.globalScope[name] : undefined,

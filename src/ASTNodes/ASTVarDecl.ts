@@ -5,7 +5,7 @@ import ASTCompound from "./ASTCompound";
 
 
 
-export default class ASTVariableDeclaration extends ASTCompound {
+export default class ASTVarDecl extends ASTCompound {
   constructor(public typeNode?: IASTWithValue) {
     super();
   }
