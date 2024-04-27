@@ -7,7 +7,7 @@
     "allowSyntheticDefaultImports": true,
     "allowArbitraryExtensions": true,
     "resolveJsonModule": true,
-    
+
     // enable latest features
     "module": "ESNext",
     "lib": ["esnext"],
@@ -23,7 +23,7 @@
 
     "allowJs": true, // allow importing `.js` from `.ts`
     "esModuleInterop": true, // allow default imports for CommonJS modules
-    
+
     // best practices
     "strict": false,
     "useDefineForClassFields": true,

@@ -4,7 +4,7 @@ const buildBase = {
   platform: "node",
   minify: true,
   minifyIdentifiers: true,
-  sourcemap: false,
+  sourcemap: true,
   keepNames: false,
   minifyWhitespace: true,
   minifySyntax: true,
@@ -13,7 +13,7 @@ const buildBase = {
     js: "/*!\n"
       +" * Quara: Query as Sara.\n"
       +" * @licence CC BY-ND 4.0\n"
-      +" * @author Bernardo A. Siverio (wandeber) <berthewanderer@gmail.com>\n"
+      +" * @author Bernardo Alemán Siverio (wandeber) <berthewanderer@gmail.com>\n"
       +" */",
   },
 };

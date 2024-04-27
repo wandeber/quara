@@ -4,7 +4,7 @@ import {TT} from "./TokenTypes";
 
 
 
-export default class Token {
+export class Token {
   static readonly Types = TT;
 
   constructor(public type: any, public value: string|boolean|number) {
@@ -25,5 +25,3 @@ export default class Token {
     return `Token(${this.type}, ${this.value})`;
   }
 }
-
-export {Token};

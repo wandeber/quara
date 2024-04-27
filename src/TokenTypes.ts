@@ -1,4 +1,4 @@
-export default class TokenTypes {
+export class TokenTypes {
   static readonly Backtip = "Backtip"; // `
   static readonly Id = "Id";
   static readonly Space = "Space"; // " "
