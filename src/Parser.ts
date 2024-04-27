@@ -119,7 +119,7 @@ const availableConstants = [
  * |  7                 Left           +, -           Plus and minus
  * |  6                 Left           *, /, %        Factor
  * |  5                 Left           !, +, -        Unary plus and minus
- * |  4                 Left (change)  ^, ¬/          Power
+ * |  4                 Left (change)  ^,             Power
  * |  3                 Left           ¬/             Sqrt
  * |  2                 Left           ()             Function
  * V  1                 Left           ., []          Accessors
