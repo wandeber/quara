@@ -24,7 +24,21 @@ export class BinOperatorVisitor extends ASTVisitor {
 
     switch (node.operator.type) {
     case TT.OpPlus:
-      result = leftValue + rightValue;
+      if (Array.isArray(leftValue)) {
+        console.log("leftValue is array");
+        if (Array.isArray(rightValue)) {
+          result = leftValue.concat(rightValue);
+        }
+        else {
+          result = leftValue.concat(rightValue);
+        }
+      }
+      else if (Array.isArray(rightValue)) {
+        result = [leftValue].concat(rightValue);
+      }
+      else {
+        result = leftValue + rightValue;
+      }
       break;
     case TT.OpMinus:
       result = leftValue - rightValue;

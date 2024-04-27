@@ -22,6 +22,20 @@ export class SumTests {
       new TestConfiguration(`${num2} + 0`, num2 + 0),
       new TestConfiguration(`0 + ${dec2}`, 0 + dec2),
       new TestConfiguration(`${dec2} + 0`, dec2 + 0),
+
+      // Strings:
+      new TestConfiguration('"a" + "b"', "ab"),
+      new TestConfiguration('"a" + 1', "a1"),
+
+      // Arrays:
+      new TestConfiguration("[1, 2, 3] + [4, 5, 6]", [1, 2, 3, 4, 5, 6]),
+      new TestConfiguration("[1, 2, 3] + 4", [1, 2, 3, 4]),
+      new TestConfiguration("0 + [1, 2, 3]", [0, 1, 2, 3]),
+
+      // Objects:
+      // new TestConfiguration("{a: 1, b: 2} + {c: 3, d: 4}", {a: 1, b: 2, c: 3, d: 4}),
+
+      // Errors:
     ];
 
     TestHelper.runTests(tests);
