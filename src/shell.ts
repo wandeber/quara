@@ -92,6 +92,7 @@ const version = info.version;
                 console.log("-∞");
               }
               else if (result == null || Number.isNaN(result)) {
+                // console.log("null");
               }
               else {
                 console.log(result);

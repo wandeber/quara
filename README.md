@@ -28,7 +28,7 @@ Programming language interpreted by JavaScript to preprocess text files like ema
   - ->
   - ", `, \
   - in, $in
-  - /if, /while, /for, /fn, /class, /interface, /enum
+  - /if, /while, /for, /fn, /struct, /class, /interface, /enum
 - Supported types:
   - Booleans.
   - Integer and decimal numbers.
@@ -123,7 +123,7 @@ while (c) {r;}
 while c -> r
 ```
 
-## Text processor/templates
+### Text processor/templates
 ```js
 `Hola` // Hola
 ```
@@ -140,13 +140,13 @@ name = "Sara";
 text = `Hola, {name += " V."; name}`; // Hola Sara V.
 ```
 
-### variables:
+#### variables:
 ```js
 name = "Sara";
 `Hola, {name}` // Hola Sara
 ```
 
-### if/else statements:
+#### if/else statements:
 ```js
 name = "Sara";
 useName = true;
@@ -160,7 +160,7 @@ useName = true;
 `
 ```
 
-### While loops:
+#### While loops:
 ```js
 i = 0;
 `
