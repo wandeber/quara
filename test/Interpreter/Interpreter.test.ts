@@ -25,6 +25,16 @@ describe("Interpreter", () => {
     expect(Quara.scriptSync(";;;")).toBe(undefined);
   });
 
+  it("Variables should be added", () => {
+    const lexer = new Lexer();
+    const parser = new Parser(lexer);
+    const interpreter = new Interpreter(parser);
+    interpreter.setVariables({prop1: 1, prop2: 2});
+    interpreter.setVariables({prop3: 3, prop2: 4});
+    console.log(interpreter.globalScope);
+    expect(interpreter.globalScope.getMemberValue("prop2")).toEqual(4);
+  });
+
   describe("Interpreter logs", () => {
     let consoleLogSpy: jest.SpyInstance;
     const lexer = new Lexer();

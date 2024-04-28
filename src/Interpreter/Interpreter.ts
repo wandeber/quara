@@ -86,9 +86,7 @@ export class Interpreter extends ASTInterpreter {
 
     this.globalScope = getGlobalScope();
     if (variables) {
-      Object.entries(variables).forEach(([key, value]) => {
-        this.globalScope.insert(key, value);
-      });
+      this.setVariables(variables);
     }
 
     // TODO: Una opción para sacar esto de aquí es que se registren las clases Visitors después de
@@ -123,7 +121,9 @@ export class Interpreter extends ASTInterpreter {
    * @param {any} variables
    */
   setVariables(variables: any) {
-    Object.assign(this.globalScope, variables);
+    Object.entries(variables).forEach(([key, value]) => {
+      this.globalScope.insert(key, value);
+    });
   }
 
   /**
