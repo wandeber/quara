@@ -5,6 +5,6 @@ import {ASTVisitor} from "../ASTVisitor";
 
 export class VarDeclVisitor extends ASTVisitor {
   visit(node: VarDecl) {
-
+    console.log("VarDeclVisitor", node);
   }
 }

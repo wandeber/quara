@@ -1,5 +1,6 @@
 import {Lexer} from "./Lexer/Lexer";
 import {Parser} from "./Parser";
+import {SemanticAnalizer} from "./SemanticAnalizer/SemanticAnalyzer";
 import {Interpreter} from "./Interpreter/Interpreter";
 import fs from "fs";
 
@@ -11,15 +12,15 @@ import fs from "fs";
  */
 export default class Quara {
   lexer: Lexer;
-
   parser: Parser;
-
+  semanticAnalyzer: SemanticAnalizer;
   interpreter: Interpreter;
 
 
   constructor(text: string, globalVariables: any = {}, debug = false) {
     this.lexer = new Lexer(text);
     this.parser = new Parser(this.lexer);
+    // this.semanticAnalyzer = new SemanticAnalizer(debug);
     this.interpreter = new Interpreter(this.parser, globalVariables, debug);
   }
 
@@ -72,4 +73,4 @@ export default class Quara {
 }
 
 
-export {Quara, Lexer, Parser, Interpreter};
+export {Quara, Lexer, Parser, SemanticAnalizer, Interpreter};

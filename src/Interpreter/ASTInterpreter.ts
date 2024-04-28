@@ -1,5 +1,6 @@
 import {IASTEngine, IASTVisitor, VisitorMap} from "../ASTVisitor";
 import {INode, INodeWithValue, Node} from "../ASTNodes/ASTNode";
+import {Compound} from "../ASTNodes/Compound";
 import {IVisitorResult} from "./VisitorResult";
 
 
@@ -39,5 +40,5 @@ export abstract class ASTInterpreter implements IASTInterpreter {
   }
 
   abstract visit(node: Node): IVisitorResult;
-  abstract process(): any;
+  abstract process(astTree?: Compound): any;
 }

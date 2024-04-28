@@ -4,21 +4,49 @@ import {IASTEngine, VisitorMap} from "../ASTVisitor";
 // AST nodes:
 import {Node} from "../ASTNodes/ASTNode";
 import {Assign} from "../ASTNodes/Assign";
+import {BinOperator} from "../ASTNodes/BinOperator";
+import {Bool} from "../ASTNodes/Bool";
+import {Char} from "../ASTNodes/Char";
+import {Compound} from "../ASTNodes/Compound";
 import {ConstDecl} from "../ASTNodes/ConstDecl";
 import {FnDecl} from "../ASTNodes/FnDecl";
 import {FnCall} from "../ASTNodes/FnCall";
+import {If} from "../ASTNodes/If";
+import {Num} from "../ASTNodes/Num";
+import {Str} from "../ASTNodes/Str";
+import {Type} from "../ASTNodes/Type";
+import {UnaryOperator} from "../ASTNodes/UnaryOperator";
 import {Variable} from "../ASTNodes/Variable";
 import {VarDecl} from "../ASTNodes/VarDecl";
+import {While} from "../ASTNodes/While";
+import {TxtBlock} from "../ASTNodes/TxtBlock";
+import {TxtProcessor} from "../ASTNodes/TxtProcessor";
+import {Arr} from "../ASTNodes/Arr";
+import {Obj} from "../ASTNodes/Obj";
 
 // Visitors:
+import {BoolVisitor} from "./BoolVisitor";
+import {NumVisitor} from "./NumVisitor";
+import {StrVisitor} from "./StrVisitor";
+import {UnaryOperatorVisitor} from "./UnaryOperatorVisitor";
+import {BinOperatorVisitor} from "./BinOperatorVisitor";
 import {FnDeclVisitor} from "./FnDeclVisitor";
 import {FnCallVisitor} from "./FnCallVisitor";
 import {AssignVisitor} from "./AssignVisitor";
 import {VariableVisitor} from "./VariableVisitor";
+import {TypeVisitor} from "./TypeVisitor";
 import {VarDeclVisitor} from "./VarDeclVisitor";
 import {ConstDeclVisitor} from "./ConstDeclVisitor";
+import {CompoundVisitor} from "./CompoundVisitor";
+import {CharVisitor} from "./CharVisitor";
+import {IfVisitor} from "./IfVisitor";
+import {WhileVisitor} from "./WhileVisitor";
+import {TxtBlockVisitor} from "./TxtBlockVisitor";
+import {TxtProcessorVisitor} from "./TxtProcessorVisitor";
+import {ArrVisitor} from "./ArrVisitor";
+import {ObjVisitor} from "./ObjVisitor";
 
-export default class SemanticAnalizer implements IASTEngine {
+export class SemanticAnalizer implements IASTEngine {
   visitors: VisitorMap = {};
   showDebug: boolean;
   space: string = "";
@@ -44,11 +72,25 @@ export default class SemanticAnalizer implements IASTEngine {
     // Por otra parte, prefiero dejarlo así por dar la posibilidad de crear diferentes interpreters
     //   con diferentes visitors.
     this.visitors[Assign.name] = new AssignVisitor(this);
+    this.visitors[BinOperator.name] = new BinOperatorVisitor(this);
+    this.visitors[Bool.name] = new BoolVisitor(this);
+    this.visitors[Char.name] = new CharVisitor(this);
+    this.visitors[Compound.name] = new CompoundVisitor(this);
     this.visitors[ConstDecl.name] = new ConstDeclVisitor(this);
     this.visitors[FnDecl.name] = new FnDeclVisitor(this);
     this.visitors[FnCall.name] = new FnCallVisitor(this);
+    this.visitors[Num.name] = new NumVisitor(this);
+    this.visitors[Str.name] = new StrVisitor(this);
+    this.visitors[Type.name] = new TypeVisitor(this);
+    this.visitors[UnaryOperator.name] = new UnaryOperatorVisitor(this);
     this.visitors[VarDecl.name] = new VarDeclVisitor(this);
     this.visitors[Variable.name] = new VariableVisitor(this);
+    this.visitors[If.name] = new IfVisitor(this);
+    this.visitors[While.name] = new WhileVisitor(this);
+    this.visitors[TxtProcessor.name] = new TxtProcessorVisitor(this);
+    this.visitors[TxtBlock.name] = new TxtBlockVisitor(this);
+    this.visitors[Arr.name] = new ArrVisitor(this);
+    this.visitors[Obj.name] = new ObjVisitor(this);
   }
 
   error(message: string, me?: any) {
@@ -74,7 +116,7 @@ export default class SemanticAnalizer implements IASTEngine {
    * @param {Node} node
    */
   private visitWithoutDebug(node: Node) {
-    this.visitors[node.constructor.name].visit(node);
+    this.visitors[node.constructor.name]?.visit(node);
   }
 
   /**

@@ -5,6 +5,6 @@ import {ASTVisitor} from "../ASTVisitor";
 
 export class FnDeclVisitor extends ASTVisitor {
   visit(node: FnDecl) {
-
+    console.log("FnDeclVisitor", node);
   }
 }

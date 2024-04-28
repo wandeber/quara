@@ -1,4 +1,4 @@
-import {Lexer, Parser, Interpreter} from "./Quara.js";
+import {Lexer, Parser, /*SemanticAnalizer,*/ Interpreter} from "./Quara.js";
 import ReadLine from "readline";
 import info from "../package.json" with {type: "json"};
 
@@ -62,6 +62,7 @@ const version = info.version;
   let result;
   const lexer = new Lexer();
   const parser = new Parser(lexer);
+  // const semanticAnalizer = new SemanticAnalizer(isDebugInterpreter);
   const interpreter = new Interpreter(parser, undefined, isDebugInterpreter);
 
   const prompt = () => {
@@ -73,7 +74,10 @@ const version = info.version;
         try {
           if (typeof input === "string" && input.length > 0) {
             lexer.setText(input);
-            result = interpreter.process();
+            const astTree = parser.parse();
+            // semanticAnalizer.process(astTree);
+            result = interpreter.process(astTree);
+            // result = interpreter.process();
             switch (typeof result) {
             case "string":
               console.log("\""+ result +"\"");
