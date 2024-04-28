@@ -73,7 +73,7 @@ const version = info.version;
         try {
           if (typeof input === "string" && input.length > 0) {
             lexer.setText(input);
-            result = interpreter.interpret();
+            result = interpreter.process();
             switch (typeof result) {
             case "string":
               console.log("\""+ result +"\"");

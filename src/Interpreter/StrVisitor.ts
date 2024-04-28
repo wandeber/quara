@@ -1,5 +1,5 @@
 // import ASTString from "../ASTNodes/ASTString";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
 
 
 

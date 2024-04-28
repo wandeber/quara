@@ -1,6 +1,6 @@
 import {INode} from "../ASTNodes/ASTNode";
 import {FnCall} from "../ASTNodes/FnCall";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
 import {IVisitorResult} from "./VisitorResult";
 
 
@@ -10,10 +10,10 @@ export class FnCallVisitor extends ASTVisitor {
     let result;
     let args = node.right.map((nodeItem: INode) =>
       // nodeItem.accept(this.interpreter)
-      this.interpreter.visit(nodeItem).value,
+      this.engine.visit(nodeItem).value,
     );
     // let func = node.left.accept(this.interpreter);
-    let func = this.interpreter.visit(node.left).value as any;
+    let func = this.engine.visit(node.left).value as any;
     result = func(...args);
     // console.log("result", result);
     return {

@@ -1,6 +1,6 @@
 import {INodeWithValue} from "../ASTNodes/ASTNode";
 import {Type} from "../ASTNodes/Type";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
 import {IVisitorResult} from "./VisitorResult";
 
 

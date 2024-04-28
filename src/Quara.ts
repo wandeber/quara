@@ -25,7 +25,7 @@ export default class Quara {
 
 
   run() {
-    return this.interpreter.interpret();
+    return this.interpreter.process();
   }
 
 

@@ -9,10 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Scopes.
 - Remove elements from arrays.
-- Custom functions.
 - Import. Its behaviour should be overridable from the outside.
 - Shell inside Quara main class.
 - Optimize Interpreter creation.
+- Absolute value operator: |x|.
+- For loop.
+- Function arguments.
+- Return.
+- Function calls with arguments.
+- Function overloading (by number of arguments).
+- Infer types from assignments.
+- Optional type definition with Pascal-like syntax.
 
 ## [Unreleased]
 

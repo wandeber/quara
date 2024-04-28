@@ -53,7 +53,7 @@ describe("Interpreter", () => {
 
     it("should log", () => {
       lexer.setText("1");
-      interpreter.interpret();
+      interpreter.process();
       expect(consoleLogSpy).toHaveBeenNthCalledWith(1, "   Compound", "Compound");
       expect(consoleLogSpy).toHaveBeenNthCalledWith(2, "     Num", "1");
     });

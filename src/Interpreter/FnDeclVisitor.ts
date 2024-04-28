@@ -1,15 +1,16 @@
 import {FnDecl} from "../ASTNodes/FnDecl";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
+import { IVisitorResult } from './VisitorResult';
 
 
 
 export class FnDeclVisitor extends ASTVisitor {
-  visit(node: FnDecl) {
-    this.interpreter.globalScope[node.name.name] = () => {
+  visit(node: FnDecl): IVisitorResult {
+    this.engine.globalScope[node.name.name] = () => {
       // console.log("Calling function", node.name.name);
       let result;
       for (let child of node.body.children) {
-        result = this.interpreter.visit(child);
+        result = this.engine.visit(child);
       }
       return result.value;
     };
@@ -43,7 +44,7 @@ export class FnDeclVisitor extends ASTVisitor {
     */
 
     return {
-      value: name ? this.interpreter.globalScope[name] : undefined,
+      value: name ? this.engine.globalScope[name] : undefined,
       // output: undefined,
     };
   }

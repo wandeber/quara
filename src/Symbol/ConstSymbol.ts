@@ -1,11 +1,7 @@
-import {SymbolEntry} from "./SymbolEntry";
+import {VarSymbol} from "./VarSymbol";
 
 
 
 
 
-export class ConstSymbol extends SymbolEntry {
-  toString() {
-    return `<${this.name}:${this.type}>`;
-  }
-}
+export class ConstSymbol extends VarSymbol {}

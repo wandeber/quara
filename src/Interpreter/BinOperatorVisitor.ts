@@ -1,5 +1,5 @@
 import {BinOperator} from "../ASTNodes/BinOperator";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
 import {TT} from "../TokenTypes";
 import {INodeWithName} from "../ASTNodes/ASTNode";
 import {IVisitorResult} from "./VisitorResult";
@@ -14,8 +14,8 @@ export class BinOperatorVisitor extends ASTVisitor {
 
     // let leftValue = node.left?.accept(this.interpreter);
     // let rightValue = node.right?.accept(this.interpreter);
-    let leftResult = this.interpreter.visit(node.left) as any;
-    let rightResult = this.interpreter.visit(node.right) as any;
+    let leftResult = this.engine.visit(node.left) as any;
+    let rightResult = this.engine.visit(node.right) as any;
 
     let leftValue = leftResult.value;
     if (typeof rightResult !== "undefined") {
@@ -104,7 +104,7 @@ export class BinOperatorVisitor extends ASTVisitor {
         result = rightValue.hasOwnProperty(leftValue);
       }
       else {
-        this.interpreter.error(rightValue +" is not an array, string, or object.");
+        this.engine.error(rightValue +" is not an array, string, or object.");
       }
       break;
 
@@ -130,7 +130,7 @@ export class BinOperatorVisitor extends ASTVisitor {
       break;
     case TT.CurlyOpen:
       if (typeof leftValue !== "object"/* || Array.isArray(leftValue)*/) {
-        this.interpreter.error(leftValue +" is not an object.");
+        this.engine.error(leftValue +" is not an object.");
       }
       if (
         typeof leftValue !== "undefined"
@@ -143,7 +143,7 @@ export class BinOperatorVisitor extends ASTVisitor {
       break;
     case TT.BracketOpen:
       if (!Array.isArray(leftValue)) {
-        this.interpreter.error(leftValue +" is not an array.");
+        this.engine.error(leftValue +" is not an array.");
       }
       if (
         typeof leftValue !== "undefined"

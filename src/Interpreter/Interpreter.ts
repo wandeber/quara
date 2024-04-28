@@ -172,7 +172,7 @@ export class Interpreter extends ASTInterpreter {
    * Parse and interpret the code.
    * @return {any}
    */
-  interpret() {
+  process() {
     let tree = this.parser.parse();
     // console.log(tree);
     // return tree.accept(this);

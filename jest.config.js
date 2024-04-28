@@ -17,6 +17,7 @@ export default {
     "src/**/*.{js,ts}",
     "!**/node_modules/**",
     "!src/Symbol/**",
+    "!src/SemanticAnalizer/**",
     "!src/shell.ts",
   ],
 };

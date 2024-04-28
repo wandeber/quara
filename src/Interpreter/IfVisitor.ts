@@ -1,5 +1,5 @@
 import {If} from "../ASTNodes/If";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
 import {IVisitorResult} from "./VisitorResult";
 
 
@@ -7,12 +7,12 @@ import {IVisitorResult} from "./VisitorResult";
 export class IfVisitor extends ASTVisitor {
   visit(node: If): IVisitorResult {
     let result;
-    let conditionResult = this.interpreter.visit(node.condition);
+    let conditionResult = this.engine.visit(node.condition);
     if (conditionResult?.value) {
-      result = this.interpreter.visit(node.ifTrue);
+      result = this.engine.visit(node.ifTrue);
     }
     else if (node.ifFalse) {
-      result = this.interpreter.visit(node.ifFalse);
+      result = this.engine.visit(node.ifFalse);
     }
     return {
       value: result?.value,

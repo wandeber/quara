@@ -1,6 +1,6 @@
 import {Variable} from "../ASTNodes/Variable";
 import {Obj} from "../ASTNodes/Obj";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
 import {IVisitorResult} from "./VisitorResult";
 
 
@@ -12,8 +12,8 @@ export class ObjVisitor extends ASTVisitor {
 
     node.members.forEach((value, key) => {
       // console.log(key, value);
-      let keyResult = (key as Variable).name || this.interpreter.visit(key) as unknown as string;
-      let valueResult = this.interpreter.visit(value);
+      let keyResult = (key as Variable).name || this.engine.visit(key) as unknown as string;
+      let valueResult = this.engine.visit(value);
       result[keyResult] = valueResult.value;
     });
 

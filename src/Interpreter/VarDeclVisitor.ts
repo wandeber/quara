@@ -1,12 +1,13 @@
 import {BinOperator} from "../ASTNodes/BinOperator";
 import {VarDecl} from "../ASTNodes/VarDecl";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
 import {INodeWithName} from "../ASTNodes/ASTNode";
+import {IVisitorResult} from "./VisitorResult";
 
 
 
 export class VarDeclVisitor extends ASTVisitor {
-  visit(node: VarDecl) {
+  visit(node: VarDecl): IVisitorResult {
     // let type = "any"; // Default any or deduce from value?
     // if (node.nodeType) {
     //   type = this.interpreter.visit(node.nodeType);
@@ -22,20 +23,20 @@ export class VarDeclVisitor extends ASTVisitor {
         ({name} = child as INodeWithName); // TODO: ¿Esto es necesario?
       }
 
-      if (typeof this.interpreter.globalScope[name] != "undefined") {
+      if (typeof this.engine.globalScope[name] != "undefined") {
         throw new Error(`Variable ${name} already declared.`);
       }
 
       // Declaration...
-      this.interpreter.globalScope[name] = null;
+      this.engine.globalScope[name] = null;
 
       // Maybe initialization...
       // child.accept(this.interpreter);
-      this.interpreter.visit(child);
+      this.engine.visit(child);
     }
 
     return {
-      value: name ? this.interpreter.globalScope[name] : undefined,
+      value: name ? this.engine.globalScope[name] : undefined,
       // output: undefined,
     };
   }

@@ -1,5 +1,5 @@
 import {Compound} from "../ASTNodes/Compound";
-import {ASTVisitor} from "./ASTVisitor";
+import {ASTVisitor} from "./ASTInterpreter";
 import {IVisitorResult} from "./VisitorResult";
 
 
@@ -11,7 +11,7 @@ export class CompoundVisitor extends ASTVisitor {
 
     for (let child of node.children) {
       // result.push(child.accept(this.interpreter));
-      let childResult = this.interpreter.visit(child);
+      let childResult = this.engine.visit(child);
       result.push(childResult);
       if (childResult.output) {
         output += childResult.output;
