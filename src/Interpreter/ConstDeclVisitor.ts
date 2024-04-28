@@ -3,11 +3,12 @@ import {ASTVisitor} from "./ASTInterpreter";
 import {BinOperator} from "../ASTNodes/BinOperator";
 import {INodeWithName} from "../ASTNodes/ASTNode";
 import {IVisitorResult} from "./VisitorResult";
+import {Scope} from "./Scope";
 
 
 
 export class ConstDeclVisitor extends ASTVisitor {
-  visit(node: ConstDecl): IVisitorResult {
+  visit(node: ConstDecl, scope: Scope): IVisitorResult {
     // this.interpreter.debug("visitASTConstantDeclaration");
     // let type = "any"; // Const puede ser any? Que sea como no ponerlo?
     // if (node.nodeType) {
@@ -21,19 +22,19 @@ export class ConstDeclVisitor extends ASTVisitor {
       let childBinaryOperator: BinOperator = child as BinOperator;
       name = (childBinaryOperator.left as INodeWithName).name;
 
-      if (typeof this.engine.globalScope[name] != "undefined") {
+      if (typeof scope.lookup(name, false) !== "undefined") {
         throw new Error(`Constant ${name} already declared.`);
       }
 
       // Declaration...
-      this.engine.globalScope[name] = null;
+      scope.insert(name, null);
 
       // Maybe initialization...
       // child.accept(this.interpreter);
-      this.engine.visit(child);
+      this.engine.visit(child, scope);
     }
 
-    let value = name ? this.engine.globalScope[name] : undefined;
+    let value = name ? scope.getMemberValue(name) : undefined;
     return {
       value,
       output: value,

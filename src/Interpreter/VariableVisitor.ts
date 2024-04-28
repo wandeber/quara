@@ -1,14 +1,16 @@
 import {Variable} from "../ASTNodes/Variable";
 import {ASTVisitor} from "./ASTInterpreter";
+import {Scope} from "./Scope";
 import {IVisitorResult} from "./VisitorResult";
 
 
 
 export class VariableVisitor extends ASTVisitor {
-  visit(node: Variable): IVisitorResult {
+  visit(node: Variable, scope: Scope): IVisitorResult {
     let value, output;
-    if (this.engine.globalScope.hasOwnProperty(node.name)) {
-      value = this.engine.globalScope[node.name];
+    let member = scope.lookup(node.name);
+    if (typeof member !== "undefined") {
+      value = member.value;
       output = String(value);
     }
     return {

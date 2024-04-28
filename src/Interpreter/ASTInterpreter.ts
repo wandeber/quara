@@ -2,11 +2,12 @@ import {IASTEngine, IASTVisitor, VisitorMap} from "../ASTVisitor";
 import {INode, INodeWithValue, Node} from "../ASTNodes/ASTNode";
 import {Compound} from "../ASTNodes/Compound";
 import {IVisitorResult} from "./VisitorResult";
+import { Scope } from './Scope';
 
 
 export interface IASTInterpreter extends IASTEngine {
-  globalScope: any;
-  visit(node: Node): IVisitorResult;
+  globalScope: Scope;
+  visit(node: Node, scope: Scope): IVisitorResult;
 }
 
 export class ASTVisitor implements IASTVisitor {
@@ -16,7 +17,7 @@ export class ASTVisitor implements IASTVisitor {
     this.engine = engine;
   }
 
-  visit(node: INode|INodeWithValue): IVisitorResult {
+  visit(node: INode|INodeWithValue, ...args: any): IVisitorResult {
     return {
       value: (node as INodeWithValue).value,
       output: String((node as INodeWithValue).value),
@@ -25,7 +26,7 @@ export class ASTVisitor implements IASTVisitor {
 }
 
 export abstract class ASTInterpreter implements IASTInterpreter {
-  globalScope: any = {};
+  globalScope = new Scope();
   visitors: VisitorMap = {};
 
   error(message: string, me?: any) {
@@ -39,6 +40,6 @@ export abstract class ASTInterpreter implements IASTInterpreter {
     console.log("-- Interpreter: "+ message);
   }
 
-  abstract visit(node: Node): IVisitorResult;
+  abstract visit(node: Node, scope: Scope): IVisitorResult;
   abstract process(astTree?: Compound): any;
 }

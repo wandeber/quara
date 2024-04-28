@@ -3,26 +3,27 @@ import {ASTVisitor} from "./ASTInterpreter";
 import {TT} from "../TokenTypes";
 import {INodeWithName} from "../ASTNodes/ASTNode";
 import {IVisitorResult} from "./VisitorResult";
+import {Scope} from "./Scope";
 
 
 
 export class AssignVisitor extends ASTVisitor {
-  visit(node: Assign): IVisitorResult {
+  visit(node: Assign, scope: Scope): IVisitorResult {
     // console.log("--");
     // console.log("node left", node.left);
-    let parent = this.engine.globalScope;
+    let parent;
     let {name} = node.left as INodeWithName;
     let leftResult, rightValue, value;
     if (name) {
       // if (typeof this.interpreter.globalScope[name] == "undefined") {
       //   this.interpreter.error("La variable "+ name +" no ha sido declarada.");
       // }
-      leftResult = this.engine.visit(node.left) as any;
+      leftResult = this.engine.visit(node.left, scope) as any;
     }
     else if (TT.Dot == (node.left as any).token.type) {
       let left = (node.left as any).left;
       name = (node?.left as any)?.right?.name;
-      leftResult = this.engine.visit(left) as any;
+      leftResult = this.engine.visit(left, scope) as any;
       parent = leftResult.value;
     }
     else if (
@@ -34,8 +35,8 @@ export class AssignVisitor extends ASTVisitor {
       let tokenType = (node.left as any).token.type;
       let left = (node.left as any).left;
       let right = (node.left as any).right;
-      leftResult = this.engine.visit(left) as any;
-      let index = this.engine.visit(right) as any;
+      leftResult = this.engine.visit(left, scope) as any;
+      let index = this.engine.visit(right, scope) as any;
       parent = leftResult.value;
       name = index.value;
       if (tokenType == TT.BracketOpen) {
@@ -57,7 +58,7 @@ export class AssignVisitor extends ASTVisitor {
 
     // let leftValue = node.left?.accept(this.interpreter);
     // let rightValue = node.right?.accept(this.interpreter);
-    let rightResult = this.engine.visit(node.right) as any;
+    let rightResult = this.engine.visit(node.right, scope) as any;
     // console.log("leftResult", leftResult);
     let leftValue = leftResult.value;
     if (typeof rightResult !== "undefined") {
@@ -88,9 +89,14 @@ export class AssignVisitor extends ASTVisitor {
       break;
     }
 
-    parent[name] = value;
+    if (parent) {
+      parent[name] = value;
+    }
+    else {
+      scope.insert(name, value);
+    }
     return {
-      value: parent[name],
+      value,
       // output: undefined,
     };
   }

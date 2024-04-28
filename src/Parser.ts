@@ -672,7 +672,9 @@ export class Parser {
   }
 
   /**
-   * declaration -> constDecl | varDecl
+   * declaration -> constDecl
+   *                | varDecl
+   *                | fnDecl
    * @return {Node}
    */
   declaration() {
@@ -682,6 +684,9 @@ export class Parser {
     }
     else if ([TT.ModVar, ...variableTypes].includes(this.currentToken.type)) {
       node = this.varDecl();
+    }
+    else if (this.currentToken.type == TT.Fn) {
+      node = this.fnDecl();
     }
     // else /* if (this.currentToken.type != TokenTypes.OpSemicolon) */ {
     //   node = this.expr();
@@ -850,7 +855,6 @@ export class Parser {
 
   /**
    * statement  -> ifStatement | whileStatement
-   *               | fnDecl
    *               | declaration
    *               | textProcessor | textBlock
    *               | empty
@@ -865,13 +869,11 @@ export class Parser {
     else if (this.currentToken.type == TT.While) {
       node = this.whileStatement();
     }
-    else if (this.currentToken.type == TT.Fn) {
-      node = this.fnDecl();
-    }
     else if (
       [
         TT.ModConst, TT.ModVar,
         ...variableTypes,
+        TT.Fn,
       ].includes(this.currentToken.type)
     ) {
       node = this.declaration();

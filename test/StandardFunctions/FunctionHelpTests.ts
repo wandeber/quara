@@ -1,17 +1,17 @@
-import {DV, Documentation} from "../../src/globalScope";
+import {getGlobalScope} from "../../src/globalScope";
 import {TestConfiguration} from "../TestConfiguration";
 import {TestHelper} from "../TestHelper";
 
-
+const globalScope = getGlobalScope();
 
 export class FunctionHelpTests {
   static test() {
     const tests: TestConfiguration[] = [
-      new TestConfiguration("help()", Documentation.get("help")),
+      new TestConfiguration("help()", globalScope.getMemberDoc("help")),
     ];
 
-    Object.keys(DV).forEach((key: string) => {
-      tests.push(new TestConfiguration(`help(${key})`, Documentation.get(key)));
+    Object.keys(globalScope.members.keys()).forEach((key: string) => {
+      tests.push(new TestConfiguration(`help("${key}")`, globalScope.getMemberDoc(key)));
     });
 
     TestHelper.runTests(tests);

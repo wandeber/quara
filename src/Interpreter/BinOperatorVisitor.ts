@@ -3,19 +3,20 @@ import {ASTVisitor} from "./ASTInterpreter";
 import {TT} from "../TokenTypes";
 import {INodeWithName} from "../ASTNodes/ASTNode";
 import {IVisitorResult} from "./VisitorResult";
+import {Scope} from "./Scope";
 
 function repeatString(str: string, num: number): string {
   return new Array(num + 1).join(str);
 }
 
 export class BinOperatorVisitor extends ASTVisitor {
-  visit(node: BinOperator): IVisitorResult {
+  visit(node: BinOperator, scope: Scope): IVisitorResult {
     let result, rightValue;
 
     // let leftValue = node.left?.accept(this.interpreter);
     // let rightValue = node.right?.accept(this.interpreter);
-    let leftResult = this.engine.visit(node.left) as any;
-    let rightResult = this.engine.visit(node.right) as any;
+    let leftResult = this.engine.visit(node.left, scope) as any;
+    let rightResult = this.engine.visit(node.right, scope) as any;
 
     let leftValue = leftResult.value;
     if (typeof rightResult !== "undefined") {

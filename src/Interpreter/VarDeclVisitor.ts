@@ -3,11 +3,12 @@ import {VarDecl} from "../ASTNodes/VarDecl";
 import {ASTVisitor} from "./ASTInterpreter";
 import {INodeWithName} from "../ASTNodes/ASTNode";
 import {IVisitorResult} from "./VisitorResult";
+import {Scope} from "./Scope";
 
 
 
 export class VarDeclVisitor extends ASTVisitor {
-  visit(node: VarDecl): IVisitorResult {
+  visit(node: VarDecl, scope: Scope): IVisitorResult {
     // let type = "any"; // Default any or deduce from value?
     // if (node.nodeType) {
     //   type = this.interpreter.visit(node.nodeType);
@@ -23,20 +24,20 @@ export class VarDeclVisitor extends ASTVisitor {
         ({name} = child as INodeWithName); // TODO: ¿Esto es necesario?
       }
 
-      if (typeof this.engine.globalScope[name] != "undefined") {
+      if (typeof scope.lookup(name) != "undefined") {
         throw new Error(`Variable ${name} already declared.`);
       }
 
       // Declaration...
-      this.engine.globalScope[name] = null;
+      scope.insert(name, null);
 
       // Maybe initialization...
       // child.accept(this.interpreter);
-      this.engine.visit(child);
+      this.engine.visit(child, scope);
     }
 
     return {
-      value: name ? this.engine.globalScope[name] : undefined,
+      value: name ? scope.getMemberValue(name) : undefined,
       // output: undefined,
     };
   }

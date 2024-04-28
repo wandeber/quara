@@ -47,7 +47,8 @@ import {TxtProcessorVisitor} from "./TxtProcessorVisitor";
 import {ArrVisitor} from "./ArrVisitor";
 import {ObjVisitor} from "./ObjVisitor";
 
-import {DV} from "../globalScope";
+import {getGlobalScope} from "../globalScope";
+import {Scope} from "./Scope";
 
 
 
@@ -62,7 +63,7 @@ export class Interpreter extends ASTInterpreter {
    * @param {Node} node
    * @return {any}
    */
-  visit: (node: Node) => IVisitorResult;
+  visit: (node: Node, scope: Scope) => IVisitorResult;
 
   /**
    * AST Interpreter.
@@ -83,9 +84,11 @@ export class Interpreter extends ASTInterpreter {
       this.visit = this.visitWithoutDebug;
     }
 
-    this.setVariables(DV);
+    this.globalScope = getGlobalScope();
     if (variables) {
-      this.setVariables(variables);
+      Object.entries(variables).forEach(([key, value]) => {
+        this.globalScope.insert(key, value);
+      });
     }
 
     // TODO: Una opción para sacar esto de aquí es que se registren las clases Visitors después de
@@ -128,8 +131,8 @@ export class Interpreter extends ASTInterpreter {
    * @param {Node} node
    * @return {any}
    */
-  private visitWithoutDebug(node: Node): IVisitorResult {
-    let result = this.visitors[node.constructor.name].visit(node);
+  private visitWithoutDebug(node: Node, scope: Scope): IVisitorResult {
+    let result = this.visitors[node.constructor.name].visit(node, scope);
     // TODO: Throw an error if the visitor is undefined, null or NaN?
     if (typeof result.value === "undefined" || result.value == null) {
       result.value = undefined;
@@ -152,14 +155,14 @@ export class Interpreter extends ASTInterpreter {
    * @param {Node} node
    * @return {any}
    */
-  private visitWithDebug(node: Node): IVisitorResult {
+  private visitWithDebug(node: Node, scope: Scope): IVisitorResult {
     let prevSpace = this.space;
     if (this.showDebug) {
       this.space += "  ";
       console.log(this.space +" "+ node.constructor.name, node.toString());
     }
 
-    let result = this.visitWithoutDebug(node);
+    let result = this.visitWithoutDebug(node, scope);
 
     if (this.showDebug) {
       this.space = prevSpace;
@@ -178,7 +181,7 @@ export class Interpreter extends ASTInterpreter {
     }
     // console.log(astTree);
     // return astTree.accept(this);
-    let result = this.visit(astTree);
+    let result = this.visit(astTree, this.globalScope);
     return result.value;
   }
 }

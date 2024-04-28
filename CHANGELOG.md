@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Function overloading (by number of arguments).
 - Infer types from assignments.
 - Optional type definition with Pascal-like syntax.
+- Default functions: push, pop, shift, unshift, count.
 
 ## [Unreleased]
 

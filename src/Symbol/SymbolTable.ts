@@ -8,9 +8,15 @@ import {SymbolEntry} from "./SymbolEntry";
 export class SymbolTable {
   public symbols: Map<string, SymbolEntry>;
 
-  constructor() {
+  constructor(
+    public name: string = "global",
+    public level: number = 0,
+    public parent: SymbolTable = null,
+  ) {
     this.symbols = new Map();
-    this.initBuiltInSymbols();
+    if (this.level === 0) {
+      this.initBuiltInSymbols();
+    }
   }
 
   initBuiltInSymbols() {
@@ -29,6 +35,11 @@ export class SymbolTable {
 
   lookup(name: string) {
     return this.symbols.get(name);
+  }
+
+  getChildScope(name: string) {
+    const childScope = new SymbolTable(name, this.level + 1, this);
+    return childScope;
   }
 
   toString() {

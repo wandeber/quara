@@ -8,12 +8,12 @@ export interface IASTEngine {
   visitors: VisitorMap;
   error(message: string, me?: any): void;
   debug(message?: string): void;
-  visit(node: Node): any;
+  visit(node: Node, ...args: any): any;
 }
 
 export interface IASTVisitor {
   engine: IASTEngine;
-  visit(node: Node): any;
+  visit(node: Node, ...args: any): any;
 }
 
 export abstract class ASTVisitor implements IASTVisitor {
@@ -23,5 +23,5 @@ export abstract class ASTVisitor implements IASTVisitor {
     this.engine = engine;
   }
 
-  abstract visit(node: INode|INodeWithValue): any;
+  abstract visit(node: INode|INodeWithValue, ...args: any): any;
 }

@@ -1,6 +1,7 @@
 // import ASTWithValue from "../ASTNodes/ASTWithValue";
 import {TxtProcessor} from "../ASTNodes/TxtProcessor";
 import {ASTVisitor} from "./ASTInterpreter";
+import {Scope} from "./Scope";
 import {IVisitorResult} from "./VisitorResult";
 // import ASTVariable from "../ASTNodes/ASTVariable";
 // import ASTFunctionCall from "../ASTNodes/ASTFunctionCall";
@@ -13,13 +14,13 @@ import {IVisitorResult} from "./VisitorResult";
 
 
 export class TxtProcessorVisitor extends ASTVisitor {
-  visit(node: TxtProcessor): IVisitorResult {
+  visit(node: TxtProcessor, scope: Scope): IVisitorResult {
     // let result: any;
     let output = "";
     // this.interpreter.textProcessorMode = true;
     for (let child of node.children) {
       // result.push(child.accept(this.interpreter));
-      let childResult = this.engine.visit(child);
+      let childResult = this.engine.visit(child, scope);
       /*
       if (
         (
