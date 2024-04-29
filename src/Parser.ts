@@ -22,6 +22,7 @@ import {TxtBlock} from "./ASTNodes/TxtBlock";
 import {TxtProcessor} from "./ASTNodes/TxtProcessor";
 import {Arr} from "./ASTNodes/Arr";
 import {Obj} from "./ASTNodes/Obj";
+import {Return} from "./ASTNodes/Return";
 
 
 class ParserError extends Error {
@@ -708,7 +709,7 @@ export class Parser {
       params = this.paramList();
     }
     this.eat(TT.ParenClose);
-    let body = this.block();
+    let body = this.block(true);
     return new FnDecl(token, name, params, body);
   }
 
@@ -716,9 +717,9 @@ export class Parser {
    * block    -> CurlyOpen statementList CurlyClose
    * @return {ASTCompound}
    */
-  block() {
+  block(returnAllowed = false) {
     this.eat([TT.CurlyOpen]);
-    let root = this.statementList([TT.CurlyClose]);
+    let root = this.statementList([TT.CurlyClose], returnAllowed);
     this.eat([TT.CurlyClose]);
     return root;
   }
@@ -854,14 +855,26 @@ export class Parser {
   }
 
   /**
+   * returnStatement -> Return expr
+   * @return {Return}
+   */
+  returnStatement() {
+    // let token = this.currentToken;
+    this.eat(TT.Return);
+    let node = new Return(this.expr());
+    return node;
+  }
+
+  /**
    * statement  -> ifStatement | whileStatement
    *               | declaration
    *               | textProcessor | textBlock
+   *               | returnStatement
    *               | empty
    *               | expr
    * @return {AST}
    */
-  statement() {
+  statement(returnAllowed = false) {
     let node: Node = null;
     if (this.currentToken.type == TT.If) {
       node = this.ifStatement();
@@ -887,6 +900,9 @@ export class Parser {
     else if (this.currentToken.type == TT.Semi) {
       // TODO: Implement empty AST?
     }
+    else if (returnAllowed && this.currentToken.type === TT.Return) {
+      node = this.returnStatement();
+    }
     else {
       // console.log("expr");
       node = this.expr();
@@ -905,13 +921,24 @@ export class Parser {
    * @param {string[]} end
    * @return {Compound}
    */
-  statementList(end: string[]) {
+  statementList(end: string[], returnAllowed = false) {
     let root = new Compound();
+    // let returnFound = false;
     while (!end.includes(this.currentToken.type)) {
-      let node = this.statement();
+      // If return is not allowed or return is allowed but not found yet.
+      // if (!returnAllowed || !returnFound) {
+      let node = this.statement(returnAllowed);
       if (node) { // For empty lines.
         root.children.push(node);
       }
+      // if (node instanceof Return) {
+      //   returnFound = true;
+      // }
+      // }
+      // else { // If return is allowed and already found.
+      //   // Ignore the rest of the tokens.
+      //   this.eat();
+      // }
     }
     return root;
   }

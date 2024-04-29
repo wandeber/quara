@@ -7,26 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [TODO]
 
-- Scopes.
 - Remove elements from arrays.
 - Import. Its behaviour should be overridable from the outside.
-- Shell inside Quara main class.
-- Optimize Interpreter creation.
 - Absolute value operator: |x|.
 - For loop.
-- Function arguments.
-- Return.
-- Function calls with arguments.
-- Function overloading (by number of arguments).
 - Infer types from assignments.
 - Optional type definition with Pascal-like syntax.
 - Default functions: push, pop, shift, unshift, count.
+- Assignment between arrays.
+- Functions:
+  - Custom function paarameters.
+  - Custom function calls with arguments.
+  - Function overloading (by number of arguments).
 
-## [Unreleased]
+## [0.10.9]
 
 ### Added
 
 - Sum operator now works with arrays.
+- New memory system ready for scopes.
+- Scopes working in functions, if blocks and while loops.
+- Constants working.
+- Return.
 
 ### Changed
 

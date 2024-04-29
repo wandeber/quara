@@ -10,9 +10,11 @@ export class WhileVisitor extends ASTVisitor {
   visit(node: While, scope: Scope): IVisitorResult {
     let result, value;
     let output = "";
-    while (this.engine.visit(node.condition, scope).value) {
+    let newScope = scope.getChildScope("while");
+    while (this.engine.visit(node.condition, newScope).value) {
       if (node.body) {
-        result = this.engine.visit(node.body, scope);
+        let bodyScope = newScope.getChildScope("while");
+        result = this.engine.visit(node.body, bodyScope);
         if (result) {
           value = result.value;
         }

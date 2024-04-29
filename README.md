@@ -52,7 +52,17 @@ Programming language interpreted by JavaScript to preprocess text files like ema
   - private, public, protected
   - interface, implements
 
+### Variables and constants
+```js
+var a = 14.10;
+const b = "Query as Sara";
+c = true; // var is optional unless you want to override an outer variable.
+```
+
 ### Objects
+
+> WIP: The operator ":" could be replaced by "=".
+
 ```js
 obj = {
   key1: 1,
@@ -121,6 +131,16 @@ while (c) r
 while (c) {r}
 while (c) {r;}
 while c -> r
+```
+
+### Functions
+
+> WIP: At the moment, custom functions don't have arguments.
+
+```js
+fn sum() {
+  return a + b;
+}
 ```
 
 ### Text processor/templates
@@ -209,8 +229,7 @@ hi
 ```
 
 ## Pending
-- Scopes
-- Function declaration
+- Custom functions
 - Regular expressions
 - For loops
 

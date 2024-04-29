@@ -1,6 +1,6 @@
 import {Lexer} from "./Lexer/Lexer";
 import {Parser} from "./Parser";
-import {SemanticAnalizer} from "./SemanticAnalizer/SemanticAnalyzer";
+// import {SemanticAnalizer} from "./SemanticAnalizer/SemanticAnalyzer";
 import {Interpreter} from "./Interpreter/Interpreter";
 import fs from "fs";
 
@@ -13,7 +13,7 @@ import fs from "fs";
 export default class Quara {
   lexer: Lexer;
   parser: Parser;
-  semanticAnalyzer: SemanticAnalizer;
+  // semanticAnalyzer: SemanticAnalizer;
   interpreter: Interpreter;
 
 
@@ -73,4 +73,4 @@ export default class Quara {
 }
 
 
-export {Quara, Lexer, Parser, SemanticAnalizer, Interpreter};
+export {Quara, Lexer, Parser, /*SemanticAnalizer,*/ Interpreter};

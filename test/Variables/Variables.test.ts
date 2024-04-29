@@ -4,6 +4,7 @@ import {ObjectTests} from "./ObjectTests";
 import {ArrayTests} from "./ArrayTests";
 import {VariableAccessTests} from "./VariableAccessTests";
 import {VariableAssignTests} from "./VariableAssignTests";
+import {ConstantsTests} from "./ConstantsTests";
 
 describe("Variables", () => {
   describe("Variable declaration", VariableDeclarationTests.test);
@@ -11,6 +12,7 @@ describe("Variables", () => {
   describe("Arrays", ArrayTests.test);
   describe("Variable assign", VariableAssignTests.test);
   describe("Variable access", VariableAccessTests.test);
+  describe("Constant declarations", ConstantsTests.test);
 
   // it("should throw an error when access an non declared variable", () => {
   //   expect(() => Quara.scriptSync("num;")).toThrow();

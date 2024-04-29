@@ -1,4 +1,4 @@
-import {IASTEngine, IASTVisitor, VisitorMap} from "../ASTVisitor";
+import {IASTEngine, ASTVisitor as BaseASTVisitor, VisitorMap} from "../ASTVisitor";
 import {INode, INodeWithValue, Node} from "../ASTNodes/ASTNode";
 import {Compound} from "../ASTNodes/Compound";
 import {IVisitorResult} from "./VisitorResult";
@@ -10,12 +10,8 @@ export interface IASTInterpreter extends IASTEngine {
   visit(node: Node, scope: Scope): IVisitorResult;
 }
 
-export class ASTVisitor implements IASTVisitor {
-  public engine: IASTInterpreter;
-
-  constructor(engine: IASTInterpreter) {
-    this.engine = engine;
-  }
+export class ASTVisitor extends BaseASTVisitor {
+  declare public engine: IASTInterpreter;
 
   visit(node: INode|INodeWithValue, ...args: any): IVisitorResult {
     return {

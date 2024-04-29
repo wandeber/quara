@@ -24,7 +24,7 @@ export class VarDeclVisitor extends ASTVisitor {
         ({name} = child as INodeWithName); // TODO: ¿Esto es necesario?
       }
 
-      if (typeof scope.lookup(name) != "undefined") {
+      if (typeof scope.lookup(name, false) != "undefined") {
         throw new Error(`Variable ${name} already declared.`);
       }
 
@@ -37,7 +37,7 @@ export class VarDeclVisitor extends ASTVisitor {
     }
 
     return {
-      value: name ? scope.getMemberValue(name) : undefined,
+      value: name ? scope.getValue(name) : undefined,
       // output: undefined,
     };
   }

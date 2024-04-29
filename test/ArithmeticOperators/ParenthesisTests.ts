@@ -1,5 +1,5 @@
-import {TestConfiguration} from "./TestConfiguration";
-import {TestHelper} from "./TestHelper";
+import {TestConfiguration} from "../TestConfiguration";
+import {TestHelper} from "../TestHelper";
 
 
 

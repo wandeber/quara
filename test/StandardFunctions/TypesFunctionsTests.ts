@@ -13,6 +13,11 @@ export class TypesFunctionsTests {
       new TestConfiguration("isNumber(-4.5)", true),
       new TestConfiguration("isNumber(0)", true),
       new TestConfiguration("isNumber(-0)", true),
+      new TestConfiguration('isNumber("test")', false),
+      new TestConfiguration("isNumber(true)", false),
+      new TestConfiguration("isNumber(false)", false),
+      new TestConfiguration("isNumber([])", false),
+      new TestConfiguration("isNumber({})", false),
 
       // isInteger
       new TestConfiguration("isInteger(4)", true),

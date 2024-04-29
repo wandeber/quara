@@ -8,12 +8,13 @@ import {IVisitorResult} from "./VisitorResult";
 export class IfVisitor extends ASTVisitor {
   visit(node: If, scope: Scope): IVisitorResult {
     let result;
-    let conditionResult = this.engine.visit(node.condition, scope);
+    let newScope = scope.getChildScope("if");
+    let conditionResult = this.engine.visit(node.condition, newScope);
     if (conditionResult?.value) {
-      result = this.engine.visit(node.ifTrue, scope);
+      result = this.engine.visit(node.ifTrue, newScope);
     }
     else if (node.ifFalse) {
-      result = this.engine.visit(node.ifFalse, scope);
+      result = this.engine.visit(node.ifFalse, newScope);
     }
     return {
       value: result?.value,

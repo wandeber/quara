@@ -32,7 +32,7 @@ describe("Interpreter", () => {
     interpreter.setVariables({prop1: 1, prop2: 2});
     interpreter.setVariables({prop3: 3, prop2: 4});
     console.log(interpreter.globalScope);
-    expect(interpreter.globalScope.getMemberValue("prop2")).toEqual(4);
+    expect(interpreter.globalScope.getValue("prop2")).toBe(4);
   });
 
   describe("Interpreter logs", () => {

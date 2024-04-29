@@ -154,7 +154,7 @@ export function getGlobalScope() {
         if (!name) {
           name = "help";
         }
-        let text = GlobalScope.getMemberDoc(name);
+        let text = GlobalScope.getDoc(name);
         console.log(text);
         return text;
       },

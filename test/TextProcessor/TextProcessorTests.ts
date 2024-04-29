@@ -16,7 +16,7 @@ export class TextProcessorTests {
       new TestConfiguration("var a = 14; a = `{a}`; a", "14"),
 
       // Escaping:
-      new TestConfiguration("`\\` \\{ \\n`", "` { \n"),
+      new TestConfiguration("`\\` \\{ \\n\\r\\t`", "` { \n\r\t"),
 
       // If:
       new TestConfiguration("var name = true; `Hola{if name:}, Sara{/if}!`", "Hola, Sara!"),

@@ -9,10 +9,15 @@ export class FnDeclVisitor extends ASTVisitor {
   visit(node: FnDecl, scope: Scope): IVisitorResult {
     let fn = () => {
       // console.log("Calling function", node.name.name);
+      let newScope = scope.getChildScope(node.name.name);
       let result;
       for (let child of node.body.children) {
-        result = this.engine.visit(child, scope);
+        result = this.engine.visit(child, newScope);
+        if (result.return) {
+          break;
+        }
       }
+      // newScope = undefined;
       return result.value;
     };
     scope.insert(node.name.name, fn);
@@ -23,8 +28,9 @@ export class FnDeclVisitor extends ASTVisitor {
     // console.log("Type: ", type);
 
     return {
-      value: fn ? fn : undefined,
-      // output: undefined,
+      value: undefined,
+      //value: fn ? fn : undefined,
+      output: undefined,
     };
   }
 }

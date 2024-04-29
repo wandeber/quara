@@ -30,6 +30,9 @@ export class MultiplicationTests {
       new TestConfiguration("var n = 4; 4n", 16),
       new TestConfiguration("var n = 4; -2 + n n", 14),
       new TestConfiguration(`0 ${num2}`, 0 * num2),
+
+      new TestConfiguration('"hola" * 3', "holaholahola"),
+      new TestConfiguration('3 * "hola"', "holaholahola"),
     ];
 
     TestHelper.runTests(tests);

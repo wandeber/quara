@@ -93,8 +93,9 @@ export class AssignVisitor extends ASTVisitor {
       parent[name] = value;
     }
     else {
-      scope.insert(name, value);
+      scope.upsert(name, value);
     }
+
     return {
       value,
       // output: undefined,

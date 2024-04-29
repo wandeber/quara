@@ -27,14 +27,13 @@ export class ConstDeclVisitor extends ASTVisitor {
       }
 
       // Declaration...
-      scope.insert(name, null);
+      scope.insert(name, undefined, undefined, true);
 
-      // Maybe initialization...
-      // child.accept(this.interpreter);
+      // Initialization... Always required in constants declaration.
       this.engine.visit(child, scope);
     }
 
-    let value = name ? scope.getMemberValue(name) : undefined;
+    let value = name ? scope.getValue(name) : undefined;
     return {
       value,
       output: value,

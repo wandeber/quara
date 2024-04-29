@@ -1,11 +1,9 @@
-
-
-
 export class Member {
   constructor(
     public name: string,
     public value: any,
     public doc: string,
+    public constant = false,
   ) {}
 }
 
@@ -20,8 +18,21 @@ export class Scope {
     this.members = new Map();
   }
 
-  insert(name: any, value: any = null, doc?: any) {
-    this.members.set(name, new Member(name, value, doc));
+  insert(name: any, value: any = undefined, doc?: any, constant = false) {
+    this.members.set(name, new Member(name, value, doc, constant));
+  }
+
+  upsert(name: any, value: any = undefined, doc?: any) {
+    const member = this.lookup(name);
+    if (member) {
+      if (member.constant && typeof member.value !== "undefined") {
+        throw new Error(`Cannot reassign constant ${name}`);
+      }
+      member.value = value;
+    }
+    else {
+      this.insert(name, value, doc);
+    }
   }
 
   lookup(name: string, deep = true): Member {
@@ -32,12 +43,12 @@ export class Scope {
     return member;
   }
 
-  getMemberValue(name: string, deep = true): any {
+  getValue(name: string, deep = true): any {
     const member = this.lookup(name, deep);
     return member ? member.value : undefined;
   }
 
-  getMemberDoc(name: string, deep = true): string {
+  getDoc(name: string, deep = true): string {
     const member = this.lookup(name, deep);
     return member ? member.doc : undefined;
   }

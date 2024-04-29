@@ -22,6 +22,7 @@ import {TxtBlock} from "../ASTNodes/TxtBlock";
 import {TxtProcessor} from "../ASTNodes/TxtProcessor";
 import {Arr} from "../ASTNodes/Arr";
 import {Obj} from "../ASTNodes/Obj";
+import {Return} from "../ASTNodes/Return";
 
 // Visitors:
 import {BoolVisitor} from "./BoolVisitor";
@@ -46,6 +47,7 @@ import {TxtBlockVisitor} from "./TxtBlockVisitor";
 import {TxtProcessorVisitor} from "./TxtProcessorVisitor";
 import {ArrVisitor} from "./ArrVisitor";
 import {ObjVisitor} from "./ObjVisitor";
+import {ReturnVisitor} from "./ReturnVisitor";
 
 import {getGlobalScope} from "../globalScope";
 import {Scope} from "./Scope";
@@ -114,6 +116,7 @@ export class Interpreter extends ASTInterpreter {
     this.visitors[TxtBlock.name] = new TxtBlockVisitor(this);
     this.visitors[Arr.name] = new ArrVisitor(this);
     this.visitors[Obj.name] = new ObjVisitor(this);
+    this.visitors[Return.name] = new ReturnVisitor(this);
   }
 
   /**

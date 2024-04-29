@@ -33,12 +33,12 @@ export class UnaryOperatorVisitor extends ASTVisitor {
     else if (node.operator.type == TT.OpIncr) {
       let name = (node.expr as INodeWithName).name;
       result = exprValue + 1;
-      scope.insert(name, result);
+      scope.upsert(name, result);
     }
     else if (node.operator.type == TT.OpDecr) {
       let name = (node.expr as INodeWithName).name;
       result = exprValue - 1;
-      scope.insert(name, result);
+      scope.upsert(name, result);
     }
 
     return {
