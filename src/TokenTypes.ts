@@ -84,8 +84,7 @@ export class TokenTypes {
   static readonly For = "For";
   static readonly EndFor = "EndFor";
   // static readonly Each = "Each";
-  static readonly In = "In";
-  static readonly EndEach = "EndEach";
+  // static readonly EndEach = "EndEach";
 
   static readonly Fn = "Fn";
   static readonly Return = "Return";

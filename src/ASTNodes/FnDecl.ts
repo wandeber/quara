@@ -17,7 +17,7 @@ export class FnDecl extends Node {
     super();
   }
 
-  toString() {
-    return String("fn "+ this.name +"("+ this.params.join(", ") +")");
-  }
+  // toString() {
+  //   return String("fn "+ this.name +"("+ this.params.join(", ") +")");
+  // }
 }

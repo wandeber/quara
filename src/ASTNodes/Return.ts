@@ -11,7 +11,7 @@ export class Return extends Node {
     super();
   }
 
-  toString() {
-    return String("return "+ this.expr);
-  }
+  // toString() {
+  //   return String("return "+ this.expr);
+  // }
 }

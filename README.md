@@ -102,17 +102,13 @@ else {
   // ...
 }
 
-// Recommended syntaxes:
 if c {r}
 else if c2 {r2}
 else {r3}
-if (c) r;
 
-// Other syntaxes:
-if (c) r
-if (c) {r}
-if (c) {r;}
 if c -> r
+else if c2 -> r2
+else -> r3
 ```
 
 #### While
@@ -121,16 +117,35 @@ while condition {
   // ...
 }
 
-// Recommended syntaxes:
 while c {r}
 while c: r /while;
-while (c) r;
-
-// Other syntaxes:
-while (c) r
-while (c) {r}
-while (c) {r;}
 while c -> r
+```
+
+#### For
+```rust
+for value, index in list {
+  // ...
+}
+
+for list {...}
+for value in list {...}
+for value, index in list {...}
+
+for list: ... /for;
+for value in list: ... /for;
+for value, index in list: ... /for;
+
+for list -> /* One statement */;
+for value in list -> /* One statement */;
+for value, index in list -> /* One statement */;
+```
+
+List could be a range in any of the forms:
+```rust
+for i in 0..5 {
+  // ...
+}
 ```
 
 ### Functions
@@ -231,7 +246,7 @@ hi
 ## Pending
 - Custom functions
 - Regular expressions
-- For loops
+- `break` and `continue`
 
 ### Objects
 ```js
@@ -240,30 +255,6 @@ obj = {
   {k}: 1,
   {"key2"}: 2
 };
-```
-
-### Loops
-
-#### For (maybe unnecessary)
-```rust
-for (item, key) in list {
-  // ...
-}
-
-// Recommended syntaxes:
-for item in list {r}
-for (item, key) in list {r}
-
-for item in list: r; /for;
-for (item, key) in list: r; /for;
-
-// Other syntaxes:
-for (item in list) r
-
-// ?
-for 1..5 {}
-for item in 1..5 {}
-for (item, key) in 1..5 {}
 ```
 
 ## References and special thanks

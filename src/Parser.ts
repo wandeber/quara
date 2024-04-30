@@ -18,6 +18,7 @@ import {Token} from "./Token";
 import {TT} from "./TokenTypes";
 import {If} from "./ASTNodes/If";
 import {While} from "./ASTNodes/While";
+import {For} from "./ASTNodes/For";
 import {TxtBlock} from "./ASTNodes/TxtBlock";
 import {TxtProcessor} from "./ASTNodes/TxtProcessor";
 import {Arr} from "./ASTNodes/Arr";
@@ -832,6 +833,32 @@ export class Parser {
     );
   }
 
+  /**
+   * forStatement    -> For [Id [, Id] in] expr controlBody
+   * @return {If}
+   */
+  forStatement() {
+    let token = this.currentToken;
+    let variable: Variable, index: Variable, iterable: Node;
+    this.eat([TT.For]);
+    if (this.currentToken.type == TT.Id) {
+      variable = this.variable();
+      if (this.currentToken.type == TT.Comma) {
+        this.eat(TT.Comma);
+        index = this.variable();
+      }
+      this.eat(TT.OpIn);
+    }
+    iterable = this.expr();
+    return new For(
+      token,
+      variable,
+      index,
+      iterable,
+      this.controlBody(() => this.colonBlock([TT.EndFor])),
+    );
+  }
+
   textBlock() {
     let node = new TxtBlock(this.currentToken);
     this.eat(TT.TextBlock);
@@ -881,6 +908,9 @@ export class Parser {
     }
     else if (this.currentToken.type == TT.While) {
       node = this.whileStatement();
+    }
+    else if (this.currentToken.type == TT.For) {
+      node = this.forStatement();
     }
     else if (
       [

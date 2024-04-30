@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove elements from arrays.
 - Import. Its behaviour should be overridable from the outside.
 - Absolute value operator: |x|.
-- For loop.
 - Infer types from assignments.
 - Optional type definition with Pascal-like syntax.
 - Default functions: push, pop, shift, unshift, count.
@@ -19,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Custom function paarameters.
   - Custom function calls with arguments.
   - Function overloading (by number of arguments).
+
+## [UNRELEASED]
+
+### Added
+- For loop.
+  - `for i in 1..5 {log(i)}`
+  - `for v, i in 5..10 {log(i +": "+ v);}`
+  - `for 1..5 {log("Hola")}`
 
 ## [0.10.9]
 
