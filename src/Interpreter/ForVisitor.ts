@@ -14,15 +14,34 @@ export class ForVisitor extends ASTVisitor {
 
     let newScope = scope.getChildScope("for");
     let iterableResult = this.engine.visit(node.iterable, newScope);
-    if (!Array.isArray(iterableResult.value)) {
-      throw new Error("For iterable must be an array");
+    if (typeof iterableResult.value !== "object" && typeof iterableResult.value !== "string") {
+      throw new Error("Not an iterable object");
     }
-    for (let i = 0; i < iterableResult.value.length; i++) {
+    let len = 0;
+    let keys: string[] = [];
+    if (Array.isArray(iterableResult.value) || typeof iterableResult.value === "string") {
+      len = iterableResult.value.length;
+    }
+    else {
+      keys = Object.keys(iterableResult.value);
+      len = keys.length;
+    }
+    for (let i = 0; i < len; i++) {
       if (typeof node.variable !== "undefined") {
-        newScope.insert(node.variable.name, iterableResult.value[i]);
+        if (Array.isArray(iterableResult.value) || typeof iterableResult.value === "string") {
+          newScope.insert(node.variable.name, iterableResult.value[i]);
+        }
+        else {
+          newScope.insert(node.variable.name, (iterableResult.value as any)[keys[i]]);
+        }
       }
       if (typeof node.index !== "undefined") {
-        newScope.insert(node.index.name, i);
+        if (Array.isArray(iterableResult.value) || typeof iterableResult.value === "string") {
+          newScope.insert(node.index.name, i);
+        }
+        else {
+          newScope.insert(node.index.name, keys[i]);
+        }
       }
       if (node.body) {
         let bodyScope = newScope.getChildScope("for");
