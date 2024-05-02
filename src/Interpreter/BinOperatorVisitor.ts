@@ -97,10 +97,18 @@ export class BinOperatorVisitor extends ASTVisitor {
 
     case TT.OpInclRange:
     case TT.OpExclRange:
-      let right = node.operator.type === TT.OpInclRange ? rightValue + 1 : rightValue;
       result = [];
-      for (let i = leftValue; i < right; i++) {
-        result.push(i);
+      if (leftValue > rightValue) {
+        let right = node.operator.type === TT.OpInclRange ? rightValue - 1 : rightValue;
+        for (let i = leftValue; i > right; i--) {
+          result.push(i);
+        }
+      }
+      else {
+        let right = node.operator.type === TT.OpInclRange ? rightValue + 1 : rightValue;
+        for (let i = leftValue; i < right; i++) {
+          result.push(i);
+        }
       }
       break;
 

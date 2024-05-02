@@ -18,10 +18,16 @@ export function getGlobalScope() {
 
     // String:
     length: {
-      f(str: string) {
+      f(str: string|any[]) {
         return str.length;
       },
       d: "length(str: string): number\n  Returns the length of a string.",
+    },
+    len: {
+      f(str: string|any[]) {
+        return str.length;
+      },
+      d: "len(str: string): number\n  Returns the length of a string.",
     },
     split: {
       f(str: string, separator: string) {
@@ -52,6 +58,38 @@ export function getGlobalScope() {
         return str.trim();
       },
       d: "",
+    },
+
+    // Arrays:
+    push: {
+      f(arr: any[], ...args: any[]) {
+        return arr.push(...args);
+      },
+      d: "push(arr: any[], ...args: any[]): number\n  Adds one or more elements to the end of an array.",
+    },
+    pop: {
+      f(arr: any[]) {
+        return arr.pop();
+      },
+      d: "pop(arr: any[]): any\n  Removes the last element from an array and returns it.",
+    },
+    shift: {
+      f(arr: any[]) {
+        return arr.shift();
+      },
+      d: "shift(arr: any[]): any\n  Removes the first element from an array and returns it.",
+    },
+    unshift: {
+      f(arr: any[], ...args: any[]) {
+        return arr.unshift(...args);
+      },
+      d: "unshift(arr: any[], ...args: any[]): number\n  Adds one or more elements to the beginning of an array.",
+    },
+    concat: {
+      f(arr1: any[], arr2: any[]) {
+        return arr1.concat(arr2);
+      },
+      d: "concat(arr1: any[], arr2: any[]): any[]\n  Joins two or more arrays.",
     },
 
     // Math:

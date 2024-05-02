@@ -12,7 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Absolute value operator: `|x|`.
 - Infer types from assignments.
 - Optional type definition with Pascal-like syntax.
-- Default functions: `push`, `pop`, `shift`, `unshift`, `len`.
 - Casting operators: `int`, `float`, `bool`, `str`.
 - Type checking operators: `is`.
 - Type retrieval operator: `type`.
@@ -20,17 +19,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Assignment between arrays.
 - Assignment between objects.
 - Objects treated internally with Map.
-- Iterate over objects and strings with `for` loops.
-- Decreasing ranges: `5..1`, `5..<1`.
 - Sobrecarga de operadores.
 - Functions:
-  - Custom function parameters.
-  - Custom function calls with arguments.
   - Function overloading (by number of arguments).
 
 ## [UNRELEASED]
 
+...
+
+## [0.10.10]
+
 ### Added
+- Default functions added: `push`, `pop`, `shift`, `unshift`, `len`, `concat`.
+- Decreasing ranges: `5..1`, `5..<1`.
+- Iterate over objects and strings with `for` loops.
+- Custom function parameters.
+- Custom function calls with arguments.
 - Revert sum operators behaviour with arrays.
 - For loop.
   - `for i in 1..5 {log(i)}`
