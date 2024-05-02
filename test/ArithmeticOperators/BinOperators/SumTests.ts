@@ -28,9 +28,9 @@ export class SumTests {
       new TestConfiguration('"a" + 1', "a1"),
 
       // Arrays:
-      new TestConfiguration("[1, 2, 3] + [4, 5, 6]", [1, 2, 3, 4, 5, 6]),
-      new TestConfiguration("[1, 2, 3] + 4", [1, 2, 3, 4]),
-      new TestConfiguration("0 + [1, 2, 3]", [0, 1, 2, 3]),
+      // new TestConfiguration("[1, 2, 3] + [4, 5, 6]", [1, 2, 3, 4, 5, 6]),
+      // new TestConfiguration("[1, 2, 3] + 4", [1, 2, 3, 4]),
+      // new TestConfiguration("0 + [1, 2, 3]", [0, 1, 2, 3]),
 
       // Objects:
       // new TestConfiguration("{a: 1, b: 2} + {c: 3, d: 4}", {a: 1, b: 2, c: 3, d: 4}),

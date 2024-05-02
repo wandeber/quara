@@ -9,19 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove elements from arrays.
 - Import. Its behaviour should be overridable from the outside.
-- Absolute value operator: |x|.
+- Absolute value operator: `|x|`.
 - Infer types from assignments.
 - Optional type definition with Pascal-like syntax.
-- Default functions: push, pop, shift, unshift, count.
+- Default functions: `push`, `pop`, `shift`, `unshift`, `len`.
+- Casting operators: `int`, `float`, `bool`, `str`.
+- Type checking operators: `is`.
+- Type retrieval operator: `type`.
+- `for`, `while` and `if` as expressions.
 - Assignment between arrays.
+- Assignment between objects.
+- Objects treated internally with Map.
+- Iterate over objects and strings with `for` loops.
+- Decreasing ranges: `5..1`, `5..<1`.
+- Sobrecarga de operadores.
 - Functions:
-  - Custom function paarameters.
+  - Custom function parameters.
   - Custom function calls with arguments.
   - Function overloading (by number of arguments).
 
 ## [UNRELEASED]
 
 ### Added
+- Revert sum operators behaviour with arrays.
 - For loop.
   - `for i in 1..5 {log(i)}`
   - `for v, i in 5..10 {log(i +": "+ v);}`
