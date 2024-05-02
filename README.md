@@ -150,10 +150,8 @@ for i in 0..5 {
 
 ### Functions
 
-> WIP: At the moment, custom functions don't have arguments.
-
 ```js
-fn sum() {
+fn sum(a, b) {
   return a + b;
 }
 ```
