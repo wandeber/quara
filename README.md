@@ -244,7 +244,6 @@ hi
 ```
 
 ## Pending
-- Custom functions
 - Regular expressions
 - `break` and `continue`
 

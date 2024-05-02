@@ -35,11 +35,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Iterate over objects and strings with `for` loops.
 - Custom function parameters.
 - Custom function calls with arguments.
-- Revert sum operators behaviour with arrays.
 - For loop.
   - `for i in 1..5 {log(i)}`
   - `for v, i in 5..10 {log(i +": "+ v);}`
   - `for 1..5 {log("Hola")}`
+
+### Removed
+- Revert sum operators behaviour with arrays.
 
 ## [0.10.9]
 
