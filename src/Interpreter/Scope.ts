@@ -4,6 +4,7 @@ export class Member {
     public value: any,
     public doc: string,
     public constant = false,
+    public params: any[] = [],
   ) {}
 }
 
@@ -18,8 +19,8 @@ export class Scope {
     this.members = new Map();
   }
 
-  insert(name: any, value: any = undefined, doc?: any, constant = false) {
-    this.members.set(name, new Member(name, value, doc, constant));
+  insert(name: any, value: any = undefined, doc?: any, constant = false, params: any = undefined) {
+    this.members.set(name, new Member(name, value, doc, constant, params));
   }
 
   upsert(name: any, value: any = undefined, doc?: any) {

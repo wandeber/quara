@@ -11,7 +11,7 @@ export class FnDecl extends Node {
   constructor(
     public token: Token,
     public name: Variable,
-    public params: Node[],
+    public params: Variable[],
     public body: Compound,
   ) {
     super();

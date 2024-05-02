@@ -705,9 +705,9 @@ export class Parser {
     this.eat(TT.Fn);
     let name = this.variable();
     this.eat(TT.ParenOpen);
-    let params: Node[] = [];
+    let params: Variable[] = [];
     if (this.currentToken.type != TT.ParenClose) {
-      params = this.paramList();
+      params = this.paramList() as Variable[];
     }
     this.eat(TT.ParenClose);
     let body = this.block(true);
