@@ -26,6 +26,8 @@ export class ForTests {
       new TestConfiguration("r = 0; for v, k in 5..<10 -> r += v; r;", 35),
       new TestConfiguration("r = 0; for v, k in 5..<10: r += v /for r;", 35),
       new TestConfiguration("r = 0; for 1..5 -> r += 1; r;", 5),
+      // Objects (Maps):
+      new TestConfiguration("r = 0; for v in {a: 6, b: 3, c: 5} {r += v}; r", 14),
       // Output:
       new TestConfiguration('r = `{for v in 1..5 -> v}`', "12345"),
       // Errors:

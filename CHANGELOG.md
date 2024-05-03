@@ -18,7 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `for`, `while` and `if` as expressions.
 - Assignment between arrays.
 - Assignment between objects.
-- Objects treated internally with Map.
 - Sobrecarga de operadores.
 - Functions:
   - Function overloading (by number of arguments).
@@ -27,9 +26,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ...
 
+### Added
+
+- Objects treated internally with Map.
+
 ## [0.10.10]
 
 ### Added
+
 - Default functions added: `push`, `pop`, `shift`, `unshift`, `len`, `concat`.
 - Decreasing ranges: `5..1`, `5..<1`.
 - Iterate over objects and strings with `for` loops.
@@ -41,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `for 1..5 {log("Hola")}`
 
 ### Removed
+
 - Revert sum operators behaviour with arrays.
 
 ## [0.10.9]

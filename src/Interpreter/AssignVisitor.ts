@@ -13,7 +13,9 @@ export class AssignVisitor extends ASTVisitor {
     // console.log("node left", node.left);
     let parent;
     let {name} = node.left as INodeWithName;
-    let leftResult, rightValue, value;
+    let leftResult = this.engine.visit(node.left, scope) as any;
+
+    let rightValue, value;
     if (name) {
       // if (typeof this.interpreter.globalScope[name] == "undefined") {
       //   this.interpreter.error("La variable "+ name +" no ha sido declarada.");
@@ -33,6 +35,7 @@ export class AssignVisitor extends ASTVisitor {
       ].includes((node.left as any).token.type)
     ) {
       let tokenType = (node.left as any).token.type;
+      console.log("node left", node.left);
       let left = (node.left as any).left;
       let right = (node.left as any).right;
       leftResult = this.engine.visit(left, scope) as any;
@@ -90,7 +93,12 @@ export class AssignVisitor extends ASTVisitor {
     }
 
     if (parent) {
-      parent[name] = value;
+      if (parent instanceof Map) {
+        parent.set(name, value);
+      }
+      else {
+        parent[name] = value;
+      }
     }
     else {
       scope.upsert(name, value);

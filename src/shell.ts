@@ -83,7 +83,12 @@ const version = info.version;
               console.log("\""+ result +"\"");
               break;
             case "object":
-              console.log(JSON.stringify(result, null, JSONIndentationSpaces));
+              if (result instanceof Map) {
+                console.log(JSON.stringify(Object.fromEntries(result), null, JSONIndentationSpaces));
+              }
+              else {
+                console.log(JSON.stringify(result, null, JSONIndentationSpaces));
+              }
               break;
             case "undefined":
               // console.log("null");

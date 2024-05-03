@@ -11,7 +11,6 @@ export class ForVisitor extends ASTVisitor {
     let result, value;
     let output = "";
 
-
     let newScope = scope.getChildScope("for");
     let iterableResult = this.engine.visit(node.iterable, newScope);
     if (typeof iterableResult.value !== "object" && typeof iterableResult.value !== "string") {
@@ -22,6 +21,10 @@ export class ForVisitor extends ASTVisitor {
     if (Array.isArray(iterableResult.value) || typeof iterableResult.value === "string") {
       len = iterableResult.value.length;
     }
+    else if (iterableResult.value instanceof Map) {
+      keys = Array.from(iterableResult.value.keys());
+      len = keys.length;
+    }
     else {
       keys = Object.keys(iterableResult.value);
       len = keys.length;
@@ -31,6 +34,9 @@ export class ForVisitor extends ASTVisitor {
         if (Array.isArray(iterableResult.value) || typeof iterableResult.value === "string") {
           newScope.insert(node.variable.name, iterableResult.value[i]);
         }
+        else if (iterableResult.value instanceof Map) {
+          newScope.insert(node.variable.name, iterableResult.value.get(keys[i]));
+        }
         else {
           newScope.insert(node.variable.name, (iterableResult.value as any)[keys[i]]);
         }
@@ -38,6 +44,9 @@ export class ForVisitor extends ASTVisitor {
       if (typeof node.index !== "undefined") {
         if (Array.isArray(iterableResult.value) || typeof iterableResult.value === "string") {
           newScope.insert(node.index.name, i);
+        }
+        else if (iterableResult.value instanceof Map) {
+          newScope.insert(node.index.name, keys[i]);
         }
         else {
           newScope.insert(node.index.name, keys[i]);

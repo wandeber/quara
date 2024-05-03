@@ -88,7 +88,12 @@ export class BinOperatorVisitor extends ASTVisitor {
         result = rightValue.includes(leftValue);
       }
       else if (typeof rightValue === "object") {
-        result = rightValue.hasOwnProperty(leftValue);
+        if (rightValue instanceof Map) {
+          result = rightValue.has(leftValue);
+        }
+        else {
+          result = rightValue.hasOwnProperty(leftValue);
+        }
       }
       else {
         this.engine.error(rightValue +" is not an array, string, or object.");
@@ -117,10 +122,14 @@ export class BinOperatorVisitor extends ASTVisitor {
       if (
         typeof leftValue !== "undefined"
         && typeof name !== "undefined"
-        && leftValue.hasOwnProperty(name)
         && typeof leftValue[name] !== "function"
       ) {
-        result = leftValue[name];
+        if (leftValue instanceof Map && leftValue.has(name)) {
+          result = leftValue.get(name);
+        }
+        else if (leftValue.hasOwnProperty(name)) {
+          result = leftValue[name];
+        }
       }
       break;
     case TT.CurlyOpen:
@@ -129,11 +138,15 @@ export class BinOperatorVisitor extends ASTVisitor {
       }
       if (
         typeof leftValue !== "undefined"
-        && leftValue.hasOwnProperty(rightValue)
         && typeof leftValue[rightValue] !== "function"
         // && !Array.isArray(leftValue)
       ) {
-        result = leftValue[rightValue];
+        if (leftValue instanceof Map && leftValue.has(rightValue)) {
+          result = leftValue.get(rightValue);
+        }
+        else if (leftValue.hasOwnProperty(rightValue)) {
+          result = leftValue[rightValue];
+        }
       }
       break;
     case TT.BracketOpen:
