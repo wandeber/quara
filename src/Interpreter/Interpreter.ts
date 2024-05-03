@@ -127,6 +127,7 @@ export class Interpreter extends ASTInterpreter {
    * @param {any} variables
    */
   setVariables(variables: any) {
+    variables = JSON.parse(JSON.stringify(variables));
     Object.entries(variables).forEach(([key, value]) => {
       this.globalScope.insert(key, value);
     });
