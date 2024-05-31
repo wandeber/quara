@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Objects treated internally with Map.
+- Support for Node 18.
 
 ## [0.10.10]
 
