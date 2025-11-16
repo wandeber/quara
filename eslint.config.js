@@ -5,6 +5,14 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    ignores: [
+      "dist/**",
+    ],
+    files: [
+      "src/**/*.ts",
+      "scripts/**/*.ts",
+      "test/**/*.ts",
+    ],
     rules: {
       // "prettier/prettier": "error",
       "max-len": ["error", {code: 120}],
@@ -25,5 +33,5 @@ export default tseslint.config(
       "one-var": ["error", {initialized: "never", uninitialized: "always"}],
       "@typescript-eslint/no-explicit-any": "off",
     },
-  }
+  },
 );

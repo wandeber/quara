@@ -29,6 +29,11 @@ module.exports = [
     },
     format: ["esm", "cjs"],
     outDir: "dist",
+    dts: {
+      entry: {
+        Quara: "src/Quara.ts",
+      },
+    },
     minify: true,
     sourcemap: true,
     platform: "node",

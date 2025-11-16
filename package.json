@@ -29,6 +29,7 @@
   "type": "module",
   "main": "./dist/Quara.cjs",
   "module": "./dist/Quara.js",
+  "types": "./dist/Quara.d.ts",
   "exports": {
     "import": "./dist/Quara.js",
     "require": "./dist/Quara.cjs"
@@ -45,7 +46,7 @@
     "build:tsup": "tsup --config tsup.config.cjs",
     "test": "./node_modules/.bin/jest --detectOpenHandles --forceExit --coverage",
     "test-verbose": "npm run test -- --verbose",
-    "lint": "npx eslint ./**/*.ts",
+    "lint": "npx eslint",
     "format": "npx prettier --write .",
     "check-format": "npx prettier --check .",
     "gen-dist-npm": "./scripts/generate-dist-npm.sh",

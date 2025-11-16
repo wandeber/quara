@@ -22,9 +22,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Functions:
   - Function overloading (by number of arguments).
 
-## [UNRELEASED]
+## [0.10.13-alpha]
 
-...
+### Added
+
+- Now types are included in `dist/Quara.d.ts` and `dist/Quara.d.cts`.
+
+### Changed
+
+- Migrated to tsup.
+- ESLint ignores generated `dist/**` artifacts.
+
+## [0.10.12]
+
+### Added
+
+- Global functions replace and replaceAll.
 
 ## [0.10.11]
 

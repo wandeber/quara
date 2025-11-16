@@ -216,6 +216,8 @@ join
 upperCase
 lowerCase
 trim
+replace
+replaceAll
 
 // Math:
 abs
