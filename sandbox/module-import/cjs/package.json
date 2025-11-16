@@ -1,0 +1,8 @@
+{
+  "name": "quara-cjs-sandbox",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node run.cjs"
+  }
+}

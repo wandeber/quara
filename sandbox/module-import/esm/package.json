@@ -1,0 +1,8 @@
+{
+  "name": "quara-esm-sandbox",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node run.mjs"
+  }
+}
