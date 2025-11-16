@@ -33,6 +33,14 @@ export class StringFunctionsTests {
       new TestConfiguration('trim(" test")', "test"),
       new TestConfiguration('trim("test ")', "test"),
       new TestConfiguration('trim(" test ")', "test"),
+
+      // replace
+      new TestConfiguration('replace("banana", "na", "NA")', "baNAna"),
+      new TestConfiguration('replace("foo", "bar", "baz")', "foo"),
+
+      // replaceAll
+      new TestConfiguration('replaceAll("banana", "na", "NA")', "baNANA"),
+      new TestConfiguration('replaceAll("foo", "", "bar")', "foo"),
     ];
 
     TestHelper.runTests(tests);

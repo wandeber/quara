@@ -59,6 +59,23 @@ export function getGlobalScope() {
       },
       d: "",
     },
+    replace: {
+      f(str: string, searchValue: string, replaceValue: string) {
+        return str.replace(searchValue, replaceValue);
+      },
+      d: "replace(str: string, searchValue: string, replaceValue: string): string\n"
+        +"  Returns a new string with the first match of searchValue replaced by replaceValue.",
+    },
+    replaceAll: {
+      f(str: string, searchValue: string, replaceValue: string) {
+        if (searchValue === "") {
+          return str;
+        }
+        return str.split(searchValue).join(replaceValue);
+      },
+      d: "replaceAll(str: string, searchValue: string, replaceValue: string): string\n"
+        +"  Returns a new string with all matches of searchValue replaced by replaceValue.",
+    },
 
     // Arrays:
     push: {
